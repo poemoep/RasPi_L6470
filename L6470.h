@@ -91,7 +91,8 @@ union L6470_packet{
 //#define REG_NUM  43
 
 //const uint8_t REG_SIZE[REG_NUM];
-int REG_SIZE[256] = {0};
+extern uint8_t *REG_SIZE;
+/*
 REG_SIZE[REG_ABS_POS]   = 22;
 REG_SIZE[REG_EL_POS]    = 9;
 REG_SIZE[REG_MARK]      = 22;
@@ -138,7 +139,7 @@ REG_SIZE[REG_HiZSoft]   =  0;
 REG_SIZE[REG_HiZHard]   =  0;
 REG_SIZE[REG_GetStatus] =  16;
 
-
+*/
 
 
 //----prottype declaration----

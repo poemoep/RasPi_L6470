@@ -8,6 +8,58 @@
 #include "L6470.h"
 #include "L6470_user.h"
 
+uint8_t *REG_SIZE;
+
+void L6470_reg_size_init(void){
+
+REG_SIZE[REG_ABS_POS]   = 22;
+REG_SIZE[REG_EL_POS]    = 9;
+REG_SIZE[REG_MARK]      = 22;
+REG_SIZE[REG_SPEED]     = 20; //readonly
+REG_SIZE[REG_ACC]       = 12;
+REG_SIZE[REG_DEC]       = 12;
+REG_SIZE[REG_MAX_SPEED] = 10;
+REG_SIZE[REG_MIN_SPEED] = 13;
+REG_SIZE[REG_KVAL_HOLD] = 8;
+REG_SIZE[REG_KVAL_RUN]  = 8;
+REG_SIZE[REG_KVAL_ACC]  = 8;
+REG_SIZE[REG_KVAL_DEC]  = 8;
+REG_SIZE[REG_INT_SPEED] = 14;
+REG_SIZE[REG_ST_SLP]    = 8;
+REG_SIZE[REG_FN_SLP_ACC]= 8;
+REG_SIZE[REG_FN_SLP_DEC]= 8;
+REG_SIZE[REG_K_THERM]   = 4;
+REG_SIZE[REG_ADC_OUT]   = 5; //readonly
+REG_SIZE[REG_OCD_TH]    = 4;
+REG_SIZE[REG_STALL_TH]  = 7;
+REG_SIZE[REG_FS_SPD]    = 10;
+REG_SIZE[REG_STEP_MODE] = 8;
+REG_SIZE[REG_ALARM_EN]  = 8;
+REG_SIZE[REG_CONFIG]    = 16;
+REG_SIZE[REG_STATUS]    = 16; //readonly
+
+REG_SIZE[REG_NOP]       = 0;
+REG_SIZE[REG_SETPARAM]  = 24;
+REG_SIZE[REG_GETPARAM]  = 24;
+REG_SIZE[REG_MoveCont]  =  24;
+REG_SIZE[REG_MoveStepClock]  = 0;
+REG_SIZE[REG_MoveStep]  =  24;
+REG_SIZE[REG_MoveGoTo]  =  24;
+REG_SIZE[REG_MoveGoToDir]= 24;
+REG_SIZE[REG_MoveGoToUntil]= 24;
+REG_SIZE[REG_MoveRelease]= 0;
+REG_SIZE[REG_GoHome]    =  0;
+REG_SIZE[REG_GoMark]    =  0;
+REG_SIZE[REG_ResetPos]  =  0;
+REG_SIZE[REG_ResetDevice]= 0;
+REG_SIZE[REG_StopSoft]  =  0;
+REG_SIZE[REG_StopHard]  =  0;
+REG_SIZE[REG_HiZSoft]   =  0;
+REG_SIZE[REG_HiZHard]   =  0;
+REG_SIZE[REG_GetStatus] =  16;
+}
+
+
 
 void L6470_SPI_init(void)
 {
@@ -29,15 +81,17 @@ void L6470_setting_init(void)
 
     for (int itr = 0; itr < itr_row; itr++){
         int SPI_res;
-        SPI_res = L6470_rw(L6470_setting[itr][L6470_setting_reg_addr],(REG_SIZE[L6470_setting[itr][L6470_setting_reg_addr]] + 8 - 1)/8);
+        SPI_res = L6470_rw( L6470_setting[itr]->value8b,
+                            (REG_SIZE[L6470_setting[itr]->data.reg_addr] + 8 - 1)/8);
             //切り上げ処理 (roundup(x%8) = (x+8-1)/8
+            
 #ifdef L6470_PRINT_MESSAGE
             printf("[L6470 DEBUG]:setting_init res:%d,\treg:0x%2x,\tvalue:0x%2x,\t0x%2x,\t0x%2x\n",
                     SPI_res,
-                    L6470_setting[itr][L6470_setting_reg_addr] & 0xFF,
-                    L6470_setting[itr][L6470_setting_reg_addr + 1] %0xFF,
-                    L6470_setting[itr][L6470_setting_reg_addr + 2] %0xFF,
-                    L6470_setting[itr][L6470_setting_reg_addr + 3] %0xFF);
+                    L6470_setting[itr]->value8b[0] & 0xFF,
+                    L6470_setting[itr]->value8b[1] & 0xFF,
+                    L6470_setting[itr]->value8b[2] & 0xFF,
+                    L6470_setting[itr]->value8b[3] & 0xFF);
 #endif
       }
 }
@@ -49,6 +103,7 @@ void L6470_init(void)
 #endif
 
     L6470_SPI_init();
+    L6470_reg_size_init();
     L6470_setting_init();
 
 #ifdef L6470_PRINT_MESSAGE

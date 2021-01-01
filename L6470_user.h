@@ -4,8 +4,8 @@
 #define SPI_SPEED 1000000 // [Hz]
 #define SPI_MODE 0 // default
 
-const uint8_t L6470_setting[22][5] =
-{// bits, REG_ADDR,     setting[0],setting[1],setting[2])
+union L6470_packet L6470_setting[22][5] =
+{// REG_ADDR,     setting[0],setting[1],setting[2])
     {REG_ABS_POS,       0x00,0x00,0x00}, //0x000000
     {REG_EL_POS,        0x00,0x00,0x00}, //0x000
     {REG_MARK,          0x00,0x00,0x00}, //0x000000
