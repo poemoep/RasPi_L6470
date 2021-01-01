@@ -2,9 +2,21 @@
 #include <unistd.h>
 
 #include "L6470.h"
+//#include "L6470_user.h"
 
-int maint (int argc, char** argv)
+
+
+int main(int argc, char** argv)
 {
+/*
+    for (int i=0; i< 22;i++){
+	 printf("REG:%x\t value:%x\t%x\t%x\n",
+			 L6470_setting[i]->value8b[0],
+			 L6470_setting[i]->value8b[1],
+			 L6470_setting[i]->value8b[2],
+			 L6470_setting[i]->value8b[3]);
+ 	} */
+
     L6470_init();
 
     L6470_MoveCont(DIR_FWD, 10000);
