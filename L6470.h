@@ -155,7 +155,7 @@ void L6470_MoveStepClock(uint8_t dir);
 void L6470_MoveStep(uint8_t dir, uint32_t step);
 void L6470_MoveGoTo(uint32_t abs_pos);
 void L6470_MoveGoToDir(uint8_t dir, uint32_t abs_pos);
-void L6470_MoveGoUntil(uint8_t act, uint8_t dir,uint32_t speed);
+void L6470_MoveGoToUntil(uint8_t act, uint8_t dir,uint32_t speed);
 void L6470_MoveRelease(uint8_t act, uint8_t dir);
 void L6470_GoHome(void);
 void L6470_GoMark(void);

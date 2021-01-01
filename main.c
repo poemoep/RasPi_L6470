@@ -12,7 +12,7 @@ int maint (int argc, char** argv)
 
     L6470_StopSoft();
 
-    for (int i =; i <10; i++){
+    for (int i =0; i <10; i++){
         L6470_MoveStepClock(DIR_RVS);
         sleep(0.5);
     }
