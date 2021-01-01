@@ -27,7 +27,7 @@ int maint (int argc, char** argv)
     L6470_MoveGoTo(0);
     sleep(5);
 
-    L6470_MoveGoUntil(ACT_POS_TO_MARK,DIR_FWD,1000);
+    L6470_MoveGoToUntil(ACT_POS_TO_MARK,DIR_FWD,1000);
     sleep(10);
 
     L6470_HiZSoft();
