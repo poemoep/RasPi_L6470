@@ -3,7 +3,7 @@
 
 #include "L6470.h"
 
-int maint (int argc, char** argv)
+int main(int argc, char** argv)
 {
     L6470_init();
 
