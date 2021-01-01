@@ -12,6 +12,13 @@ uint8_t *REG_SIZE;
 
 void L6470_reg_size_init(void){
 
+
+#ifdef L6470_PRINT_MESSAGE
+    printf("[L6470 DEBUG]:reg_size_init start\n");
+#endif
+
+REG_SIZE = (uint8_t*)malloc(256* sizeof(uint8_t));
+
 REG_SIZE[REG_ABS_POS]   = 22;
 REG_SIZE[REG_EL_POS]    = 9;
 REG_SIZE[REG_MARK]      = 22;
@@ -57,6 +64,11 @@ REG_SIZE[REG_StopHard]  =  0;
 REG_SIZE[REG_HiZSoft]   =  0;
 REG_SIZE[REG_HiZHard]   =  0;
 REG_SIZE[REG_GetStatus] =  16;
+
+#ifdef L6470_PRINT_MESSAGE
+    printf("[L6470 DEBUG]:reg_size_init end\n");
+#endif
+
 }
 
 
@@ -77,21 +89,28 @@ void L6470_setting_init(void)
     int itr_row,itr_col;
     
     itr_row =  sizeof(L6470_setting) / sizeof(L6470_setting[0]);
-    itr_col = sizeof(L6470_setting[0]) / sizeof(L6470_setting[0][0]);
+
 
     for (int itr = 0; itr < itr_row; itr++){
         int SPI_res;
-        SPI_res = L6470_rw( L6470_setting[itr]->value8b,
-                            (REG_SIZE[L6470_setting[itr]->data.reg_addr] + 8 - 1)/8);
+	union L6470_packet temp;
+       	temp = L6470_setting[itr];
+#ifdef L6470_PRINT_MESSAGE
+            printf("[L6470 DEBUG]:setting_init before\tres:%d,\treg:0x%x,\tvalue:0x%x,\tlen:%d\n",
+                    0,
+                    temp.data.reg_addr,
+                    temp.data.value32b,
+		    (REG_SIZE[temp.data.reg_addr] + 8 - 1)/8);
+#endif
+     	    SPI_res = L6470_rw( temp.value8b,
+                            (1 + (REG_SIZE[temp.data.reg_addr] + 8 - 1)/8));
             //切り上げ処理 (roundup(x%8) = (x+8-1)/8
             
 #ifdef L6470_PRINT_MESSAGE
-            printf("[L6470 DEBUG]:setting_init res:%d,\treg:0x%2x,\tvalue:0x%2x,\t0x%2x,\t0x%2x\n",
+            printf("[L6470 DEBUG]:setting_init after\tres:%d,\treg:0x%x,\tvalue:0x%x\n",
                     SPI_res,
-                    L6470_setting[itr]->value8b[0] & 0xFF,
-                    L6470_setting[itr]->value8b[1] & 0xFF,
-                    L6470_setting[itr]->value8b[2] & 0xFF,
-                    L6470_setting[itr]->value8b[3] & 0xFF);
+                    temp.data.reg_addr,
+                    temp.data.value32b);
 #endif
       }
 }
@@ -149,7 +168,7 @@ void L6470_SetParam(uint8_t param_addr, uint32_t value)
     }
 
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:SetParam res:%d\n",SPI_res);
@@ -164,7 +183,7 @@ union L6470_packet L6470_GetParam(uint8_t param_addr)
 
     pkt.data.reg_addr = (param_addr & REG_GETPARAM);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:GetParam res:%d,\taddr:0x%2x\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -183,7 +202,7 @@ void L6470_MoveCont(uint8_t dir, uint32_t value)
     pkt.data.reg_addr = (REG_MoveCont & dir);
     pkt.data.value32b = (value & 0xFFFFFF);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:MoveCont res:%d,\tDIR:0x%2x\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -200,7 +219,7 @@ void L6470_MoveStepClock(uint8_t dir)
 
     pkt.data.reg_addr = (REG_MoveStepClock & dir);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:MoveStepClock res:%d,\tDIR:0x%2x\n",SPI_res,pkt.data.reg_addr);
@@ -217,7 +236,7 @@ void L6470_MoveStep(uint8_t dir,uint32_t step)
     pkt.data.reg_addr = (REG_MoveStep & dir);
     pkt.data.value32b = (step & 0xFFFFFF);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:MoveStepClock res:%d,\tDIR:0x%2x\n",SPI_res,pkt.data.reg_addr);
@@ -233,7 +252,7 @@ void L6470_MoveGoTo(uint32_t abs_pos)
     pkt.data.reg_addr = (REG_MoveGoTo);
     pkt.data.value32b = (abs_pos & 0xFFFFFF);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:MoveGoTo res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -249,7 +268,7 @@ void L6470_MoveGoToDir(uint8_t dir,uint32_t abs_pos)
     pkt.data.reg_addr = (REG_MoveGoToDir & dir);
     pkt.data.value32b = (abs_pos & 0xFFFFFF);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:MoveGoToDir res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -265,7 +284,7 @@ void L6470_MoveGoToUntil(uint8_t act, uint8_t dir,uint32_t speed)
     pkt.data.reg_addr = (REG_MoveGoToUntil & dir & act);
     pkt.data.value32b = (speed & 0xFFFFFF);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:MoveGoToUntil res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -280,7 +299,7 @@ void L6470_MoveRelease(uint8_t act, uint8_t dir)
 
     pkt.data.reg_addr = (REG_MoveRelease & dir & act);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:MoveRelease res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -295,7 +314,7 @@ void L6470_GoHome(void)
 
     pkt.data.reg_addr = (REG_GoHome);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:GoHome res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -310,7 +329,7 @@ void L6470_GoMark(void)
 
     pkt.data.reg_addr = (REG_GoMark);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:GoMark res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -325,7 +344,7 @@ void L6470_ResetPos(void)
 
     pkt.data.reg_addr = (REG_ResetPos);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:ResetPos res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -340,7 +359,7 @@ void L6470_ResetDevice(void)
 
     pkt.data.reg_addr = (REG_ResetDevice);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:ResetDevice res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -355,7 +374,7 @@ void L6470_StopSoft(void)
 
     pkt.data.reg_addr = (REG_StopSoft);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:StopSoft res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -370,7 +389,7 @@ void L6470_StopHard(void)
 
     pkt.data.reg_addr = (REG_StopHard);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:StopHard res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -385,7 +404,7 @@ void L6470_HiZSoft(void)
 
     pkt.data.reg_addr = (REG_HiZSoft);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:HiZSoft res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -400,7 +419,7 @@ void L6470_HiZHard(void)
 
     pkt.data.reg_addr = (REG_HiZHard);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:HiZHard res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
@@ -415,7 +434,7 @@ uint16_t L6470_GetStatus(void)
 
     pkt.data.reg_addr = (REG_GetStatus);
 
-    SPI_res = L6470_rw((pkt.value8b),((size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:GetStatus res:%d,\tDIR:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
