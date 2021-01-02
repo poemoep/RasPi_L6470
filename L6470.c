@@ -105,7 +105,7 @@ void L6470_setting_init(void)
 #ifdef L6470_PRINT_MESSAGE
                 printf("[L6470 DEBUG]:setting_init before reg:%x\tvalue:%x\tlen:%d",L6470_setting[reg].data.reg_addr, L6470_setting[reg].value32b, (int)(1 + (len +8 -1)/8));
 #endif
-                SPI_res = L6470_rw(L6470_setting[reg].value8b, (int)(1 + (len + 8 -1)/8);
+                SPI_res = L6470_rw(L6470_setting[reg].value8b, (int)(1 + (len + 8 -1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
                 printf("[L6470 DEBUG]:setting_init after reg:%x\tvalue:%x\tlen:%d",L6470_setting[reg].data.reg_addr, L6470_setting[reg].value32b, (int)(1 + (len +8 -1)/8));
@@ -210,10 +210,10 @@ void L6470_SetParam(uint8_t param_addr, uint32_t value)
     pkt.data.reg_addr = (param_addr | REG_SETPARAM);
 
     if(8 >= size){
-        pkt.value8b[1] = ((value & 0xFF);
+        pkt.value8b[1] = ((value & 0xFF));
     }else if (16 >= size){
         pkt.value8b[1] = ((value & 0xFF00) >> 8);
-        pkt.value8b[2] = ((value & 0x00FF);
+        pkt.value8b[2] = ((value & 0x00FF));
     }else{
         pkt.value8b[1] = ((value & 0xFF0000) >> 16);
         pkt.value8b[2] = ((value & 0x00FF00) >> 8);
@@ -255,7 +255,7 @@ void L6470_MoveCont(uint8_t dir, uint32_t value)
     pkt.data.reg_addr = (REG_MoveCont | dir);
     pkt.data.value8b[0] = ((value & 0xFF0000) >> 16);
     pkt.data.value8b[1] = ((value & 0x00FF00) >> 8);
-    pkt.data.value8b[2] = ((value & 0x0000FF);
+    pkt.data.value8b[2] = (value & 0x0000FF);
 
     SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
@@ -484,7 +484,7 @@ void L6470_HiZHard(void)
     SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:HiZHard res:%d,\taddr:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.data.value32b);
+    printf("[L6470 DEBUG]:HiZHard res:%d,\taddr:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.value32b);
 #endif
 }
 

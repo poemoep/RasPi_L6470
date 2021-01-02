@@ -8,7 +8,7 @@
 #define SPI_SPEED 1000000 // [Hz]
 #define SPI_MODE 0 // default
 
-extern union L6470_packet L6470_setting[0x19 + 1];
+extern union L6470_packet *L6470_setting;
 
 const union L6470_packet L6470_user_setting[0x19 + 1] =
 {// REG_ADDR,     setting[0],setting[1],setting[2]}//initial

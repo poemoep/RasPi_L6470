@@ -4,14 +4,6 @@
 #include "L6470.h"
 //#include "L6470_user.h"
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-
-
-=======
->>>>>>> d833a8bacf594b59c465fc2b10f64963c73934f8
->>>>>>> test/hoge
 int main(int argc, char** argv)
 {
 /*
