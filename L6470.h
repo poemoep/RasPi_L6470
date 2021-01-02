@@ -12,17 +12,6 @@
 //----define debug message function ON/OFF----
 #define L6470_PRINT_MESSAGE 
 
-//----define struct/union----
-
-struct L6470_Data{
-    uint8_t reg_addr;
-    uint32_t value32b;
-};
-
-union L6470_packet{
-    struct L6470_Data data;
-    uint8_t value8b[4];
-};
 
 //----define const value----
 
@@ -138,9 +127,20 @@ REG_SIZE[REG_StopHard]  =  0;
 REG_SIZE[REG_HiZSoft]   =  0;
 REG_SIZE[REG_HiZHard]   =  0;
 REG_SIZE[REG_GetStatus] =  16;
-
 */
 
+//----define struct/union----
+
+struct L6470_Data{
+    uint8_t reg_addr;
+    uint8_t value8b[3];
+};
+
+union L6470_packet{
+    struct L6470_Data data;
+    uint8_t value8b[4];
+    uint32_t value32b;
+};
 
 //----prottype declaration----
 void L6470_SPI_init(void);
