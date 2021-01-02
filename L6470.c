@@ -103,12 +103,18 @@ void L6470_setting_init(void)
                 int len, SPI_res;
                 len = REG_SIZE[reg];
 #ifdef L6470_PRINT_MESSAGE
-                printf("[L6470 DEBUG]:setting_init before reg:%x\tvalue:%x\tlen:%d",L6470_setting[reg].data.reg_addr, L6470_setting[reg].value32b, (int)(1 + (len +8 -1)/8));
+                printf("[L6470 DEBUG]:setting_init before reg:0x%x\tvalue:0x%x\tlen:%d\n",
+				L6470_setting[reg].data.reg_addr,
+				L6470_setting[reg].value32b,
+				(int)(1 + (len +8 -1)/8));
 #endif
                 SPI_res = L6470_rw(L6470_setting[reg].value8b, (int)(1 + (len + 8 -1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
-                printf("[L6470 DEBUG]:setting_init after reg:%x\tvalue:%x\tlen:%d",L6470_setting[reg].data.reg_addr, L6470_setting[reg].value32b, (int)(1 + (len +8 -1)/8));
+                printf("[L6470 DEBUG]:setting_init after reg:0x%x\tvalue:0x%x\tlen:%d\n",
+				L6470_setting[reg].data.reg_addr,
+				L6470_setting[reg].value32b,
+				(int)(1 + (len +8 -1)/8));
 #endif
             break;
             }
