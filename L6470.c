@@ -264,9 +264,9 @@ void L6470_MoveCont(uint8_t dir, uint32_t value)
 
 
     pkt.data.reg_addr = (REG_MoveCont | dir);
-    pkt.data.value8b[0] = ((value & 0xFF0000) >> 16);
-    pkt.data.value8b[1] = ((value & 0x00FF00) >> 8);
-    pkt.data.value8b[2] = (value & 0x0000FF);
+    pkt.data.value8b[0] = (uint8_t)((value & 0xFF0000) >> 16);
+    pkt.data.value8b[1] = (uint8_t)((value & 0x00FF00) >> 8);
+    pkt.data.value8b[2] = (uint8_t)(value & 0x0000FF);
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:MoveCont before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",

@@ -8,15 +8,15 @@ int main(int argc, char** argv)
 {
     L6470_init();
 
-    L6470_MoveCont(DIR_FWD, 10000);
-    sleep(3);
+    L6470_MoveCont(DIR_FWD, 200);
+    sleep(5);
     L6470_StopSoft();
-    sleep(3);
+    sleep(5);
 
-    L6470_MoveCont(DIR_RVS, 10000);
-    sleep(3);
+    L6470_MoveCont(DIR_RVS, 200);
+    sleep(5);
     L6470_StopSoft();
-    sleep(3);
+    sleep(5);
     
     
     for (int i =0; i <10; i++){
