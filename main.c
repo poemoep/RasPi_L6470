@@ -6,25 +6,22 @@
 
 int main(int argc, char** argv)
 {
-/*
-    for (int i=0; i< 22;i++){
-	 printf("REG:%x\t value:%x\t%x\t%x\n",
-			 L6470_setting[i]->value8b[0],
-			 L6470_setting[i]->value8b[1],
-			 L6470_setting[i]->value8b[2],
-			 L6470_setting[i]->value8b[3]);
- 	} */
-
     L6470_init();
 
     L6470_MoveCont(DIR_FWD, 10000);
     sleep(3);
-
     L6470_StopSoft();
+    sleep(3);
 
+    L6470_MoveCont(DIR_RVS, 10000);
+    sleep(3);
+    L6470_StopSoft();
+    sleep(3);
+    
+    
     for (int i =0; i <10; i++){
         L6470_MoveStepClock(DIR_RVS);
-        sleep(0.5);
+        sleep(1);
     }
     sleep(3);
 
