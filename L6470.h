@@ -144,6 +144,7 @@ union L6470_packet{
 
 //----prottype declaration----
 void L6470_SPI_init(void);
+void L6470_reg_size_init(void);
 void L6470_setting_init(void);
 void L6470_init(void);
 int L6470_rw(uint8_t *data,int len);
@@ -153,8 +154,8 @@ union L6470_packet L6470_GetParam(uint8_t param);
 void L6470_MoveCont(uint8_t dir,uint32_t value);
 void L6470_MoveStepClock(uint8_t dir);
 void L6470_MoveStep(uint8_t dir, uint32_t step);
-void L6470_MoveGoTo(uint32_t abs_pos);
-void L6470_MoveGoToDir(uint8_t dir, uint32_t abs_pos);
+void L6470_MoveGoTo(int32_t abs_pos);
+void L6470_MoveGoToDir(uint8_t dir, int32_t abs_pos);
 void L6470_MoveGoToUntil(uint8_t act, uint8_t dir,uint32_t speed);
 void L6470_MoveRelease(uint8_t act, uint8_t dir);
 void L6470_GoHome(void);

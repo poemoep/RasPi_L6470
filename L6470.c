@@ -252,12 +252,30 @@ union L6470_packet L6470_GetParam(uint8_t param_addr)
     int size = REG_SIZE[param_addr];
 
     pkt.data.reg_addr = (param_addr | REG_GETPARAM);
+#ifdef L6470_PRINT_MESSAGE
+    printf("[L6470 DEBUG]:GetParam before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
+		    	SPI_res,
+			pkt.data.reg_addr,
+			pkt.value8b[0],
+			pkt.value8b[1],
+			pkt.value8b[2],
+			pkt.value8b[3],
+			size);
+#endif
+
 
     SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
-
 #ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:GetParam res:%d,\taddr:0x%2x\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.value32b);
+    printf("[L6470 DEBUG]:GetParam after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
+		    	SPI_res,
+			pkt.data.reg_addr,
+			pkt.value8b[0],
+			pkt.value8b[1],
+			pkt.value8b[2],
+			pkt.value8b[3],
+			size);
 #endif
+
 
     return pkt;
 }
@@ -369,14 +387,16 @@ void L6470_MoveStep(uint8_t dir,uint32_t step)
 #endif
 }
 
-void L6470_MoveGoTo(uint32_t abs_pos)
+void L6470_MoveGoTo(int32_t abs_pos)
 {
     union L6470_packet pkt={0};
     int SPI_res = 0;
     int size = REG_SIZE[REG_MoveGoTo];
+    
+    printf("%x\n",abs_pos);
 
     pkt.data.reg_addr = (REG_MoveGoTo);
-    pkt.data.value8b[0] = ((abs_pos & 0xFF0000) >> 16);
+    pkt.data.value8b[0] = ((abs_pos & 0x3F0000) >> 16);
     pkt.data.value8b[1] = ((abs_pos & 0x00FF00) >> 8);
     pkt.data.value8b[2] = ((abs_pos & 0x0000FF));
 #ifdef L6470_PRINT_MESSAGE
@@ -404,14 +424,16 @@ void L6470_MoveGoTo(uint32_t abs_pos)
 #endif
 }
 
-void L6470_MoveGoToDir(uint8_t dir,uint32_t abs_pos)
+void L6470_MoveGoToDir(uint8_t dir,int32_t abs_pos)
 {
     union L6470_packet pkt={0};
     int SPI_res = 0;
     int size = REG_SIZE[REG_MoveGoToDir];
 
+    printf("%x\n",abs_pos);
+    
     pkt.data.reg_addr = (REG_MoveGoToDir | dir);
-    pkt.data.value8b[0] = ((abs_pos & 0xFF0000) >> 16);
+    pkt.data.value8b[0] = ((abs_pos & 0x3F0000) >> 16);
     pkt.data.value8b[1] = ((abs_pos & 0x00FF00) >> 8);
     pkt.data.value8b[2] = ((abs_pos & 0x0000FF));
 
