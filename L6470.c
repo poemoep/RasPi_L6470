@@ -193,7 +193,13 @@ void L6470_init(void)
 
 int L6470_rw(uint8_t *data,int len)
 {
-   return wiringPiSPIDataRW(SPI_CH, data, len); 
+	int i = 0,j = 0;
+	for (i = 0; i<len; i++){
+		j += wiringPiSPIDataRW(SPI_CH, data,1);
+		data += 1;
+	}
+
+   return j; 
 }
 
 void L6470_nop(int times)

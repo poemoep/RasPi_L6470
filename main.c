@@ -10,12 +10,19 @@ int main(int argc, char** argv)
 	printf("sizeof(int): %d\n",sizeof(int));
     L6470_init();
 
-    L6470_MoveCont(DIR_FWD, 200);
+    L6470_MoveCont(DIR_RVS, 2000);
     sleep(10);
+    L6470_MoveCont(DIR_RVS, 4000);
+    sleep(10);
+    L6470_MoveCont(DIR_RVS, 6000);
+    sleep(10);
+    L6470_MoveCont(DIR_RVS, 8000);
+    sleep(10);
+    
     L6470_StopSoft();
     sleep(10);
 
-    L6470_MoveCont(DIR_RVS, 200);
+    L6470_MoveCont(DIR_FWD, 2000);
     sleep(10);
     L6470_StopSoft();
     sleep(10);
