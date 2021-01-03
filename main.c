@@ -11,29 +11,31 @@ int main(int argc, char** argv)
     L6470_init();
 
     L6470_MoveCont(DIR_RVS, 2000);
-    sleep(10);
+    sleep(5);
     L6470_MoveCont(DIR_RVS, 4000);
-    sleep(10);
-    L6470_MoveCont(DIR_RVS, 6000);
-    sleep(10);
+    sleep(5);
     L6470_MoveCont(DIR_RVS, 8000);
-    sleep(10);
+    sleep(5);
+    L6470_MoveCont(DIR_RVS, 16000);
+    sleep(5);
+    L6470_MoveCont(DIR_RVS, 32000);
+    sleep(5);
+    L6470_MoveCont(DIR_RVS, 64000);
+    sleep(5);
     
     L6470_StopSoft();
-    sleep(10);
+    sleep(5);
 
-    L6470_MoveCont(DIR_FWD, 2000);
+    L6470_MoveCont(DIR_FWD, 16000);
     sleep(10);
     L6470_StopSoft();
     sleep(10);
     
     
-    for (int i =0; i <10; i++){
-        L6470_MoveStepClock(DIR_FWD);
-        sleep(1);
-        L6470_MoveStepClock(DIR_RVS);
-        sleep(1);
-    }
+    L6470_MoveStepClock(DIR_FWD);
+    sleep(10);
+    L6470_MoveStepClock(DIR_RVS);
+    sleep(10);
     sleep(3);
 
     for(int i = 0; i<10; i++){
