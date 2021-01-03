@@ -99,7 +99,7 @@ void L6470_setting_init(void)
                 //when use L6470_rw, L6470_setting is written by SDO 
                 L6470_setting[reg] = L6470_user_setting[reg];
 
-                int len, SPI_res;
+                int len, SPI_res = 0;
                 len = REG_SIZE[reg];
 #ifdef L6470_PRINT_MESSAGE
                 printf("[L6470 DEBUG]:setting_init before reg:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
@@ -215,7 +215,7 @@ void L6470_nop(int times)
 void L6470_SetParam(uint8_t param_addr, uint32_t value)
 {
     union L6470_packet pkt;
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[param_addr];
     
     pkt.data.reg_addr = (param_addr | REG_SETPARAM);
@@ -242,7 +242,7 @@ void L6470_SetParam(uint8_t param_addr, uint32_t value)
 union L6470_packet L6470_GetParam(uint8_t param_addr)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[param_addr];
 
     pkt.data.reg_addr = (param_addr | REG_GETPARAM);
@@ -259,9 +259,8 @@ union L6470_packet L6470_GetParam(uint8_t param_addr)
 void L6470_MoveCont(uint8_t dir, uint32_t value)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_MoveCont];
-
 
     pkt.data.reg_addr = (REG_MoveCont | dir);
     pkt.data.value8b[0] = (uint8_t)((value & 0xFF0000) >> 16);
@@ -298,7 +297,7 @@ void L6470_MoveCont(uint8_t dir, uint32_t value)
 void L6470_MoveStepClock(uint8_t dir)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_MoveStepClock];
 
     pkt.data.reg_addr = (REG_MoveStepClock | dir);
@@ -330,9 +329,8 @@ void L6470_MoveStepClock(uint8_t dir)
 void L6470_MoveStep(uint8_t dir,uint32_t step)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_MoveStep];
-
 
     pkt.data.reg_addr = (REG_MoveStep | dir);
     pkt.data.value8b[0] = ((step & 0xFF0000) >> 16);
@@ -368,7 +366,7 @@ void L6470_MoveStep(uint8_t dir,uint32_t step)
 void L6470_MoveGoTo(uint32_t abs_pos)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_MoveGoTo];
 
     pkt.data.reg_addr = (REG_MoveGoTo);
@@ -403,7 +401,7 @@ void L6470_MoveGoTo(uint32_t abs_pos)
 void L6470_MoveGoToDir(uint8_t dir,uint32_t abs_pos)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_MoveGoToDir];
 
     pkt.data.reg_addr = (REG_MoveGoToDir | dir);
@@ -438,7 +436,7 @@ void L6470_MoveGoToDir(uint8_t dir,uint32_t abs_pos)
 void L6470_MoveGoToUntil(uint8_t act, uint8_t dir,uint32_t speed)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_MoveGoToUntil];
 
     pkt.data.reg_addr = (REG_MoveGoToUntil | dir | act);
@@ -473,7 +471,7 @@ void L6470_MoveGoToUntil(uint8_t act, uint8_t dir,uint32_t speed)
 void L6470_MoveRelease(uint8_t act, uint8_t dir)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_MoveRelease];
 
     pkt.data.reg_addr = (REG_MoveRelease | dir | act);
@@ -488,7 +486,7 @@ void L6470_MoveRelease(uint8_t act, uint8_t dir)
 void L6470_GoHome(void)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_GoHome];
 
     pkt.data.reg_addr = (REG_GoHome);
@@ -520,7 +518,7 @@ void L6470_GoHome(void)
 void L6470_GoMark(void)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_GoMark];
 
     pkt.data.reg_addr = (REG_GoMark);
@@ -552,7 +550,7 @@ void L6470_GoMark(void)
 void L6470_ResetPos(void)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_ResetPos];
 
     pkt.data.reg_addr = (REG_ResetPos);
@@ -585,7 +583,7 @@ void L6470_ResetPos(void)
 void L6470_ResetDevice(void)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_ResetDevice];
 
     pkt.data.reg_addr = (REG_ResetDevice);
@@ -617,7 +615,7 @@ void L6470_ResetDevice(void)
 void L6470_StopSoft(void)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_StopSoft];
 
     pkt.data.reg_addr = (REG_StopSoft);
@@ -649,7 +647,7 @@ void L6470_StopSoft(void)
 void L6470_StopHard(void)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_StopHard];
 
     pkt.data.reg_addr = (REG_StopHard);
@@ -681,7 +679,7 @@ void L6470_StopHard(void)
 void L6470_HiZSoft(void)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_HiZSoft];
 
     pkt.data.reg_addr = (REG_HiZSoft);
@@ -713,7 +711,7 @@ void L6470_HiZSoft(void)
 void L6470_HiZHard(void)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_HiZHard];
 
     pkt.data.reg_addr = (REG_HiZHard);
@@ -745,7 +743,7 @@ void L6470_HiZHard(void)
 uint16_t L6470_GetStatus(void)
 {
     union L6470_packet pkt={0};
-    int SPI_res;
+    int SPI_res = 0;
     int size = REG_SIZE[REG_GetStatus];
 
     pkt.data.reg_addr = (REG_GetStatus);

@@ -9,16 +9,16 @@ int main(int argc, char** argv)
 
 	printf("sizeof(int): %d\n",sizeof(int));
     L6470_init();
-/*
+
     L6470_MoveCont(DIR_FWD, 200);
-    sleep(5);
+    sleep(10);
     L6470_StopSoft();
-    sleep(5);
-*/
+    sleep(10);
+
     L6470_MoveCont(DIR_RVS, 200);
-    sleep(5);
+    sleep(10);
     L6470_StopSoft();
-    sleep(5);
+    sleep(10);
     
     
     for (int i =0; i <10; i++){
