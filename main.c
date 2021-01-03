@@ -6,13 +6,15 @@
 
 int main(int argc, char** argv)
 {
-    L6470_init();
 
+	printf("sizeof(int): %d\n",sizeof(int));
+    L6470_init();
+/*
     L6470_MoveCont(DIR_FWD, 200);
     sleep(5);
     L6470_StopSoft();
     sleep(5);
-
+*/
     L6470_MoveCont(DIR_RVS, 200);
     sleep(5);
     L6470_StopSoft();
@@ -20,13 +22,17 @@ int main(int argc, char** argv)
     
     
     for (int i =0; i <10; i++){
+        L6470_MoveStepClock(DIR_FWD);
+        sleep(1);
         L6470_MoveStepClock(DIR_RVS);
         sleep(1);
     }
     sleep(3);
 
     for(int i = 0; i<10; i++){
-        L6470_MoveStep(DIR_FWD,2000);
+        L6470_MoveStep(DIR_FWD,200);
+        sleep(1);
+        L6470_MoveStep(DIR_RVS,200);
         sleep(1);
     }
     sleep(3);

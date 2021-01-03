@@ -60,7 +60,7 @@
 #define REG_GETPARAM    0b00100000
 #define REG_MoveCont    0b01010000
 #define REG_MoveStepClock 0b01011000
-#define REG_MoveStep    0b01011000
+#define REG_MoveStep    0b01000000
 #define REG_MoveGoTo    0b01100000
 #define REG_MoveGoToDir 0b01101000
 #define REG_MoveGoToUntil 0b10000010
