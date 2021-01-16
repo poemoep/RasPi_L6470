@@ -3,16 +3,12 @@
 #include <stdint.h>
 #include <unistd.h>
 
-// #include "wiringPi.h"
-// #include "wiringPiSPI.h"
-
 
 #ifndef __L6470_HEADER
 #define __L6470_HEADER
 
 //----define debug message function ON/OFF----
 #define L6470_PRINT_MESSAGE 
-
 
 //----define const value----
 
@@ -82,65 +78,69 @@
 
 //const uint8_t REG_SIZE[REG_NUM];
 extern uint8_t *REG_SIZE;
-/*
-REG_SIZE[REG_ABS_POS]   = 22;
-REG_SIZE[REG_EL_POS]    = 9;
-REG_SIZE[REG_MARK]      = 22;
-REG_SIZE[REG_SPEED]     = 20; //readonly
-REG_SIZE[REG_ACC]       = 12;
-REG_SIZE[REG_DEC]       = 12;
-REG_SIZE[REG_MAX_SPEED] = 10;
-REG_SIZE[REG_MIN_SPEED] = 13;
-REG_SIZE[REG_KVAL_HOLD] = 8;
-REG_SIZE[REG_KVAL_RUN]  = 8;
-REG_SIZE[REG_KVAL_ACC]  = 8;
-REG_SIZE[REG_KVAL_DEC]  = 8;
-REG_SIZE[REG_INT_SPEED] = 14;
-REG_SIZE[REG_ST_SLP]    = 8;
-REG_SIZE[REG_FN_SLP_ACC]= 8;
-REG_SIZE[REG_FN_SLP_DEC]= 8;
-REG_SIZE[REG_K_THERM]   = 4;
-REG_SIZE[REG_ADC_OUT]   = 5; //readonly
-REG_SIZE[REG_OCD_TH]    = 4;
-REG_SIZE[REG_STALL_TH]  = 7;
-REG_SIZE[REG_FS_SPD]    = 10;
-REG_SIZE[REG_STEP_MODE] = 8;
-REG_SIZE[REG_ALARM_EN]  = 8;
-REG_SIZE[REG_CONFIG]    = 16;
-REG_SIZE[REG_STATUS]    = 16; //readonly
 
-REG_SIZE[REG_NOP]       = 0;
-REG_SIZE[REG_SETPARAM]  = 24;
-REG_SIZE[REG_GETPARAM]  = 24;
-REG_SIZE[REG_MoveCont]  =  24;
-REG_SIZE[REG_MoveStepClock]  = 0;
-REG_SIZE[REG_MoveStep]  =  24;
-REG_SIZE[REG_MoveGoTo]  =  24;
-REG_SIZE[REG_MoveGoToDir]= 24;
-REG_SIZE[REG_MoveGoToUntil]= 24;
-REG_SIZE[REG_MoveRelease]= 0;
-REG_SIZE[REG_GoHome]    =  0;
-REG_SIZE[REG_GoMark]    =  0;
-REG_SIZE[REG_ResetPos]  =  0;
-REG_SIZE[REG_ResetDevice]= 0;
-REG_SIZE[REG_StopSoft]  =  0;
-REG_SIZE[REG_StopHard]  =  0;
-REG_SIZE[REG_HiZSoft]   =  0;
-REG_SIZE[REG_HiZHard]   =  0;
-REG_SIZE[REG_GetStatus] =  16;
-*/
+#define ADDR_SIZE                (8 )
+
+#define REG_SIZE[REG_ABS_POS]    (22)
+#define REG_SIZE[REG_EL_POS]     (9 )
+#define REG_SIZE[REG_MARK]       (22)
+#define REG_SIZE[REG_SPEED]      (20) //readonly
+#define REG_SIZE[REG_ACC]        (12)
+#define REG_SIZE[REG_DEC]        (12)
+#define REG_SIZE[REG_MAX_SPEED]  (10)
+#define REG_SIZE[REG_MIN_SPEED]  (13)
+#define REG_SIZE[REG_KVAL_HOLD]  (8 )
+#define REG_SIZE[REG_KVAL_RUN]   (8 )
+#define REG_SIZE[REG_KVAL_ACC]   (8 )
+#define REG_SIZE[REG_KVAL_DEC]   (8 )
+#define REG_SIZE[REG_INT_SPEED]  (14)
+#define REG_SIZE[REG_ST_SLP]     (8 )
+#define REG_SIZE[REG_FN_SLP_ACC] (8 )
+#define REG_SIZE[REG_FN_SLP_DEC] (8 )
+#define REG_SIZE[REG_K_THERM]    (4 )
+#define REG_SIZE[REG_ADC_OUT]    (5 ) //readonly
+#define REG_SIZE[REG_OCD_TH]     (4 )
+#define REG_SIZE[REG_STALL_TH]   (7 )
+#define REG_SIZE[REG_FS_SPD]     (10)
+#define REG_SIZE[REG_STEP_MODE]  (8 )
+#define REG_SIZE[REG_ALARM_EN]   (8 )
+#define REG_SIZE[REG_CONFIG]     (16)
+#define REG_SIZE[REG_STATUS]     (16) //readonly
+
+#define REG_SIZE[REG_NOP]        (1 ) // test
+#define REG_SIZE[REG_SETPARAM]   (24)
+#define REG_SIZE[REG_GETPARAM]   (24)
+#define REG_SIZE[REG_MoveCont]   (24)
+#define REG_SIZE[REG_MoveStepClock]   (0 )
+#define REG_SIZE[REG_MoveStep]    (24)  
+#define REG_SIZE[REG_MoveGoTo]    (24)
+#define REG_SIZE[REG_MoveGoToDir] (24)
+#define REG_SIZE[REG_MoveGoToUntil] (24)
+#define REG_SIZE[REG_MoveRelease] (0 )
+#define REG_SIZE[REG_GoHome]      (0 )
+#define REG_SIZE[REG_GoMark]      (0 )
+#define REG_SIZE[REG_ResetPos]    (0 )
+#define REG_SIZE[REG_ResetDevice] (0 )
+#define REG_SIZE[REG_StopSoft]    (0 )
+#define REG_SIZE[REG_StopHard]    (0 )
+#define REG_SIZE[REG_HiZSoft]     (0 )
+#define REG_SIZE[REG_HiZHard]     (0 )
+#define REG_SIZE[REG_GetStatus]   (16)
+
+static const uint8_t spiBPW  8;
+static const uint16_t spiDelay  0;
 
 //----define struct/union----
 
 struct L6470_Data{
-    uint8_t reg_addr;
-    uint8_t value8b[3];
+#define  uint8_t reg_addr;
+#define  uint8_t value8b[3];
 };
 
 union L6470_packet{
-    struct L6470_Data data;
-    uint8_t value8b[4];
-    uint32_t value32b;
+#define  struct L6470_Data data;
+#define  uint8_t value8b[4];
+#define  uint32_t value32b;
 };
 
 //----prottype declaration---
@@ -171,6 +171,11 @@ void L6470_HiZSoft(void);
 void L6470_HiZHard(void);
 int32_t L6470_GetAbsPos(void);
 uint16_t L6470_GetStatus(void);
+
+#if defined (L6470_PRINT_MESSAGE)
+#define L6470_PRINT_HEADER "[L6470 DEBUG]: "
+static void L6470_debug_print(const char *msg,union L6470_packet send, union L6470_packet get)
+#endif
 
 #endif
 

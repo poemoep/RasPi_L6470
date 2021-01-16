@@ -5,9 +5,9 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
-#include <sys/ioctl.h>
-#include <asm/ioctl.h>
-#include <linux/spi/spidev.h>
+// #include <sys/ioctl.h>
+// #include <asm/ioctl.h>
+// #include <linux/spi/spidev.h>
 
 #include "wiringPi.h"
 #include "wiringPiSPI.h"
@@ -17,98 +17,74 @@
 #include "L6470.h"
 #include "L6470_user.h"
 
-uint8_t *REG_SIZE;
+// uint8_t *REG_SIZE;
 union L6470_packet *L6470_setting;
 
-static const uint8_t spiBPW = 8;
-static const uint16_t spiDelay = 0;
 
 static uint32_t spiSpeeds [2];
 static int 	spiFds [2];
 
+// void L6470_reg_size_init(void){
+
+// #ifdef L6470_PRINT_MESSAGE
+//     printf("[L6470 DEBUG]:reg_size_init start\n");
+// #endif
+
+//     //REG_SIZE initialize
+//     REG_SIZE = (uint8_t*)malloc(256* sizeof(uint8_t));
+
+//     REG_SIZE[REG_ABS_POS]   = 22;
+//     REG_SIZE[REG_EL_POS]    = 9;
+//     REG_SIZE[REG_MARK]      = 22;
+//     REG_SIZE[REG_SPEED]     = 20; //readonly
+//     REG_SIZE[REG_ACC]       = 12;
+//     REG_SIZE[REG_DEC]       = 12;
+//     REG_SIZE[REG_MAX_SPEED] = 10;
+//     REG_SIZE[REG_MIN_SPEED] = 13;
+//     REG_SIZE[REG_KVAL_HOLD] = 8;
+//     REG_SIZE[REG_KVAL_RUN]  = 8;
+//     REG_SIZE[REG_KVAL_ACC]  = 8;
+//     REG_SIZE[REG_KVAL_DEC]  = 8;
+//     REG_SIZE[REG_INT_SPEED] = 14;
+//     REG_SIZE[REG_ST_SLP]    = 8;
+//     REG_SIZE[REG_FN_SLP_ACC]= 8;
+//     REG_SIZE[REG_FN_SLP_DEC]= 8;
+//     REG_SIZE[REG_K_THERM]   = 4;
+//     REG_SIZE[REG_ADC_OUT]   = 5; //readonly
+//     REG_SIZE[REG_OCD_TH]    = 4;
+//     REG_SIZE[REG_STALL_TH]  = 7;
+//     REG_SIZE[REG_FS_SPD]    = 10;
+//     REG_SIZE[REG_STEP_MODE] = 8;
+//     REG_SIZE[REG_ALARM_EN]  = 8;
+//     REG_SIZE[REG_CONFIG]    = 16;
+//     REG_SIZE[REG_STATUS]    = 16; //readonly
+
+//     REG_SIZE[REG_NOP]       = 1; // test
+//     REG_SIZE[REG_SETPARAM]  = 24;
+//     REG_SIZE[REG_GETPARAM]  = 24;
+//     REG_SIZE[REG_MoveCont]  =  24;
+//     REG_SIZE[REG_MoveStepClock]  = 0;
+//     REG_SIZE[REG_MoveStep]  =  24;  
+//     REG_SIZE[REG_MoveGoTo]  =  24;
+//     REG_SIZE[REG_MoveGoToDir]= 24;
+//     REG_SIZE[REG_MoveGoToUntil]= 24;
+//     REG_SIZE[REG_MoveRelease]= 0;
+//     REG_SIZE[REG_GoHome]    =  0;
+//     REG_SIZE[REG_GoMark]    =  0;
+//     REG_SIZE[REG_ResetPos]  =  0;
+//     REG_SIZE[REG_ResetDevice]= 0;
+//     REG_SIZE[REG_StopSoft]  =  0;
+//     REG_SIZE[REG_StopHard]  =  0;
+//     REG_SIZE[REG_HiZSoft]   =  0;
+//     REG_SIZE[REG_HiZHard]   =  0;
+//     REG_SIZE[REG_GetStatus] =  16;
 
 
-// int mywiringPiFailure (int fatal, const char *message, ...)
-// {
-//   va_list argp ;
-//   char buffer [1024] ;
+// #ifdef L6470_PRINT_MESSAGE
+//     printf("[L6470 DEBUG]:reg_size_init end\n");
+// #endif
 
-//   if (!fatal && 0)
-//     return -1 ;
-
-//   va_start (argp, message) ;
-//     vsnprintf (buffer, 1023, message, argp) ;
-//   va_end (argp) ;
-
-//   fprintf (stderr, "%s", buffer) ;
-//   exit (EXIT_FAILURE) ;
-
-//   return 0 ;
 // }
-
-
-
-void L6470_reg_size_init(void){
-
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:reg_size_init start\n");
-#endif
-
-    //REG_SIZE initialize
-    REG_SIZE = (uint8_t*)malloc(256* sizeof(uint8_t));
-
-    REG_SIZE[REG_ABS_POS]   = 22;
-    REG_SIZE[REG_EL_POS]    = 9;
-    REG_SIZE[REG_MARK]      = 22;
-    REG_SIZE[REG_SPEED]     = 20; //readonly
-    REG_SIZE[REG_ACC]       = 12;
-    REG_SIZE[REG_DEC]       = 12;
-    REG_SIZE[REG_MAX_SPEED] = 10;
-    REG_SIZE[REG_MIN_SPEED] = 13;
-    REG_SIZE[REG_KVAL_HOLD] = 8;
-    REG_SIZE[REG_KVAL_RUN]  = 8;
-    REG_SIZE[REG_KVAL_ACC]  = 8;
-    REG_SIZE[REG_KVAL_DEC]  = 8;
-    REG_SIZE[REG_INT_SPEED] = 14;
-    REG_SIZE[REG_ST_SLP]    = 8;
-    REG_SIZE[REG_FN_SLP_ACC]= 8;
-    REG_SIZE[REG_FN_SLP_DEC]= 8;
-    REG_SIZE[REG_K_THERM]   = 4;
-    REG_SIZE[REG_ADC_OUT]   = 5; //readonly
-    REG_SIZE[REG_OCD_TH]    = 4;
-    REG_SIZE[REG_STALL_TH]  = 7;
-    REG_SIZE[REG_FS_SPD]    = 10;
-    REG_SIZE[REG_STEP_MODE] = 8;
-    REG_SIZE[REG_ALARM_EN]  = 8;
-    REG_SIZE[REG_CONFIG]    = 16;
-    REG_SIZE[REG_STATUS]    = 16; //readonly
-
-    REG_SIZE[REG_NOP]       = 0;
-    REG_SIZE[REG_SETPARAM]  = 24;
-    REG_SIZE[REG_GETPARAM]  = 24;
-    REG_SIZE[REG_MoveCont]  =  24;
-    REG_SIZE[REG_MoveStepClock]  = 0;
-    REG_SIZE[REG_MoveStep]  =  24;  
-    REG_SIZE[REG_MoveGoTo]  =  24;
-    REG_SIZE[REG_MoveGoToDir]= 24;
-    REG_SIZE[REG_MoveGoToUntil]= 24;
-    REG_SIZE[REG_MoveRelease]= 0;
-    REG_SIZE[REG_GoHome]    =  0;
-    REG_SIZE[REG_GoMark]    =  0;
-    REG_SIZE[REG_ResetPos]  =  0;
-    REG_SIZE[REG_ResetDevice]= 0;
-    REG_SIZE[REG_StopSoft]  =  0;
-    REG_SIZE[REG_StopHard]  =  0;
-    REG_SIZE[REG_HiZSoft]   =  0;
-    REG_SIZE[REG_HiZHard]   =  0;
-    REG_SIZE[REG_GetStatus] =  16;
-
-
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:reg_size_init end\n");
-#endif
-
-}
 
 void L6470_setting_init(void)
 {
@@ -139,25 +115,14 @@ void L6470_setting_init(void)
                 int len, SPI_res = 0;
                 len = REG_SIZE[reg];
 #ifdef L6470_PRINT_MESSAGE
-                printf("[L6470 DEBUG]:setting_init before reg:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-				L6470_setting[reg].data.reg_addr,
-				L6470_setting[reg].value8b[0],
-				L6470_setting[reg].value8b[1],
-				L6470_setting[reg].value8b[2],
-				L6470_setting[reg].value8b[3],
-				(int)(1 + (len +8 -1)/8));
+                union L6470_packet send = L6470_setting[reg];
 #endif
                 SPI_res = L6470_rw(L6470_setting[reg].value8b, (int)(1 + (len + 8 -1)/8));
 
 #ifdef L6470_PRINT_MESSAGE
-                printf("[L6470 DEBUG]:setting_init after reg:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-				L6470_setting[reg].data.reg_addr,
-				L6470_setting[reg].value8b[0],
-				L6470_setting[reg].value8b[1],
-				L6470_setting[reg].value8b[2],
-				L6470_setting[reg].value8b[3],
-				(int)(1 + (len +8 -1)/8));
+                L6470_debug_print("setting_init",send,L6470_setting[reg]);
 #endif
+
             break;
             }
         }
@@ -180,64 +145,12 @@ void L6470_SPI_init(void)
 #endif
 }
 
-// int mywiringPiSPISetupMode (int channel, int speed, int wmode, int rmode)
-// {
-
-// #ifdef L6470_PRINT_MESSAGE
-// 	printf("[L6470 DEBUG]:mywiringPiSPISetupMode start\n");
-// #endif
-
-//   int fd ;
-//   char spiDev [32] ;
-//   int err = 0;
-  
-//   wmode    &= 3 ;	// Mode is 0, 1, 2 or 3
-//   rmode    &= 3 ;	// Mode is 0, 1, 2 or 3
-
-// // Channel can be anything - lets hope for the best
-// //  channel &= 1 ;	// Channel is 0 or 1
-
-//   snprintf (spiDev, 31, "/dev/spidev0.%d", channel) ;
- 
-//   if ((fd = open (spiDev, O_RDWR)) < 0)
-//     return mywiringPiFailure (WPI_ALMOST, "Unable to open SPI device: %s\n", strerror (errno)) ;
-
-//   spiSpeeds [channel] = speed ;
-//   spiFds    [channel] = fd ;
-
-// // Set SPI parameters.
-
-//   if (ioctl (fd, SPI_IOC_RD_MODE, &rmode)            < 0)
-//     return mywiringPiFailure (WPI_ALMOST, "SPI WriteMode Change failure: %s\t%s\n", err, strerror (errno)) ;
-  
-//   if (ioctl (fd, SPI_IOC_WR_MODE, &wmode)            < 0)
-//     return mywiringPiFailure (WPI_ALMOST, "SPI ReadMode Change failure: %s\t%s\n", err, strerror (errno)) ;
-
-//   if (ioctl (fd, SPI_IOC_WR_BITS_PER_WORD, &spiWBPW) < 0)
-//     return mywiringPiFailure (WPI_ALMOST, "SPI Write BPW Change failure: %s\t%s\n", err, strerror (errno)) ;
-
-//   //if (ioctl (fd, SPI_IOC_RD_BITS_PER_WORD, &spiWBPW) < 0)
-//   //err = ioctl (fd, SPI_IOC_RD_BITS_PER_WORD, &spiWBPW);
-//   //if (err  < 0)
-//   //  return mywiringPiFailure (WPI_ALMOST, "SPI Read BPW Change failure: %s\t%s\n", err, strerror (errno)) ;
-
-//   if (ioctl (fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed)   < 0)
-//   //err = ioctl (fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
-//   //if (err    < 0)
-//     return mywiringPiFailure (WPI_ALMOST, "SPI Speed Change failure: %s\t%s\n", err, strerror (errno)) ;
-
-//   return fd ;
-// }
-
-//int mywiringPiSPIDataRW (int channel, unsigned char *wdata, unsigned char *rdata, int len)
 int mywiringPiSPIDataRW (int channel, unsigned char *wdata, int len)
 {
   struct spi_ioc_transfer spi ;
 
   channel &= 1 ;
 
-// Mentioned in spidev.h but not used in the original kernel documentation
-//	test program )-:
 
   memset (&spi, 0, sizeof (spi)) ;
 
@@ -246,47 +159,12 @@ int mywiringPiSPIDataRW (int channel, unsigned char *wdata, int len)
   spi.len           = len ;
   spi.delay_usecs   = spiDelay ;
   spi.speed_hz      = spiSpeeds [channel] ;
-  spi.bits_per_word = spiBPW ; 
+  spi.bits_per_word = spiBPW ;
   spi.cs_change	    = 0;
   spi.pad	    = 0;
-//  spi.mode 	    = SPI_MODE_1;
   return ioctl (spiFds [channel], SPI_IOC_MESSAGE(1), &spi) ;
 }
 
-
-/*
-void L6470_setting_init(void)
-{
-    
-    int itr_row,itr_col;
-    
-    itr_row =  sizeof(L6470_setting) / sizeof(L6470_setting[0]);
-
-
-    for (int itr = 0; itr < itr_row; itr++){
-        int SPI_res;
-	union L6470_packet temp;
-       	temp = L6470_setting[itr];
-#ifdef L6470_PRINT_MESSAGE
-            printf("[L6470 DEBUG]:setting_init before\tres:%d,\treg:0x%x,\tvalue:0x%x,\tlen:%d\n",
-                    0,
-                    temp.data.reg_addr,
-                    temp.data.value32b,
-		    (REG_SIZE[temp.data.reg_addr] + 8 - 1)/8);
-#endif
-     	    SPI_res = L6470_rw( temp.value8b,
-                            (1 + (REG_SIZE[temp.data.reg_addr] + 8 - 1)/8));
-            //切り上げ処理 (roundup(x%8) = (x+8-1)/8
-            
-#ifdef L6470_PRINT_MESSAGE
-            printf("[L6470 DEBUG]:setting_init after\tres:%d,\treg:0x%x,\tvalue:0x%x\n",
-                    SPI_res,
-                    temp.data.reg_addr,
-                    temp.data.value32b);
-#endif
-      }
-}
-*/
 
 void L6470_init(void)
 {
@@ -295,7 +173,7 @@ void L6470_init(void)
 #endif
 
     L6470_SPI_init();
-    L6470_reg_size_init();
+    // L6470_reg_size_init();
     L6470_setting_init();
 
 #ifdef L6470_PRINT_MESSAGE
@@ -303,32 +181,36 @@ void L6470_init(void)
 #endif
 }
 
-int L6470_rw(uint8_t *data,int len)
+int L6470_rw(union L6470_packet pkt,int len, const char* msg)
 {
+    uint8_t *data;
+    data = pkt.value8b;
+
+#ifdef L6470_PRINT_MESSAGE
+    union L6470_packet send = pkt;
+#endif
+
+
 	int i = 0,j = 0;
 	for (i = 0; i<len; i++){
 		j += wiringPiSPIDataRW(L6470_SPI_CH, data,1);
-	//	j += mywiringPiSPIDataRW(L6470_SPI_CH, data,1);
 		data++;
 	}
+
+#ifdef L6470_PRINT_MESSAGE
+    L6470_debug_print(msg,send,pkt)
+#endif
 
    return j; 
 }
 
 void L6470_nop(int times)
 {
-    uint8_t * data;
+    union L6470_packet pkt = {0};
+    int SPI_res = 0;
+    int size = REG_SIZE[REG_NOP];
 
-    data = (uint8_t*)malloc(times * sizeof(uint8_t));
-
-    for (int itr = 0; itr < times; itr++){
-        data[itr] = REG_NOP;
-    }
-
-    L6470_rw(data,times);
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:nop send %d times\n",times);
-#endif
+    L6470_rw(pkt.value8b,times, "NOP");
 }
 
 void L6470_SetParam(uint8_t param_addr, uint32_t value)
@@ -349,13 +231,8 @@ void L6470_SetParam(uint8_t param_addr, uint32_t value)
         pkt.value8b[2] = ((value & 0x00FF00) >> 8);
         pkt.value8b[3] = (value & 0x0000FF);
     }
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "SetParam");
 
-
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
-
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:SetParam res:%d\n",SPI_res);
-#endif
 }
 
 union L6470_packet L6470_GetParam(uint8_t param_addr)
@@ -365,30 +242,8 @@ union L6470_packet L6470_GetParam(uint8_t param_addr)
     int size = REG_SIZE[param_addr];
 
     pkt.data.reg_addr = (param_addr | REG_GETPARAM);
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:GetParam before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
 
-
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:GetParam after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8),"GetParam");
 
     return pkt;
 }
@@ -404,31 +259,7 @@ void L6470_MoveCont(uint8_t dir, uint32_t value)
     pkt.data.value8b[1] = (uint8_t)((value & 0x00FF00) >> 8);
     pkt.data.value8b[2] = (uint8_t)(value & 0x0000FF);
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveCont before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-
-
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
-
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveCont after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "MoveCont");
 }
 
 void L6470_MoveStepClock(uint8_t dir)
@@ -439,28 +270,7 @@ void L6470_MoveStepClock(uint8_t dir)
 
     pkt.data.reg_addr = (REG_MoveStepClock | dir);
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveStepClock before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
-
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveStepClock after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "MoveStepClock");
 }
 
 void L6470_MoveStep(uint8_t dir,uint32_t step)
@@ -474,30 +284,8 @@ void L6470_MoveStep(uint8_t dir,uint32_t step)
     pkt.data.value8b[1] = ((step & 0x00FF00) >> 8);
     pkt.data.value8b[2] = ((step & 0x0000FF));
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveStep before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "MoveStep");
 
-
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
-
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveStep after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
 }
 
 void L6470_MoveGoTo(int32_t abs_pos)
@@ -506,35 +294,13 @@ void L6470_MoveGoTo(int32_t abs_pos)
     int SPI_res = 0;
     int size = REG_SIZE[REG_MoveGoTo];
     
-    printf("%x\n",abs_pos);
-
     pkt.data.reg_addr = (REG_MoveGoTo);
     pkt.data.value8b[0] = ((abs_pos & 0x3F0000) >> 16);
     pkt.data.value8b[1] = ((abs_pos & 0x00FF00) >> 8);
     pkt.data.value8b[2] = ((abs_pos & 0x0000FF));
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveGoTo before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
 
-   SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
+   SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "MoveGoTo");
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveGoTo after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
 }
 
 void L6470_MoveGoToDir(uint8_t dir,int32_t abs_pos)
@@ -550,28 +316,7 @@ void L6470_MoveGoToDir(uint8_t dir,int32_t abs_pos)
     pkt.data.value8b[1] = ((abs_pos & 0x00FF00) >> 8);
     pkt.data.value8b[2] = ((abs_pos & 0x0000FF));
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveGoToDir before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
-
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveGoToDir after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "MoveGoToDir");
 }
 
 void L6470_MoveGoToUntil(uint8_t act, uint8_t dir,uint32_t speed)
@@ -585,28 +330,8 @@ void L6470_MoveGoToUntil(uint8_t act, uint8_t dir,uint32_t speed)
     pkt.data.value8b[1] = ((speed & 0xFFFFFF) >> 8);
     pkt.data.value8b[2] = (speed & 0xFFFFFF);
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveGoToUntil before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "MoveGoToUntil");
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveGoToUntil after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
 }
 
 void L6470_MoveRelease(uint8_t act, uint8_t dir)
@@ -617,11 +342,9 @@ void L6470_MoveRelease(uint8_t act, uint8_t dir)
 
     pkt.data.reg_addr = (REG_MoveRelease | dir | act);
     
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "MoveRelease");
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveRelease res:%d,\taddr:0x%2x,\tvalue:0x%6x\n",SPI_res,pkt.data.reg_addr, pkt.value32b);
-#endif
+
 }
 
 void L6470_GoHome(void)
@@ -632,28 +355,8 @@ void L6470_GoHome(void)
 
     pkt.data.reg_addr = (REG_GoHome);
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveGoHome before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "MoveGoHome");
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveGoHome after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
 }
 
 void L6470_GoMark(void)
@@ -664,28 +367,8 @@ void L6470_GoMark(void)
 
     pkt.data.reg_addr = (REG_GoMark);
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveGoMark before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "MoveGoMark");
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:MoveGoMark after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
 }
 
 void L6470_ResetPos(void)
@@ -696,29 +379,8 @@ void L6470_ResetPos(void)
 
     pkt.data.reg_addr = (REG_ResetPos);
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:ResetPos before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "ResetPos");
 
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
-
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:ResetPos after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
 }
 
 void L6470_ResetDevice(void)
@@ -729,28 +391,8 @@ void L6470_ResetDevice(void)
 
     pkt.data.reg_addr = (REG_ResetDevice);
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:ResetDevice before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8),"ResetDevice");
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:ResetDevice after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
 }
 
 void L6470_StopSoft(void)
@@ -761,28 +403,7 @@ void L6470_StopSoft(void)
 
     pkt.data.reg_addr = (REG_StopSoft);
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:StopSoft before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
-
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:StopSoft after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "StopSoft");
 }
 
 void L6470_StopHard(void)
@@ -793,28 +414,8 @@ void L6470_StopHard(void)
 
     pkt.data.reg_addr = (REG_StopHard);
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:StopHard before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "StopHard");
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:StopHard after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
 }
 
 void L6470_HiZSoft(void)
@@ -825,28 +426,8 @@ void L6470_HiZSoft(void)
 
     pkt.data.reg_addr = (REG_HiZSoft);
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:HiZSoft before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8), "HiZSoft");
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:HiZSoft after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
 }
 
 void L6470_HiZHard(void)
@@ -857,28 +438,8 @@ void L6470_HiZHard(void)
 
     pkt.data.reg_addr = (REG_HiZHard);
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:HiZHart before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8),"HIZHard");
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:HiZHard after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
 }
 
 int32_t L6470_GetAbsPos(void)
@@ -892,12 +453,11 @@ int32_t L6470_GetAbsPos(void)
     pos += ((pkt.value8b[3] & 0xFF));
     
     if(((pos & 0x200000) >> 21) == 1){
-	printf("inv\n");
-	pos = (-1) * ((~pos + 1) & 0x3FFFFF);	
+	    pos = (-1) * ((~pos + 1) & 0x3FFFFF);	
     }
 
 #ifdef L6470_PRINT_MESSAGE
-	printf("pos: %d\tand: %d\n", pos, ((pos & 0x200000) >> 21));
+	printf("pos: %d\n", pos);
 #endif
 
     return pos;
@@ -913,29 +473,17 @@ uint16_t L6470_GetStatus(void)
 
     pkt.data.reg_addr = (REG_GetStatus);
 
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:GetStatus before\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8));
-
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:GetStatus after\tres:%d,\taddr:0x%x\tvalue:0x%x\t%x\t%x\t%x\tlen:%d\n",
-		    	SPI_res,
-			pkt.data.reg_addr,
-			pkt.value8b[0],
-			pkt.value8b[1],
-			pkt.value8b[2],
-			pkt.value8b[3],
-			size);
-#endif
-
+    SPI_res = L6470_rw((pkt.value8b),(1 + (size+8-1)/8),"GetStatus");
     return (pkt.value8b[2] << 8) & (pkt.value8b[3]);
 
 }
+
+#if defined (L6470_PRINT_MESSAGE)
+static void L6470_debug_print(const char *msg,union L6470_packet send, union L6470_packet get)
+{
+    printf("%s %s send:%8x \t len:%d\n", L6470_PRINT_HEADER, msg, send.value32b, REG_SIZE[send.data.reg_addr]);
+    if (get != NULL)
+        printf("%s %s  get:%8x \t len:%d\n", L6470_PRINT_HEADER, msg,  get.value32b, REG_SIZE[ get.data.reg_addr]);
+
+}
+#endif
