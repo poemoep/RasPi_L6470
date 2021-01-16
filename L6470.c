@@ -39,7 +39,7 @@ void L6470_setting_init(void)
         if(L6470_param[reg].rw == RESERVED){
             continue;
         }else if(L6470_param[reg].rw == READONLY){
-            L6470_setting[reg] = L6470_GetParam(L6470_param[reg].addr);
+            L6470_GetParam(L6470_param[reg].addr);
         }else{
             L6470_setting[reg] = L6470_user_setting[reg];
             //make temp because wiringPiSPIDataRW rewrite send data
@@ -114,9 +114,9 @@ void L6470_nop(int times)
 {
     union L6470_packet pkt = {0};
     int SPI_res = 0;
-    int size = REG_SIZE[REG_NOP];
+    int size = L6470_cmd[enum_L6470_NOP].size;
 
-    L6470_rw(pkt.value8b,times, "NOP");
+    L6470_rw(pkt,times, "NOP");
 }
 
 void L6470_SetParam(int enum_param, uint32_t value)
@@ -284,10 +284,10 @@ int32_t L6470_GetAbsPos(void)
     int32_t pos = 0;
     
     union L6470_packet pkt;
-    pkt = L6470_GetParam(enum_L6470_ABS_POS);
-    pos = ((pkt.value8b[1] & 0x3F) << 16);
-    pos += ((pkt.value8b[2] & 0xFF) << 8);
-    pos += ((pkt.value8b[3] & 0xFF));
+    pos = L6470_GetParam(enum_L6470_ABS_POS);
+//    pos = ((pkt.value8b[1] & 0x3F) << 16);
+//    pos += ((pkt.value8b[2] & 0xFF) << 8);
+//    pos += ((pkt.value8b[3] & 0xFF));
     
     if(((pos & 0x200000) >> 21) == 1){
 	    pos = (-1) * ((~pos + 1) & 0x3FFFFF);	
@@ -319,7 +319,7 @@ uint16_t L6470_GetStatus(void)
 static void L6470_debug_print(const char *msg,union L6470_packet send, union L6470_packet get)
 {
     printf("%s %s send:%8x \t len:%d\n", L6470_PRINT_HEADER, msg, send.value32b, 1);
-    if (get != (union L6470_packet*) NULL)
+    if (get != (union L6470_packet) NULL)
         printf("%s %s  get:%8x \t len:%d\n", L6470_PRINT_HEADER, msg,  get.value32b, 1);
 
 }

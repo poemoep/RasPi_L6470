@@ -11,7 +11,7 @@
 #define L6470_PRINT_MESSAGE 
 
 //----define inline function----
-#define bit2byte(x) ( ( x + 8 - 1 ) / 8 ) )
+#define bit2byte(x) ( ( x + 8 - 1 ) / 8 ) 
 
 //----define const value----
 
@@ -306,15 +306,13 @@ const struct L6470_CMD L6470_cmd[CMD_NUM] =
 
 //----prottype declaration---
 void L6470_SPI_init(void);
-int mywiringPiSPISetupMode (int channel, int speed, int wmode, int rmode);
-int mywiringPiSPIDataRW(int channel, unsigned char *data,int len);
 void L6470_reg_size_init(void);
 void L6470_setting_init(void);
 void L6470_init(void);
-int L6470_rw(union L6470_packet data,int len,const char*);
+int  L6470_rw(union L6470_packet data,int len,const char* msg);
 void L6470_nop(int times);
 void L6470_SetParam(uint8_t param,uint32_t value);
-union L6470_packet L6470_GetParam(uint8_t param);
+uint32_t L6470_GetParam(uint8_t param);
 void L6470_MoveCont(uint8_t dir,uint32_t value);
 void L6470_MoveStepClock(uint8_t dir);
 void L6470_MoveStep(uint8_t dir, uint32_t step);
