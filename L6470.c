@@ -5,6 +5,8 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
+#include <math.h>
+
 // #include <sys/ioctl.h>
 // #include <asm/ioctl.h>
  #include <linux/spi/spidev.h>
@@ -114,7 +116,7 @@ void L6470_nop(int times)
 {
     union L6470_packet pkt = {0};
     int SPI_res = 0;
-    int size = L6470_cmd[enum_L6470_NOP].size;
+    int size = L6470_cmd[enum_L6470_NOP].send_bit_size;
 
     L6470_rw(pkt,times, "NOP");
 }
@@ -138,7 +140,7 @@ void L6470_SetParam(int enum_param, uint32_t value)
         pkt.value8b[3] = (value & 0x0000FF);
     }
     
-    SPI_res = L6470_rw((pkt,(bit2byte(size + ADDR_SIZE), "SetParam");
+    SPI_res = L6470_rw((pkt,bit2byte(size + ADDR_SIZE), "SetParam");
 
 }
 
@@ -186,7 +188,7 @@ void L6470_MoveStep(uint8_t dir,uint32_t step)
 
 void L6470_MoveGoTo(int32_t abs_pos)
 {
-    L6470_ExecCmd(L6470_cmd[enum_L6470_MOVEGOTO],0,abs_pos "MoveGoTo");
+    L6470_ExecCmd(L6470_cmd[enum_L6470_MOVEGOTO],0,abs_pos, "MoveGoTo");
 }
 
 void L6470_MoveGoToDir(uint8_t dir,int32_t abs_pos)
@@ -246,7 +248,7 @@ void L6470_HiZHard(void)
     L6470_ExecCmd_NoArg(L6470_cmd[enum_L6470_HIZHARD],"HIZHard");
 }
 
-void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,const char* msg)
+static void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,const char* msg)
 {
     union L6470_packet pkt={0};
     int SPI_res = 0;
@@ -260,14 +262,14 @@ void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,const cha
         return
     }
 
-    pkt.data.value8b[0] = ((step & 0xFF0000) >> 16);
-    pkt.data.value8b[1] = ((step & 0x00FF00) >> 8);
-    pkt.data.value8b[2] = ((step & 0x0000FF));
+    pkt.data.value8b[0] = ((arg_param & 0xFF0000) >> 16);
+    pkt.data.value8b[1] = ((arg_param & 0x00FF00) >> 8);
+    pkt.data.value8b[2] = ((arg_param & 0x0000FF));
 
     SPI_res = L6470_rw(pkt,bit2byte(size + ADDR_SIZE),msg);
 }
 
-void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg)
+static void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg)
 {
     union L6470_packet pkt={0};
     int SPI_res = 0;
@@ -310,8 +312,9 @@ uint16_t L6470_GetStatus(void)
     int size = L6470_param[enum_L6470_GETSTATUS].param_size;
     pkt.data.reg_addr = L6470_cmd[enum_L6470_GETSTATUS].addr;
 
-    SPI_res = L6470_rw(pkt,(bit2byte(size + ADDR_SIZE),"GetStatus");
-    return (pkt.value8b[2] << 8) & (pkt.value8b[3]);
+    SPI_res = L6470_rw(pkt,bit2byte(size + ADDR_SIZE),"GetStatus");
+
+    return ((pkt.value8b[2] << 8) & (pkt.value8b[3]));
 
 }
 

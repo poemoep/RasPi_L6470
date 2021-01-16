@@ -330,6 +330,10 @@ void L6470_HiZSoft(void);
 void L6470_HiZHard(void);
 int32_t L6470_GetAbsPos(void);
 uint16_t L6470_GetStatus(void);
+static void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,const char* msg);
+static void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg);
+
+
 
 #if defined (L6470_PRINT_MESSAGE)
 #define L6470_PRINT_HEADER "[L6470 DEBUG]: "
