@@ -1,15 +1,55 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <string.h>
+#include <sys/ioctl.h>
+#include <asm/ioctl.h>
+#include <linux/spi/spidev.h>
 
-#include "wiringPi.h"
-#include "wiringPiSPI.h"
+// #include "wiringPi.h"
+
+// #include "wiringPiSPI.h"
+
+
 
 #include "L6470.h"
 #include "L6470_user.h"
 
 uint8_t *REG_SIZE;
 union L6470_packet *L6470_setting;
+
+static const uint8_t spiWBPW = 8;
+static const uint8_t spiRBPW = 8;
+static const uint16_t spiDelay = 0;
+
+static uint32_t spiSpeeds [2];
+static int 	spiFds [2];
+
+#define WPI_ALMOST (1==2)
+
+
+int mywiringPiFailure (int fatal, const char *message, ...)
+{
+  va_list argp ;
+  char buffer [1024] ;
+
+  if (!fatal && 0)
+    return -1 ;
+
+  va_start (argp, message) ;
+    vsnprintf (buffer, 1023, message, argp) ;
+  va_end (argp) ;
+
+  fprintf (stderr, "%s", buffer) ;
+  exit (EXIT_FAILURE) ;
+
+  return 0 ;
+}
+
+
 
 void L6470_reg_size_init(void){
 
@@ -135,12 +175,93 @@ void L6470_setting_init(void)
 void L6470_SPI_init(void)
 {
     int SPI_res;
-    SPI_res = wiringPiSPISetupMode(SPI_CH,SPI_SPEED,SPI_MODE);
+   // SPI_res = wiringPiSPISetupMode(SPI_CH,SPI_SPEED,SPI_WMODE);
+    SPI_res = mywiringPiSPISetupMode(SPI_CH,SPI_SPEED,SPI_WMODE, SPI_RMODE);
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:SPI_init ch:%d\n",SPI_res);
 #endif
 }
+
+int mywiringPiSPISetupMode (int channel, int speed, int wmode, int rmode)
+{
+
+#ifdef L6470_PRINT_MESSAGE
+	printf("[L6470 DEBUG]:mywiringPiSPISetupMode start\n");
+#endif
+
+  int fd ;
+  char spiDev [32] ;
+  int err = 0;
+  
+  wmode    &= 3 ;	// Mode is 0, 1, 2 or 3
+  rmode    &= 3 ;	// Mode is 0, 1, 2 or 3
+
+// Channel can be anything - lets hope for the best
+//  channel &= 1 ;	// Channel is 0 or 1
+
+  snprintf (spiDev, 31, "/dev/spidev0.%d", channel) ;
+ 
+  if ((fd = open (spiDev, O_RDWR)) < 0)
+    return mywiringPiFailure (WPI_ALMOST, "Unable to open SPI device: %s\n", strerror (errno)) ;
+
+  spiSpeeds [channel] = speed ;
+  spiFds    [channel] = fd ;
+
+// Set SPI parameters.
+
+  if (ioctl (fd, SPI_IOC_RD_MODE, &rmode)            < 0)
+  //err = ioctl (fd, SPI_IOC_RD_MODE, &rmode);
+  //if (err < 0)
+    return mywiringPiFailure (WPI_ALMOST, "SPI WriteMode Change failure: %s\t%s\n", err, strerror (errno)) ;
+  
+  if (ioctl (fd, SPI_IOC_WR_MODE, &wmode)            < 0)
+  //err = ioctl (fd, SPI_IOC_WR_MODE, &wmode);
+  //if (err  < 0)
+    return mywiringPiFailure (WPI_ALMOST, "SPI ReadMode Change failure: %s\t%s\n", err, strerror (errno)) ;
+
+  if (ioctl (fd, SPI_IOC_WR_BITS_PER_WORD, &spiWBPW) < 0)
+  //err = ioctl (fd, SPI_IOC_WR_BITS_PER_WORD, &spiWBPW);
+  //if (err  < 0)
+    return mywiringPiFailure (WPI_ALMOST, "SPI Write BPW Change failure: %s\t%s\n", err, strerror (errno)) ;
+
+  //if (ioctl (fd, SPI_IOC_RD_BITS_PER_WORD, &spiWBPW) < 0)
+  //err = ioctl (fd, SPI_IOC_RD_BITS_PER_WORD, &spiWBPW);
+  //if (err  < 0)
+  //  return mywiringPiFailure (WPI_ALMOST, "SPI Read BPW Change failure: %s\t%s\n", err, strerror (errno)) ;
+
+  if (ioctl (fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed)   < 0)
+  //err = ioctl (fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
+  //if (err    < 0)
+    return mywiringPiFailure (WPI_ALMOST, "SPI Speed Change failure: %s\t%s\n", err, strerror (errno)) ;
+
+  return fd ;
+}
+
+//int mywiringPiSPIDataRW (int channel, unsigned char *wdata, unsigned char *rdata, int len)
+int mywiringPiSPIDataRW (int channel, unsigned char *wdata, int len)
+{
+  struct spi_ioc_transfer spi ;
+
+  channel &= 1 ;
+
+// Mentioned in spidev.h but not used in the original kernel documentation
+//	test program )-:
+
+  memset (&spi, 0, sizeof (spi)) ;
+
+  spi.tx_buf        = (unsigned long)wdata ;
+  spi.rx_buf        = (unsigned long)wdata ;
+  spi.len           = len ;
+  spi.delay_usecs   = spiDelay ;
+  spi.speed_hz      = spiSpeeds [channel] ;
+  spi.bits_per_word = spiWBPW ; 
+  spi.cs_change	    = 0;
+  spi.pad	    = 0;
+//  spi.mode 	    = SPI_MODE_1;
+  return ioctl (spiFds [channel], SPI_IOC_MESSAGE(1), &spi) ;
+}
+
 
 /*
 void L6470_setting_init(void)
@@ -195,8 +316,9 @@ int L6470_rw(uint8_t *data,int len)
 {
 	int i = 0,j = 0;
 	for (i = 0; i<len; i++){
-		j += wiringPiSPIDataRW(SPI_CH, data,1);
-		data += 1;
+	//	j += wiringPiSPIDataRW(SPI_CH, data,1);
+		j += mywiringPiSPIDataRW(SPI_CH, data,1);
+		data++;
 	}
 
    return j; 
@@ -767,6 +889,30 @@ void L6470_HiZHard(void)
 			size);
 #endif
 }
+
+int32_t L6470_GetAbsPos(void)
+{
+    int32_t pos = 0;
+    
+    union L6470_packet pkt;
+    pkt = L6470_GetParam(REG_ABS_POS);
+    pos = ((pkt.value8b[1] & 0x3F) << 16);
+    pos += ((pkt.value8b[2] & 0xFF) << 8);
+    pos += ((pkt.value8b[3] & 0xFF));
+    
+    if(((pos & 0x200000) >> 21) == 1){
+	printf("inv\n");
+	pos = (-1) * ((~pos + 1) & 0x3FFFFF);	
+    }
+
+#ifdef L6470_PRINT_MESSAGE
+	printf("pos: %d\tand: %d\n", pos, ((pos & 0x200000) >> 21));
+#endif
+
+    return pos;
+
+}
+
 
 uint16_t L6470_GetStatus(void)
 {

@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "wiringPi.h"
-#include "wiringPiSPI.h"
+// #include "wiringPi.h"
+// #include "wiringPiSPI.h"
 
 
 #ifndef __L6470_HEADER
@@ -142,8 +142,10 @@ union L6470_packet{
     uint32_t value32b;
 };
 
-//----prottype declaration----
+//----prottype declaration---
 void L6470_SPI_init(void);
+int mywiringPiSPISetupMode (int channel, int speed, int wmode, int rmode);
+int mywiringPiSPIDataRW(int channel, unsigned char *data,int len);
 void L6470_reg_size_init(void);
 void L6470_setting_init(void);
 void L6470_init(void);
@@ -166,6 +168,7 @@ void L6470_StopSoft(void);
 void L6470_StopHard(void);
 void L6470_HiZSoft(void);
 void L6470_HiZHard(void);
+int32_t L6470_GetAbsPos(void);
 uint16_t L6470_GetStatus(void);
 
 #endif

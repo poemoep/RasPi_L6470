@@ -6,7 +6,8 @@
 
 #define SPI_CH 0 
 #define SPI_SPEED 1000000 // [Hz]
-#define SPI_MODE 0 // default
+#define SPI_WMODE 3 // default
+#define SPI_RMODE 3 // default
 
 extern union L6470_packet *L6470_setting;
 
