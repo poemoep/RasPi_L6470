@@ -49,62 +49,60 @@
 #define WRITABLE_Always (Writable | 0x04)
 //----define L6470 parametor as userful number----
 
-#define PARAM_ofset 	  0
-
-#define L6470_ABS_POS     (PARAM_ofset + 0)
-#define L6470_EL_POS      (PARAM_ofset + 1) 
-#define L6470_MARK        (PARAM_ofset + 2)
-#define L6470_SPEED       (PARAM_ofset + 3) //readonly
-#define L6470_ACC         (PARAM_ofset + 4) 
-#define L6470_DEC         (PARAM_ofset + 5)
-#define L6470_MAX_SPEED   (PARAM_ofset + 6)
-#define L6470_MIN_SPEED   (PARAM_ofset + 7)
-#define L6470_KVAL_HOLD   (PARAM_ofset + 8)
-#define L6470_KVAL_RUN    (PARAM_ofset + 9)
-#define L6470_KVAL_ACC    (PARAM_ofset + 10)
-#define L6470_KVAL_DEC    (PARAM_ofset + 11)
-#define L6470_INT_SPEED   (PARAM_ofset + 12)
-#define L6470_ST_SLP      (PARAM_ofset + 13)
-#define L6470_FN_SLP_ACC  (PARAM_ofset + 14)
-#define L6470_FN_SLP_DEC  (PARAM_ofset + 15)
-#define L6470_K_THERM     (PARAM_ofset + 16)
-#define L6470_ADC_OUT     (PARAM_ofset + 17) //readonly
-#define L6470_OCD_TH      (PARAM_ofset + 18)
-#define L6470_STALL_TH    (PARAM_ofset + 19)
-#define L6470_FS_SPD      (PARAM_ofset + 20)
-#define L6470_STEP_MODE   (PARAM_ofset + 21)
-#define L6470_ALARM_EN    (PARAM_ofset + 22)
-#define L6470_CONFIG      (PARAM_ofset + 23)
-#define L6470_STATUS      (PARAM_ofset + 24) //readonly
-#define L6470_RESERVED_h1A    (PARAM_ofset + 25)
-#define L6470_RESERVED_h1B    (PARAM_ofset + 26)
-
-#define PARAM_NUM	(L6470_RESERVED_h1B + 1 - PARAM_ofset)
+const enum enum_L6470_PARAM {
+  L6470_ABS_POS = PARAM_ofset,
+  L6470_EL_POS ,
+  L6470_MARK,
+  L6470_SPEED, //readonly
+  L6470_ACC ,
+  L6470_DEC,
+  L6470_MAX_SPEED,
+  L6470_MIN_SPEED,
+  L6470_KVAL_HOLD,
+  L6470_KVAL_RUN,
+  L6470_KVAL_ACC,
+  L6470_KVAL_DEC,
+  L6470_INT_SPEED,
+  L6470_ST_SLP,
+  L6470_FN_SLP_ACC,
+  L6470_FN_SLP_DEC,
+  L6470_K_THERM,
+  L6470_ADC_OUT, //readonly
+  L6470_OCD_TH,
+  L6470_STALL_TH,
+  L6470_FS_SPD,
+  L6470_STEP_MODE,
+  L6470_ALARM_EN,
+  L6470_CONFIG,
+  L6470_STATUS, //readonly
+  L6470_RESERVED_h1A,
+  L6470_RESERVED_h1B
+} enum_L6470_param;
+#define PARAM_NUM (L6470_RESERVED_h1B + 1)
 
 //----define L6470 command as userful number----
-#define CMD_ofset	  100
-
-#define L6470_NOP (CMD_ofset + 0) /0x00
-#define L6470_SETPARAM    (CMD_ofset + 1) 
-#define L6470_GETPARAM    (CMD_ofset + 2)
-#define L6470_MoveCont    (CMD_ofset + 3)
-#define L6470_MoveStepClock (CMD_ofset + 4)
-#define L6470_MoveStep    (CMD_ofset + 5)
-#define L6470_MoveGoTo    (CMD_ofset + 6)
-#define L6470_MoveGoToDir (CMD_ofset + 7)
-#define L6470_MoveGoToUntil (CMD_ofset + 8)
-#define L6470_MoveRelease (CMD_ofset + 9)
-#define L6470_GoHome      (CMD_ofset + 0)
-#define L6470_GoMark      (CMD_ofset + 1)
-#define L6470_ResetPos    (CMD_ofset + 2)
-#define L6470_ResetDevice (CMD_ofset + 13)
-#define L6470_StopSoft    (CMD_ofset + 14)
-#define L6470_StopHard    (CMD_ofset + 15)
-#define L6470_HiZSoft     (CMD_ofset + 16)
-#define L6470_HiZHard     (CMD_ofset + 17)
-#define L6470_GetStatus   (CMD_ofset + 18)
-
-#define CMD_NUM		  (L6470_GetStatus + 1 - CMD_ofset)
+const enum enum_L6470_CMD{
+  L6470_NOP,
+  L6470_SETPARAM, 
+  L6470_GETPARAM,
+  L6470_MOVECONT,
+  L6470_MOVESTEPCLOCK,
+  L6470_MOVESTEP,
+  L6470_MOVEGOTO,
+  L6470_MOVEGOTODIR,
+  L6470_,
+  L6470_MoveRelease,
+  L6470_GoHome,
+  L6470_GoMark,
+  L6470_ResetPos,
+  L6470_ResetDevice,
+  L6470_StopSoft,
+  L6470_StopHard,
+  L6470_HiZSoft,
+  L6470_HiZHard,
+  L6470_GetStatus
+} enum_L6470_cmd;
+#define CMD_NUM		  (L6470_GetStatus + 1))
 
 //----define L6470 registers----
 
@@ -223,7 +221,7 @@ struct L6470_PARAM{
 	uint8_t addr;
 	uint8_t param_size;
 	uint8_t rw;
-}
+};
 
 struct L6470_Data{
   uint8_t reg_addr;
@@ -237,8 +235,37 @@ union L6470_packet{
 };
 
 const struct L6470_PARAM L6470_param[PARAM_NUM] =
-{	(L6470_ABS_POS - PARAM_ofset),	REG_ABS_POS,	REG_SIZE_ABS_POS,	READONLY	},
+{
+  L6470_ABS_POS ,
+  L6470_EL_POS ,
+  L6470_MARK,
+  L6470_SPEED, //readonly
+  L6470_ACC ,
+  L6470_DEC,
+  L6470_MAX_SPEED,
+  L6470_MIN_SPEED,
+  L6470_KVAL_HOLD,
+  L6470_KVAL_RUN,
+  L6470_KVAL_ACC,
+  L6470_KVAL_DEC,
+  L6470_INT_SPEED,
+  L6470_ST_SLP,
+  L6470_FN_SLP_ACC,
+  L6470_FN_SLP_DEC,
+  L6470_K_THERM,
+  L6470_ADC_OUT, //readonly
+  L6470_OCD_TH,
+  L6470_STALL_TH,
+  L6470_FS_SPD,
+  L6470_STEP_MODE,
+  L6470_ALARM_EN,
+  L6470_CONFIG,
+  L6470_STATUS, //readonly
+  L6470_RESERVED_h1A,
+  L6470_RESERVED_h1B
+}
 
+};
 const struct L6470_CMD L6470_cmd[CMD_NUM] =
 {	},
 
