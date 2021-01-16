@@ -145,7 +145,7 @@ void L6470_SetParam(int enum_param, uint32_t value)
 
 }
 
-uint32_t L6470_GetParam(int enum_param)
+int32_t L6470_GetParam(int enum_param)
 {
     union L6470_packet pkt={0};
     int SPI_res = 0;
@@ -168,6 +168,8 @@ uint32_t L6470_GetParam(int enum_param)
     }else{
         ret = (pkt.value8b[1] << 16) + (pkt.value8b[2] << 8) + (pkt.value8b[3]);
     }
+
+    printf("debug size:%d, ret%d\n " ,size,ret);
 
     return ret;
 }
@@ -285,15 +287,14 @@ static void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg)
 int32_t L6470_GetAbsPos(void)
 {
     int32_t pos = 0;
-    
+    int32_t ret = 0; 
     union L6470_packet pkt;
     pos = L6470_GetParam(enum_L6470_ABS_POS);
-//    pos = ((pkt.value8b[1] & 0x3F) << 16);
-//    pos += ((pkt.value8b[2] & 0xFF) << 8);
-//    pos += ((pkt.value8b[3] & 0xFF));
-    
+ 
+    ret = ((pos & 0x0000FF) << 16) + ((pos & 0x00FF00)) + ((pos & 0xFF0000) >> 16); 
+ 
     if(((pos & 0x200000) >> 21) == 1){
-	    pos = (-1) * ((~pos + 1) & 0x3FFFFF);	
+	    ret = (-1) * ((~ret + 1) & 0x3FFFFF);	
     }
 
 #ifdef L6470_PRINT_MESSAGE
@@ -324,9 +325,17 @@ static void L6470_debug_print(const char *msg,union L6470_packet* send, union L6
 {
     if(msg != NULL)
     {
-        printf("%s %s send:%8x \t len:%d\n", L6470_PRINT_HEADER, msg, send->value32b, 1);
+        printf("%s %s send:%2x %2x %2x %2x \t len:%d\n", L6470_PRINT_HEADER, msg, 
+				send->value8b[0], 
+				send->value8b[1], 
+				send->value8b[2], 
+				send->value8b[3], 1);
         if (get != (union L6470_packet*)NULL)
-            printf("%s %s  get:%8x \t len:%d\n", L6470_PRINT_HEADER, msg,  get->value32b, 1);
+            printf("%s %s  get:%2x %2x %2x %2x \t len:%d\n", L6470_PRINT_HEADER, msg,  
+			         get->value8b[0], 
+			         get->value8b[1], 
+			         get->value8b[2], 
+			         get->value8b[3], 1);
     }
 }
 #endif
