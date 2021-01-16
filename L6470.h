@@ -162,51 +162,51 @@ extern uint8_t *REG_SIZE;
 
 #define ADDR_SIZE                (8 )
 
-#define REG_SIZE[REG_ABS_POS]    (22)
-#define REG_SIZE[REG_EL_POS]     (9 )
-#define REG_SIZE[REG_MARK]       (22)
-#define REG_SIZE[REG_SPEED]      (20) //readonly
-#define REG_SIZE[REG_ACC]        (12)
-#define REG_SIZE[REG_DEC]        (12)
-#define REG_SIZE[REG_MAX_SPEED]  (10)
-#define REG_SIZE[REG_MIN_SPEED]  (13)
-#define REG_SIZE[REG_KVAL_HOLD]  (8 )
-#define REG_SIZE[REG_KVAL_RUN]   (8 )
-#define REG_SIZE[REG_KVAL_ACC]   (8 )
-#define REG_SIZE[REG_KVAL_DEC]   (8 )
-#define REG_SIZE[REG_INT_SPEED]  (14)
-#define REG_SIZE[REG_ST_SLP]     (8 )
-#define REG_SIZE[REG_FN_SLP_ACC] (8 )
-#define REG_SIZE[REG_FN_SLP_DEC] (8 )
-#define REG_SIZE[REG_K_THERM]    (4 )
-#define REG_SIZE[REG_ADC_OUT]    (5 ) //readonly
-#define REG_SIZE[REG_OCD_TH]     (4 )
-#define REG_SIZE[REG_STALL_TH]   (7 )
-#define REG_SIZE[REG_FS_SPD]     (10)
-#define REG_SIZE[REG_STEP_MODE]  (8 )
-#define REG_SIZE[REG_ALARM_EN]   (8 )
-#define REG_SIZE[REG_CONFIG]     (16)
-#define REG_SIZE[REG_STATUS]     (16) //readonly
+#define REG_SIZE_ABS_POS    (22)
+#define REG_SIZE_EL_POS     (9 )
+#define REG_SIZE_MARK       (22)
+#define REG_SIZE_SPEED      (20) //readonly
+#define REG_SIZE_ACC        (12)
+#define REG_SIZE_DEC        (12)
+#define REG_SIZE_MAX_SPEED  (10)
+#define REG_SIZE_MIN_SPEED  (13)
+#define REG_SIZE_KVAL_HOLD  (8 )
+#define REG_SIZE_KVAL_RUN   (8 )
+#define REG_SIZE_KVAL_ACC   (8 )
+#define REG_SIZE_KVAL_DEC   (8 )
+#define REG_SIZE_INT_SPEED  (14)
+#define REG_SIZE_ST_SLP     (8 )
+#define REG_SIZE_FN_SLP_ACC (8 )
+#define REG_SIZE_FN_SLP_DEC (8 )
+#define REG_SIZE_K_THERM    (4 )
+#define REG_SIZE_ADC_OUT    (5 ) //readonly
+#define REG_SIZE_OCD_TH     (4 )
+#define REG_SIZE_STALL_TH   (7 )
+#define REG_SIZE_FS_SPD     (10)
+#define REG_SIZE_STEP_MODE  (8 )
+#define REG_SIZE_ALARM_EN   (8 )
+#define REG_SIZE_CONFIG     (16)
+#define REG_SIZE_STATUS     (16) //readonly
 
-#define REG_SIZE[REG_NOP]        (1 ) // test
-#define REG_SIZE[REG_SETPARAM]   (24)
-#define REG_SIZE[REG_GETPARAM]   (24)
-#define REG_SIZE[REG_MoveCont]   (24)
-#define REG_SIZE[REG_MoveStepClock]   (0 )
-#define REG_SIZE[REG_MoveStep]    (24)  
-#define REG_SIZE[REG_MoveGoTo]    (24)
-#define REG_SIZE[REG_MoveGoToDir] (24)
-#define REG_SIZE[REG_MoveGoToUntil] (24)
-#define REG_SIZE[REG_MoveRelease] (0 )
-#define REG_SIZE[REG_GoHome]      (0 )
-#define REG_SIZE[REG_GoMark]      (0 )
-#define REG_SIZE[REG_ResetPos]    (0 )
-#define REG_SIZE[REG_ResetDevice] (0 )
-#define REG_SIZE[REG_StopSoft]    (0 )
-#define REG_SIZE[REG_StopHard]    (0 )
-#define REG_SIZE[REG_HiZSoft]     (0 )
-#define REG_SIZE[REG_HiZHard]     (0 )
-#define REG_SIZE[REG_GetStatus]   (16)
+#define CMD_SIZE_NOP        (1 ) // test
+#define CMD_SIZE_SETPARAM   (24)
+#define CMD_SIZE_GETPARAM   (24)
+#define CMD_SIZE_MOVECONT   (24)
+#define CMD_SIZE_MOVESTEPCLOCK   (0 )
+#define CMD_SIZE_MOVESTEP    (24)  
+#define CMD_SIZE_MOVEGOTO    (24)
+#define CMD_SIZE_MOVEGOTODIR (24)
+#define CMD_SIZE_MOVEGOTOUNTIL (24)
+#define CMD_SIZE_MOVERELEASE (0 )
+#define CMD_SIZE_GOHOME      (0 )
+#define CMD_SIZE_GOMARK      (0 )
+#define CMD_SIZE_RESETPOS    (0 )
+#define CMD_SIZE_RESETDEVICE (0 )
+#define CMD_SIZE_STOPSOFT    (0 )
+#define CMD_SIZE_STOPHARD    (0 )
+#define CMD_SIZE_HIZSOFT     (0 )
+#define CMD_SIZE_HIZHARD     (0 )
+#define CMD_SIZE_GETSTATUS   (16)
 
 static const uint8_t spiBPW  8;
 static const uint16_t spiDelay  0;
@@ -218,7 +218,7 @@ struct L6470_CMD{
 	uint8_t send_bit_size;
 };
 
-struct L6470_REG{
+struct L6470_PARAM{
 	uint8_t self_num;
 	uint8_t addr;
 	uint8_t param_size;
@@ -236,7 +236,10 @@ union L6470_packet{
   uint32_t value32b;
 };
 
-const struct L6470_CMD[CMD_NUM] =
+const struct L6470_PARAM L6470_param[PARAM_NUM] =
+{	(L6470_ABS_POS - PARAM_ofset),	REG_ABS_POS,	REG_SIZE_ABS_POS,	READONLY	},
+
+const struct L6470_CMD L6470_cmd[CMD_NUM] =
 {	},
 
 
