@@ -13,7 +13,8 @@
 
 // #include "wiringPiSPI.h"
 
-
+#define SPI_WMODE 3 // default
+#define SPI_RMODE 3 // default
 
 #include "L6470.h"
 #include "L6470_user.h"
