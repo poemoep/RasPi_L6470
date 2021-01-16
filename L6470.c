@@ -172,7 +172,7 @@ void L6470_setting_init(void)
 void L6470_SPI_init(void)
 {
     int SPI_res;
-    SPI_res = wiringPiSPISetupMode(SPI_CH,SPI_SPEED,SPI_MODE);
+    SPI_res = wiringPiSPISetupMode(L6470_SPI_CH,SPI_SPEED,L6470_SPI_MODE);
     // SPI_res = mywiringPiSPISetupMode(SPI_CH,SPI_SPEED,SPI_WMODE, SPI_RMODE);
 
 #ifdef L6470_PRINT_MESSAGE
@@ -246,7 +246,7 @@ int mywiringPiSPIDataRW (int channel, unsigned char *wdata, int len)
   spi.len           = len ;
   spi.delay_usecs   = spiDelay ;
   spi.speed_hz      = spiSpeeds [channel] ;
-  spi.bits_per_word = spiWBPW ; 
+  spi.bits_per_word = spiBPW ; 
   spi.cs_change	    = 0;
   spi.pad	    = 0;
 //  spi.mode 	    = SPI_MODE_1;
@@ -307,8 +307,8 @@ int L6470_rw(uint8_t *data,int len)
 {
 	int i = 0,j = 0;
 	for (i = 0; i<len; i++){
-	//	j += wiringPiSPIDataRW(SPI_CH, data,1);
-		j += mywiringPiSPIDataRW(SPI_CH, data,1);
+		j += wiringPiSPIDataRW(L6470_SPI_CH, data,1);
+	//	j += mywiringPiSPIDataRW(L6470_SPI_CH, data,1);
 		data++;
 	}
 
