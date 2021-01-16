@@ -51,12 +51,12 @@
 #define RESERVED  (0x00)
 #define READONLY	(0x01)
 #define WRITABLE	(0x10)
-#define WRITABLE_HiZ	(Writable | 0x02)
-#define WRITABLE_MStop	(Writable | 0x04)
-#define WRITABLE_Always (Writable | 0x08)
+#define WRITABLE_HiZ	(WRITABLE | 0x02)
+#define WRITABLE_MStop	(WRITABLE | 0x04)
+#define WRITABLE_Always (WRITABLE | 0x08)
 //----define L6470 parametor as userful number----
 
-const enum enum_L6470_PARAM {
+enum enum_L6470_PARAM {
   enum_L6470_ABS_POS ,
   enum_L6470_EL_POS ,
   enum_L6470_MARK,
@@ -83,10 +83,10 @@ const enum enum_L6470_PARAM {
   enum_L6470_CONFIG,
   enum_L6470_STATUS, //readonly
 //  enum_L6470_RESERVED_h1A,
-//  enum_L6470_RESERVED_h1B
+//  enum_L6470_RESERVED_h1B,
+  enum_L6470_PARAM_FIN
 };
-//#define PARAM_NUM (enum_L6470_RESERVED_h1B + 1)
-#define PARAM_NUM (enum_L6470_STATUS+ 1)
+#define PARAM_NUM (enum_L6470_PARAM_FIN)
 
 //----define L6470 command as userful number----
 enum enum_L6470_CMD{
@@ -108,9 +108,10 @@ enum enum_L6470_CMD{
   enum_L6470_STOPHARD,
   enum_L6470_HIZSOFT,
   enum_L6470_HIZHARD,
-  enum_L6470_GETSTATUS
+  enum_L6470_GETSTATUS,
+  enum_L6470_CMD_FIN
 };
-#define CMD_NUM		  (enum_L6470_GetStatus + 1)
+#define CMD_NUM		  (enum_L6470_CMD_FIN)
 
 //----define L6470 registers----
 
@@ -212,8 +213,8 @@ enum enum_L6470_CMD{
 #define CMD_SIZE_HIZHARD     (0 )
 #define CMD_SIZE_GETSTATUS   (16)
 
-static const uint8_t spiBPW  8;
-static const uint16_t spiDelay  0;
+#define SPI_BPW   8
+#define SPI_DELAY  0
 
 extern union L6470_packet *L6470_setting;
 
@@ -249,7 +250,7 @@ const struct L6470_PARAM L6470_param[PARAM_NUM] =
 { enum_L6470_MARK         , REG_MARK,         REG_SIZE_MARK,          READONLY | WRITABLE_Always},
 { enum_L6470_SPEED        , REG_SPEED,        REG_SIZE_SPEED,         READONLY }, //readonly
 { enum_L6470_ACC          , REG_ACC,          REG_SIZE_ACC,           READONLY | WRITABLE_MStop},
-{ enum_L6470_DEC          , REG_DEC,          REG_SIZE_DEC,           READONLY | WRITABLE_MStop},,
+{ enum_L6470_DEC          , REG_DEC,          REG_SIZE_DEC,           READONLY | WRITABLE_MStop},
 { enum_L6470_MAX_SPEED    , REG_MAX_SPEED,    REG_SIZE_MAX_SPEED,     READONLY | WRITABLE_Always},
 { enum_L6470_MIN_SPEED    , REG_MIN_SPEED,    REG_SIZE_MIN_SPEED,     READONLY | WRITABLE_MStop},
 { enum_L6470_KVAL_HOLD    , REG_KVAL_HOLD,    REG_SIZE_KVAL_HOLD,     READONLY | WRITABLE_Always},
@@ -307,7 +308,7 @@ int mywiringPiSPIDataRW(int channel, unsigned char *data,int len);
 void L6470_reg_size_init(void);
 void L6470_setting_init(void);
 void L6470_init(void);
-int L6470_rw(uint8_t *data,int len);
+int L6470_rw(union L6470_packet data,int len,const char*);
 void L6470_nop(int times);
 void L6470_SetParam(uint8_t param,uint32_t value);
 union L6470_packet L6470_GetParam(uint8_t param);
@@ -331,7 +332,7 @@ uint16_t L6470_GetStatus(void);
 
 #if defined (L6470_PRINT_MESSAGE)
 #define L6470_PRINT_HEADER "[L6470 DEBUG]: "
-static void L6470_debug_print(const char *msg,union L6470_packet send, union L6470_packet get)
+static void L6470_debug_print(const char *msg,union L6470_packet send, union L6470_packet get);
 #endif
 
 #endif

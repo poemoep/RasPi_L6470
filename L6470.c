@@ -7,7 +7,7 @@
 #include <string.h>
 // #include <sys/ioctl.h>
 // #include <asm/ioctl.h>
-// #include <linux/spi/spidev.h>
+ #include <linux/spi/spidev.h>
 
 #include "wiringPi.h"
 #include "wiringPiSPI.h"
@@ -51,7 +51,7 @@ void L6470_setting_init(void)
 #ifdef L6470_PRINT_MESSAGE
             union L6470_packet send = L6470_setting[reg];
 #endif
-            SPI_res = L6470_rw(pkt_temp.value8b, (int)(bit2byte(len + ADDR_SIZE)));
+            SPI_res = L6470_rw(pkt_temp, (int)(bit2byte(len + ADDR_SIZE)), NULL);
 #ifdef L6470_PRINT_MESSAGE
             L6470_debug_print("setting_init",send,L6470_setting[reg]);
 #endif
@@ -104,7 +104,7 @@ int L6470_rw(union L6470_packet pkt,int len, const char* msg)
 	}
 
 #ifdef L6470_PRINT_MESSAGE
-    L6470_debug_print(msg,send,pkt)
+    L6470_debug_print(msg,send,pkt);
 #endif
 
    return j; 

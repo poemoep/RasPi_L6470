@@ -39,9 +39,9 @@ const union L6470_packet L6470_user_setting[PARAM_NUM] =
     //Dummy READONLY param &  RESERVED param
     {L6470_param[enum_L6470_SPEED].addr,         0x00,   0x00,   0x00}, //dummy
     {L6470_param[enum_L6470_ADC_OUT].addr,       0x00,   0x00,   0x00}, //dummy
-    {L6470_param[enum_L6470_STATUS].addr,        0x00,   0x00,   0x00}, //dummy
-    {L6470_param[enum_L6470_RESERVED_h1A].addr,  0x00,   0x00,   0x00}, //dummy
-    {L6470_param[enum_L6470_RESERVED_h1B].addr,  0x00,   0x00,   0x00}, //dummy
+    {L6470_param[enum_L6470_STATUS].addr,        0x00,   0x00,   0x00}//, //dummy
+//    {L6470_param[enum_L6470_RESERVED_h1A].addr,  0x00,   0x00,   0x00}, //dummy
+//    {L6470_param[enum_L6470_RESERVED_h1B].addr,  0x00,   0x00,   0x00}, //dummy
 
 };
 
