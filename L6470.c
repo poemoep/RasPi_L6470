@@ -55,7 +55,7 @@ void L6470_setting_init(void)
 #endif
             SPI_res = L6470_rw(pkt_temp, (int)(bit2byte(len + ADDR_SIZE)), NULL);
 #ifdef L6470_PRINT_MESSAGE
-            L6470_debug_print("setting_init",send,L6470_setting[reg]);
+            L6470_debug_print("setting_init",&(send),&(L6470_setting[reg]));
 #endif
         }
     }
@@ -106,7 +106,7 @@ int L6470_rw(union L6470_packet pkt,int len, const char* msg)
 	}
 
 #ifdef L6470_PRINT_MESSAGE
-    L6470_debug_print(msg,send,pkt);
+    L6470_debug_print(msg,&(send),&(pkt));
 #endif
 
    return j; 
@@ -319,11 +319,13 @@ uint16_t L6470_GetStatus(void)
 }
 
 #if defined (L6470_PRINT_MESSAGE)
-static void L6470_debug_print(const char *msg,union L6470_packet send, union L6470_packet get)
+static void L6470_debug_print(const char *msg,union L6470_packet* send, union L6470_packet* get)
 {
-    printf("%s %s send:%8x \t len:%d\n", L6470_PRINT_HEADER, msg, send.value32b, 1);
-    if (get != (union L6470_packet)NULL)
-        printf("%s %s  get:%8x \t len:%d\n", L6470_PRINT_HEADER, msg,  get.value32b, 1);
-
+    if(msg != NULL)
+    {
+        printf("%s %s send:%8x \t len:%d\n", L6470_PRINT_HEADER, msg, send->value32b, 1);
+        if (get != (union L6470_packet*)NULL)
+            printf("%s %s  get:%8x \t len:%d\n", L6470_PRINT_HEADER, msg,  get->value32b, 1);
+    }
 }
 #endif

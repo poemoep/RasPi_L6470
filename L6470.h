@@ -337,7 +337,7 @@ static void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg);
 
 #if defined (L6470_PRINT_MESSAGE)
 #define L6470_PRINT_HEADER "[L6470 DEBUG]: "
-static void L6470_debug_print(const char *msg,union L6470_packet send, union L6470_packet get);
+static void L6470_debug_print(const char *msg,union L6470_packet* send, union L6470_packet* get);
 #endif
 
 #endif
