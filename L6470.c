@@ -9,12 +9,10 @@
 #include <asm/ioctl.h>
 #include <linux/spi/spidev.h>
 
-// #include "wiringPi.h"
+#include "wiringPi.h"
+#include "wiringPiSPI.h"
 
-// #include "wiringPiSPI.h"
-
-#define SPI_WMODE 3 // default
-#define SPI_RMODE 3 // default
+#define L6470_SPI_MODE SPI_MODE_3 // default
 
 #include "L6470.h"
 #include "L6470_user.h"
@@ -22,33 +20,31 @@
 uint8_t *REG_SIZE;
 union L6470_packet *L6470_setting;
 
-static const uint8_t spiWBPW = 8;
-static const uint8_t spiRBPW = 8;
+static const uint8_t spiBPW = 8;
 static const uint16_t spiDelay = 0;
 
 static uint32_t spiSpeeds [2];
 static int 	spiFds [2];
 
-#define WPI_ALMOST (1==2)
 
 
-int mywiringPiFailure (int fatal, const char *message, ...)
-{
-  va_list argp ;
-  char buffer [1024] ;
+// int mywiringPiFailure (int fatal, const char *message, ...)
+// {
+//   va_list argp ;
+//   char buffer [1024] ;
 
-  if (!fatal && 0)
-    return -1 ;
+//   if (!fatal && 0)
+//     return -1 ;
 
-  va_start (argp, message) ;
-    vsnprintf (buffer, 1023, message, argp) ;
-  va_end (argp) ;
+//   va_start (argp, message) ;
+//     vsnprintf (buffer, 1023, message, argp) ;
+//   va_end (argp) ;
 
-  fprintf (stderr, "%s", buffer) ;
-  exit (EXIT_FAILURE) ;
+//   fprintf (stderr, "%s", buffer) ;
+//   exit (EXIT_FAILURE) ;
 
-  return 0 ;
-}
+//   return 0 ;
+// }
 
 
 
@@ -176,68 +172,62 @@ void L6470_setting_init(void)
 void L6470_SPI_init(void)
 {
     int SPI_res;
-   // SPI_res = wiringPiSPISetupMode(SPI_CH,SPI_SPEED,SPI_WMODE);
-    SPI_res = mywiringPiSPISetupMode(SPI_CH,SPI_SPEED,SPI_WMODE, SPI_RMODE);
+    SPI_res = wiringPiSPISetupMode(SPI_CH,SPI_SPEED,SPI_MODE);
+    // SPI_res = mywiringPiSPISetupMode(SPI_CH,SPI_SPEED,SPI_WMODE, SPI_RMODE);
 
 #ifdef L6470_PRINT_MESSAGE
     printf("[L6470 DEBUG]:SPI_init ch:%d\n",SPI_res);
 #endif
 }
 
-int mywiringPiSPISetupMode (int channel, int speed, int wmode, int rmode)
-{
+// int mywiringPiSPISetupMode (int channel, int speed, int wmode, int rmode)
+// {
 
-#ifdef L6470_PRINT_MESSAGE
-	printf("[L6470 DEBUG]:mywiringPiSPISetupMode start\n");
-#endif
+// #ifdef L6470_PRINT_MESSAGE
+// 	printf("[L6470 DEBUG]:mywiringPiSPISetupMode start\n");
+// #endif
 
-  int fd ;
-  char spiDev [32] ;
-  int err = 0;
+//   int fd ;
+//   char spiDev [32] ;
+//   int err = 0;
   
-  wmode    &= 3 ;	// Mode is 0, 1, 2 or 3
-  rmode    &= 3 ;	// Mode is 0, 1, 2 or 3
+//   wmode    &= 3 ;	// Mode is 0, 1, 2 or 3
+//   rmode    &= 3 ;	// Mode is 0, 1, 2 or 3
 
-// Channel can be anything - lets hope for the best
-//  channel &= 1 ;	// Channel is 0 or 1
+// // Channel can be anything - lets hope for the best
+// //  channel &= 1 ;	// Channel is 0 or 1
 
-  snprintf (spiDev, 31, "/dev/spidev0.%d", channel) ;
+//   snprintf (spiDev, 31, "/dev/spidev0.%d", channel) ;
  
-  if ((fd = open (spiDev, O_RDWR)) < 0)
-    return mywiringPiFailure (WPI_ALMOST, "Unable to open SPI device: %s\n", strerror (errno)) ;
+//   if ((fd = open (spiDev, O_RDWR)) < 0)
+//     return mywiringPiFailure (WPI_ALMOST, "Unable to open SPI device: %s\n", strerror (errno)) ;
 
-  spiSpeeds [channel] = speed ;
-  spiFds    [channel] = fd ;
+//   spiSpeeds [channel] = speed ;
+//   spiFds    [channel] = fd ;
 
-// Set SPI parameters.
+// // Set SPI parameters.
 
-  if (ioctl (fd, SPI_IOC_RD_MODE, &rmode)            < 0)
-  //err = ioctl (fd, SPI_IOC_RD_MODE, &rmode);
-  //if (err < 0)
-    return mywiringPiFailure (WPI_ALMOST, "SPI WriteMode Change failure: %s\t%s\n", err, strerror (errno)) ;
+//   if (ioctl (fd, SPI_IOC_RD_MODE, &rmode)            < 0)
+//     return mywiringPiFailure (WPI_ALMOST, "SPI WriteMode Change failure: %s\t%s\n", err, strerror (errno)) ;
   
-  if (ioctl (fd, SPI_IOC_WR_MODE, &wmode)            < 0)
-  //err = ioctl (fd, SPI_IOC_WR_MODE, &wmode);
-  //if (err  < 0)
-    return mywiringPiFailure (WPI_ALMOST, "SPI ReadMode Change failure: %s\t%s\n", err, strerror (errno)) ;
+//   if (ioctl (fd, SPI_IOC_WR_MODE, &wmode)            < 0)
+//     return mywiringPiFailure (WPI_ALMOST, "SPI ReadMode Change failure: %s\t%s\n", err, strerror (errno)) ;
 
-  if (ioctl (fd, SPI_IOC_WR_BITS_PER_WORD, &spiWBPW) < 0)
-  //err = ioctl (fd, SPI_IOC_WR_BITS_PER_WORD, &spiWBPW);
-  //if (err  < 0)
-    return mywiringPiFailure (WPI_ALMOST, "SPI Write BPW Change failure: %s\t%s\n", err, strerror (errno)) ;
+//   if (ioctl (fd, SPI_IOC_WR_BITS_PER_WORD, &spiWBPW) < 0)
+//     return mywiringPiFailure (WPI_ALMOST, "SPI Write BPW Change failure: %s\t%s\n", err, strerror (errno)) ;
 
-  //if (ioctl (fd, SPI_IOC_RD_BITS_PER_WORD, &spiWBPW) < 0)
-  //err = ioctl (fd, SPI_IOC_RD_BITS_PER_WORD, &spiWBPW);
-  //if (err  < 0)
-  //  return mywiringPiFailure (WPI_ALMOST, "SPI Read BPW Change failure: %s\t%s\n", err, strerror (errno)) ;
+//   //if (ioctl (fd, SPI_IOC_RD_BITS_PER_WORD, &spiWBPW) < 0)
+//   //err = ioctl (fd, SPI_IOC_RD_BITS_PER_WORD, &spiWBPW);
+//   //if (err  < 0)
+//   //  return mywiringPiFailure (WPI_ALMOST, "SPI Read BPW Change failure: %s\t%s\n", err, strerror (errno)) ;
 
-  if (ioctl (fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed)   < 0)
-  //err = ioctl (fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
-  //if (err    < 0)
-    return mywiringPiFailure (WPI_ALMOST, "SPI Speed Change failure: %s\t%s\n", err, strerror (errno)) ;
+//   if (ioctl (fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed)   < 0)
+//   //err = ioctl (fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
+//   //if (err    < 0)
+//     return mywiringPiFailure (WPI_ALMOST, "SPI Speed Change failure: %s\t%s\n", err, strerror (errno)) ;
 
-  return fd ;
-}
+//   return fd ;
+// }
 
 //int mywiringPiSPIDataRW (int channel, unsigned char *wdata, unsigned char *rdata, int len)
 int mywiringPiSPIDataRW (int channel, unsigned char *wdata, int len)

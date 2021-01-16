@@ -3,9 +3,13 @@
 #ifndef __L6470_USER_HEADER__
 #define __L6470_USER_HEADER__
 
-
-#define SPI_CH 0 
+//#define L6470_DAISY_CHAIN 
+#define L6470_SPI_CH 0  // 0 or 1
 #define SPI_SPEED 1000000 // [Hz]
+
+#if defined (L6470_DAISY_CHAIN)
+#define L6470_DEV_NUM 2 
+#endif
 
 extern union L6470_packet *L6470_setting;
 

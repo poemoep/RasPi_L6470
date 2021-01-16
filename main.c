@@ -1,9 +1,6 @@
 #include <stdio.h>
-#include <unistd.h>
-
 #include "L6470.h"
-//#include "L6470_user.h"
-//add comment
+
 int main(int argc, char** argv)
 {
 
