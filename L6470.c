@@ -24,111 +24,42 @@ union L6470_packet *L6470_setting;
 static uint32_t spiSpeeds [2];
 static int 	spiFds [2];
 
-// void L6470_reg_size_init(void){
-
-// #ifdef L6470_PRINT_MESSAGE
-//     printf("[L6470 DEBUG]:reg_size_init start\n");
-// #endif
-
-//     //REG_SIZE initialize
-//     REG_SIZE = (uint8_t*)malloc(256* sizeof(uint8_t));
-
-//     REG_SIZE[REG_ABS_POS]   = 22;
-//     REG_SIZE[REG_EL_POS]    = 9;
-//     REG_SIZE[REG_MARK]      = 22;
-//     REG_SIZE[REG_SPEED]     = 20; //readonly
-//     REG_SIZE[REG_ACC]       = 12;
-//     REG_SIZE[REG_DEC]       = 12;
-//     REG_SIZE[REG_MAX_SPEED] = 10;
-//     REG_SIZE[REG_MIN_SPEED] = 13;
-//     REG_SIZE[REG_KVAL_HOLD] = 8;
-//     REG_SIZE[REG_KVAL_RUN]  = 8;
-//     REG_SIZE[REG_KVAL_ACC]  = 8;
-//     REG_SIZE[REG_KVAL_DEC]  = 8;
-//     REG_SIZE[REG_INT_SPEED] = 14;
-//     REG_SIZE[REG_ST_SLP]    = 8;
-//     REG_SIZE[REG_FN_SLP_ACC]= 8;
-//     REG_SIZE[REG_FN_SLP_DEC]= 8;
-//     REG_SIZE[REG_K_THERM]   = 4;
-//     REG_SIZE[REG_ADC_OUT]   = 5; //readonly
-//     REG_SIZE[REG_OCD_TH]    = 4;
-//     REG_SIZE[REG_STALL_TH]  = 7;
-//     REG_SIZE[REG_FS_SPD]    = 10;
-//     REG_SIZE[REG_STEP_MODE] = 8;
-//     REG_SIZE[REG_ALARM_EN]  = 8;
-//     REG_SIZE[REG_CONFIG]    = 16;
-//     REG_SIZE[REG_STATUS]    = 16; //readonly
-
-//     REG_SIZE[REG_NOP]       = 1; // test
-//     REG_SIZE[REG_SETPARAM]  = 24;
-//     REG_SIZE[REG_GETPARAM]  = 24;
-//     REG_SIZE[REG_MoveCont]  =  24;
-//     REG_SIZE[REG_MoveStepClock]  = 0;
-//     REG_SIZE[REG_MoveStep]  =  24;  
-//     REG_SIZE[REG_MoveGoTo]  =  24;
-//     REG_SIZE[REG_MoveGoToDir]= 24;
-//     REG_SIZE[REG_MoveGoToUntil]= 24;
-//     REG_SIZE[REG_MoveRelease]= 0;
-//     REG_SIZE[REG_GoHome]    =  0;
-//     REG_SIZE[REG_GoMark]    =  0;
-//     REG_SIZE[REG_ResetPos]  =  0;
-//     REG_SIZE[REG_ResetDevice]= 0;
-//     REG_SIZE[REG_StopSoft]  =  0;
-//     REG_SIZE[REG_StopHard]  =  0;
-//     REG_SIZE[REG_HiZSoft]   =  0;
-//     REG_SIZE[REG_HiZHard]   =  0;
-//     REG_SIZE[REG_GetStatus] =  16;
-
-
-// #ifdef L6470_PRINT_MESSAGE
-//     printf("[L6470 DEBUG]:reg_size_init end\n");
-// #endif
-
-// }
 
 void L6470_setting_init(void)
 {
 
 #ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:setting_init start\n");
+    printf("%s setting_init start\n",L6470_PRINT_HEADER);
 #endif
 
 
-    L6470_setting = (union L6470_packet*)malloc((0x19 + 1) * sizeof(union L6470_packet));
+    L6470_setting = (union L6470_packet*)malloc((PARAM_NUM) * sizeof(union L6470_packet));
 
-    for (int reg = 0; reg < (0x19 +1); reg++){
-        switch (reg) {
-            case REG_NOP:
-            case REG_SPEED:
-            case REG_ADC_OUT:
-            case REG_STATUS:
-                //do nothing
-                break;
+    for (int reg = 0; reg < (PARAM_NUM); reg++){
+        if(L6470_param[reg].rw == RESERVED){
+            continue;
+        }else if(L6470_param[reg].rw == READONLY){
+            L6470_setting[reg] = L6470_GetParam(L6470_param[reg].addr);
+        }else{
+            L6470_setting[reg] = L6470_user_setting[reg];
+            //make temp because wiringPiSPIDataRW rewrite send data
+            union L6470_packet pkt_temp;
+            pkt_temp = L6470_user_setting[reg];
 
-            default:
-                //copy user_setting to setting
-                //set L6470
-
-                //when use L6470_rw, L6470_setting is written by SDO 
-                L6470_setting[reg] = L6470_user_setting[reg];
-
-                int len, SPI_res = 0;
-                len = REG_SIZE[reg];
+            int len, SPI_res = 0;
+            len = L6470_param[reg].param_size;
 #ifdef L6470_PRINT_MESSAGE
-                union L6470_packet send = L6470_setting[reg];
+            union L6470_packet send = L6470_setting[reg];
 #endif
-                SPI_res = L6470_rw(L6470_setting[reg].value8b, (int)(1 + (len + 8 -1)/8));
-
+            SPI_res = L6470_rw(pkt_temp.value8b, (int)(bit2byte(len + ADDR_SIZE)));
 #ifdef L6470_PRINT_MESSAGE
-                L6470_debug_print("setting_init",send,L6470_setting[reg]);
+            L6470_debug_print("setting_init",send,L6470_setting[reg]);
 #endif
-
-            break;
-            }
         }
+    }
 
 #ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:setting_init end\n");
+    printf("%s setting_init end\n",L6470_PRINT_HEADER);
 #endif
 
 }
@@ -141,43 +72,18 @@ void L6470_SPI_init(void)
     // SPI_res = mywiringPiSPISetupMode(SPI_CH,SPI_SPEED,SPI_WMODE, SPI_RMODE);
 
 #ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:SPI_init ch:%d\n",SPI_res);
+    printf("%s SPI_init ch:%d\n",L6470_PRINT_HEADER,SPI_res);
 #endif
 }
-
-int mywiringPiSPIDataRW (int channel, unsigned char *wdata, int len)
-{
-  struct spi_ioc_transfer spi ;
-
-  channel &= 1 ;
-
-
-  memset (&spi, 0, sizeof (spi)) ;
-
-  spi.tx_buf        = (unsigned long)wdata ;
-  spi.rx_buf        = (unsigned long)wdata ;
-  spi.len           = len ;
-  spi.delay_usecs   = spiDelay ;
-  spi.speed_hz      = spiSpeeds [channel] ;
-  spi.bits_per_word = spiBPW ;
-  spi.cs_change	    = 0;
-  spi.pad	    = 0;
-  return ioctl (spiFds [channel], SPI_IOC_MESSAGE(1), &spi) ;
-}
-
 
 void L6470_init(void)
 {
-#ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:init Start\n");
-#endif
 
     L6470_SPI_init();
-    // L6470_reg_size_init();
     L6470_setting_init();
 
 #ifdef L6470_PRINT_MESSAGE
-    printf("[L6470 DEBUG]:init Done\n");
+    printf("%s init Done\n",L6470_PRINT_HEADER);
 #endif
 }
 

@@ -11,37 +11,38 @@
 #define L6470_DEV_NUM 2 
 #endif
 
-extern union L6470_packet *L6470_setting;
+const union L6470_packet L6470_user_setting[PARAM_NUM] =
+{// L6470_PARAM_addr,     setting[2],setting[1],setting[0]} //reset_val
+//Left justified, MSB first
+    {L6470_param[enum_L6470_ABS_POS].addr,       0x00,   0x00,   0x00}, //0x000000
+    {L6470_param[enum_L6470_EL_POS].addr,        0x00,   0x00,   0x00}, //0x000
+    {L6470_param[enum_L6470_MARK].addr,          0x00,   0x00,   0x00}, //0x000000
+    {L6470_param[enum_L6470_ACC].addr,           0x00,   0x8A,   0x00}, //0x08A
+    {L6470_param[enum_L6470_DEC].addr,           0x00,   0x8A,   0x00}, //0x08A
+    {L6470_param[enum_L6470_MAX_SPEED].addr,     0x00,   0x41,   0x00}, //0x041
+    {L6470_param[enum_L6470_MIN_SPEED].addr,     0x00,   0x00,   0x00}, //0x000
+    {L6470_param[enum_L6470_KVAL_HOLD].addr,     0x29,   0x00,   0x00}, //0x29
+    {L6470_param[enum_L6470_KVAL_RUN].addr,      0x29,   0x00,   0x00}, //0x29
+    {L6470_param[enum_L6470_KVAL_ACC].addr,      0x29,   0x00,   0x00}, //0x29
+    {L6470_param[enum_L6470_KVAL_DEC].addr,      0x29,   0x00,   0x00}, //0x29
+    {L6470_param[enum_L6470_INT_SPEED].addr,     0x04,   0x08,   0x00}, //0x0408
+    {L6470_param[enum_L6470_ST_SLP].addr,        0x19,   0x00,   0x00}, //0x19 
+    {L6470_param[enum_L6470_FN_SLP_ACC].addr,    0x29,   0x00,   0x00}, //0x29
+    {L6470_param[enum_L6470_FN_SLP_DEC].addr,    0x29,   0x00,   0x00}, //0x29
+    {L6470_param[enum_L6470_K_THERM].addr,       0x00,   0x00,   0x00}, //0x0
+    {L6470_param[enum_L6470_OCD_TH].addr,        0x08,   0x00,   0x00}, //0x8
+    {L6470_param[enum_L6470_STALL_TH].addr,      0x40,   0x00,   0x00}, //0x40
+    {L6470_param[enum_L6470_FS_SPD].addr,        0x00,   0x27,   0x00}, //0x027
+    {L6470_param[enum_L6470_STEP_MODE].addr,     0x00,   0x07,   0x00}, //0x07
+    {L6470_param[enum_L6470_ALARM_EN].addr,      0xFF,   0x00,   0x00}, //0xFF
+    {L6470_param[enum_L6470_CONFIG].addr,        0x2E,   0x88,   0x00}, //0x2E88
+    //Dummy READONLY param &  RESERVED param
+    {L6470_param[enum_L6470_SPEED].addr,         0x00,   0x00,   0x00}, //dummy
+    {L6470_param[enum_L6470_ADC_OUT].addr,       0x00,   0x00,   0x00}, //dummy
+    {L6470_param[enum_L6470_STATUS].addr,        0x00,   0x00,   0x00}, //dummy
+    {L6470_param[enum_L6470_RESERVED_h1A].addr,  0x00,   0x00,   0x00}, //dummy
+    {L6470_param[enum_L6470_RESERVED_h1B].addr,  0x00,   0x00,   0x00}, //dummy
 
-const union L6470_packet L6470_user_setting[0x19 + 1] =
-{// REG_ADDR,     setting[0],setting[1],setting[2]}//initial
-//左づめ
-    {REG_NOP,           0xFF,   0xFF,   0xFF}, //////NOP
-    {REG_ABS_POS,       0x00,   0x00,   0x00}, //0x000000
-    {REG_EL_POS,        0x00,   0x00,   0x00}, //0x000
-    {REG_MARK,          0x00,   0x00,   0x00}, //0x000000
-    {REG_SPEED,         0xFF,   0xFF,   0xFF}, //////readonly
-    {REG_ACC,           0x00,   0x8A,   0x00}, //0x08A
-    {REG_DEC,           0x00,   0x8A,   0x00}, //0x08A
-    {REG_MAX_SPEED,     0x00,   0x41,   0x00}, //0x041
-    {REG_MIN_SPEED,     0x00,   0x00,   0x00}, //0x000
-    {REG_KVAL_HOLD,     0x29,   0x00,   0x00}, //0x29
-    {REG_KVAL_RUN,      0x29,   0x00,   0x00}, //0x29
-    {REG_KVAL_ACC,      0x29,   0x00,   0x00}, //0x29
-    {REG_KVAL_DEC,      0x29,   0x00,   0x00}, //0x29
-    {REG_INT_SPEED,     0x04,   0x08,   0x00}, //0x0408
-    {REG_ST_SLP,        0x19,   0x00,   0x00}, //0x19 
-    {REG_FN_SLP_ACC,    0x29,   0x00,   0x00}, //0x29
-    {REG_FN_SLP_DEC,    0x29,   0x00,   0x00}, //0x29
-    {REG_K_THERM,       0x00,   0x00,   0x00}, //0x0
-    {REG_ADC_OUT,       0xFF,   0xFF,   0xFF}, //////readonly
-    {REG_OCD_TH,        0x08,   0x00,   0x00}, //0x8
-    {REG_STALL_TH,      0x40,   0x00,   0x00}, //0x40
-    {REG_FS_SPD,        0x00,   0x27,   0x00}, //0x027
-    {REG_STEP_MODE,     0x00,   0x07,   0x00}, //0x07
-    {REG_ALARM_EN,      0xFF,   0x00,   0x00}, //0xFF
-    {REG_CONFIG,        0x2E,   0x88,   0x00}, //0x2E88
-    {REG_STATUS,        0xFF,   0xFF,   0xFF}  //////readonly
 };
 
 #endif

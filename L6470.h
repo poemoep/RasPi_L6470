@@ -10,7 +10,13 @@
 //----define debug message function ON/OFF----
 #define L6470_PRINT_MESSAGE 
 
+//----define inline function----
+#define bit2byte(x) ( ( x + 8 - 1 ) / 8 ) )
+
 //----define const value----
+
+#define ADDR_SIZE                (8 )
+
 
 #define DIR_RVS 0x00
 #define DIR_FWD 0x01
@@ -42,67 +48,69 @@
 #define MOTOR_STATUS_DEC	0b10
 #define MOTOR_STATUS_CONST	0b11
 
-#define READONLY	(0x00)
+#define RESERVED  (0x00)
+#define READONLY	(0x01)
 #define WRITABLE	(0x10)
-#define WRITABLE_HiZ	(Writable | 0x01)
-#define WRITABLE_MStop	(Writable | 0x02)
-#define WRITABLE_Always (Writable | 0x04)
+#define WRITABLE_HiZ	(Writable | 0x02)
+#define WRITABLE_MStop	(Writable | 0x04)
+#define WRITABLE_Always (Writable | 0x08)
 //----define L6470 parametor as userful number----
 
 const enum enum_L6470_PARAM {
-  L6470_ABS_POS = PARAM_ofset,
-  L6470_EL_POS ,
-  L6470_MARK,
-  L6470_SPEED, //readonly
-  L6470_ACC ,
-  L6470_DEC,
-  L6470_MAX_SPEED,
-  L6470_MIN_SPEED,
-  L6470_KVAL_HOLD,
-  L6470_KVAL_RUN,
-  L6470_KVAL_ACC,
-  L6470_KVAL_DEC,
-  L6470_INT_SPEED,
-  L6470_ST_SLP,
-  L6470_FN_SLP_ACC,
-  L6470_FN_SLP_DEC,
-  L6470_K_THERM,
-  L6470_ADC_OUT, //readonly
-  L6470_OCD_TH,
-  L6470_STALL_TH,
-  L6470_FS_SPD,
-  L6470_STEP_MODE,
-  L6470_ALARM_EN,
-  L6470_CONFIG,
-  L6470_STATUS, //readonly
-  L6470_RESERVED_h1A,
-  L6470_RESERVED_h1B
-} enum_L6470_param;
-#define PARAM_NUM (L6470_RESERVED_h1B + 1)
+  enum_L6470_ABS_POS ,
+  enum_L6470_EL_POS ,
+  enum_L6470_MARK,
+  enum_L6470_SPEED, //readonly
+  enum_L6470_ACC ,
+  enum_L6470_DEC,
+  enum_L6470_MAX_SPEED,
+  enum_L6470_MIN_SPEED,
+  enum_L6470_KVAL_HOLD,
+  enum_L6470_KVAL_RUN,
+  enum_L6470_KVAL_ACC,
+  enum_L6470_KVAL_DEC,
+  enum_L6470_INT_SPEED,
+  enum_L6470_ST_SLP,
+  enum_L6470_FN_SLP_ACC,
+  enum_L6470_FN_SLP_DEC,
+  enum_L6470_K_THERM,
+  enum_L6470_ADC_OUT, //readonly
+  enum_L6470_OCD_TH,
+  enum_L6470_STALL_TH,
+  enum_L6470_FS_SPD,
+  enum_L6470_STEP_MODE,
+  enum_L6470_ALARM_EN,
+  enum_L6470_CONFIG,
+  enum_L6470_STATUS, //readonly
+//  enum_L6470_RESERVED_h1A,
+//  enum_L6470_RESERVED_h1B
+};
+//#define PARAM_NUM (enum_L6470_RESERVED_h1B + 1)
+#define PARAM_NUM (enum_L6470_STATUS+ 1)
 
 //----define L6470 command as userful number----
-const enum enum_L6470_CMD{
-  L6470_NOP,
-  L6470_SETPARAM, 
-  L6470_GETPARAM,
-  L6470_MOVECONT,
-  L6470_MOVESTEPCLOCK,
-  L6470_MOVESTEP,
-  L6470_MOVEGOTO,
-  L6470_MOVEGOTODIR,
-  L6470_,
-  L6470_MoveRelease,
-  L6470_GoHome,
-  L6470_GoMark,
-  L6470_ResetPos,
-  L6470_ResetDevice,
-  L6470_StopSoft,
-  L6470_StopHard,
-  L6470_HiZSoft,
-  L6470_HiZHard,
-  L6470_GetStatus
-} enum_L6470_cmd;
-#define CMD_NUM		  (L6470_GetStatus + 1))
+enum enum_L6470_CMD{
+  enum_L6470_NOP,
+  enum_L6470_SETPARAM, 
+  enum_L6470_GETPARAM,
+  enum_L6470_MOVECONT,
+  enum_L6470_MOVESTEPCLOCK,
+  enum_L6470_MOVESTEP,
+  enum_L6470_MOVEGOTO,
+  enum_L6470_MOVEGOTODIR,
+  enum_L6470_MOVEGOTOUNTIL,
+  enum_L6470_MOVERELEASE,
+  enum_L6470_GOHOME,
+  enum_L6470_GOMARK,
+  enum_L6470_RESETPOS,
+  enum_L6470_RESETDEVICE,
+  enum_L6470_STOPSOFT,
+  enum_L6470_STOPHARD,
+  enum_L6470_HIZSOFT,
+  enum_L6470_HIZHARD,
+  enum_L6470_GETSTATUS
+};
+#define CMD_NUM		  (enum_L6470_GetStatus + 1)
 
 //----define L6470 registers----
 
@@ -138,27 +146,23 @@ const enum enum_L6470_CMD{
 #define CMD_NOP 0b00000000 //0x00
 #define CMD_SETPARAM    0b00000000 
 #define CMD_GETPARAM    0b00100000
-#define CMD_MoveCont    0b01010000
-#define CMD_MoveStepClock 0b01011000
-#define CMD_MoveStep    0b01000000
-#define CMD_MoveGoTo    0b01100000
-#define CMD_MoveGoToDir 0b01101000
-#define CMD_MoveGoToUntil 0b10000010
-#define CMD_MoveRelease 0b10010010
-#define CMD_GoHome      0b01110000
-#define CMD_GoMark      0b01111000
-#define CMD_ResetPos    0b11011000
-#define CMD_ResetDevice 0b11000000
-#define CMD_StopSoft    0b10110000
-#define CMD_StopHard    0b10111000
-#define CMD_HiZSoft     0b10100000
-#define CMD_HiZHard     0b10101000
-#define CMD_GetStatus   0b11010000
+#define CMD_MOVECONT    0b01010000
+#define CMD_MOVESTEPCLOCK 0b01011000
+#define CMD_MOVESTEP    0b01000000
+#define CMD_MOVEGOTO    0b01100000
+#define CMD_MOVEGOTODIR 0b01101000
+#define CMD_MOVEGOTOUNTIL 0b10000010
+#define CMD_MOVERELEASE 0b10010010
+#define CMD_GOHOME      0b01110000
+#define CMD_GOMARK      0b01111000
+#define CMD_RESETPOS    0b11011000
+#define CMD_RESETDEVICE 0b11000000
+#define CMD_STOPSOFT    0b10110000
+#define CMD_STOPHARD    0b10111000
+#define CMD_HIZSOFT     0b10100000
+#define CMD_HIZHARD     0b10101000
+#define CMD_GETSTATUS   0b11010000
 
-//const uint8_t REG_SIZE[REG_NUM];
-extern uint8_t *REG_SIZE;
-
-#define ADDR_SIZE                (8 )
 
 #define REG_SIZE_ABS_POS    (22)
 #define REG_SIZE_EL_POS     (9 )
@@ -185,6 +189,8 @@ extern uint8_t *REG_SIZE;
 #define REG_SIZE_ALARM_EN   (8 )
 #define REG_SIZE_CONFIG     (16)
 #define REG_SIZE_STATUS     (16) //readonly
+//#define REG_SIZE_RESERVED_h1A     (0) //dummy
+//#define REG_SIZE_RESERVED_h1B     (0) //dummy
 
 #define CMD_SIZE_NOP        (1 ) // test
 #define CMD_SIZE_SETPARAM   (24)
@@ -208,6 +214,8 @@ extern uint8_t *REG_SIZE;
 
 static const uint8_t spiBPW  8;
 static const uint16_t spiDelay  0;
+
+extern union L6470_packet *L6470_setting;
 
 //----define struct/union----
 struct L6470_CMD{
@@ -236,38 +244,58 @@ union L6470_packet{
 
 const struct L6470_PARAM L6470_param[PARAM_NUM] =
 {
-  L6470_ABS_POS ,
-  L6470_EL_POS ,
-  L6470_MARK,
-  L6470_SPEED, //readonly
-  L6470_ACC ,
-  L6470_DEC,
-  L6470_MAX_SPEED,
-  L6470_MIN_SPEED,
-  L6470_KVAL_HOLD,
-  L6470_KVAL_RUN,
-  L6470_KVAL_ACC,
-  L6470_KVAL_DEC,
-  L6470_INT_SPEED,
-  L6470_ST_SLP,
-  L6470_FN_SLP_ACC,
-  L6470_FN_SLP_DEC,
-  L6470_K_THERM,
-  L6470_ADC_OUT, //readonly
-  L6470_OCD_TH,
-  L6470_STALL_TH,
-  L6470_FS_SPD,
-  L6470_STEP_MODE,
-  L6470_ALARM_EN,
-  L6470_CONFIG,
-  L6470_STATUS, //readonly
-  L6470_RESERVED_h1A,
-  L6470_RESERVED_h1B
-}
-
+{ enum_L6470_ABS_POS      , REG_ABS_POS,      REG_SIZE_ABS_POS,       READONLY | WRITABLE_MStop },
+{ enum_L6470_EL_POS       , REG_EL_POS ,      REG_SIZE_EL_POS ,       READONLY | WRITABLE_MStop},
+{ enum_L6470_MARK         , REG_MARK,         REG_SIZE_MARK,          READONLY | WRITABLE_Always},
+{ enum_L6470_SPEED        , REG_SPEED,        REG_SIZE_SPEED,         READONLY }, //readonly
+{ enum_L6470_ACC          , REG_ACC,          REG_SIZE_ACC,           READONLY | WRITABLE_MStop},
+{ enum_L6470_DEC          , REG_DEC,          REG_SIZE_DEC,           READONLY | WRITABLE_MStop},,
+{ enum_L6470_MAX_SPEED    , REG_MAX_SPEED,    REG_SIZE_MAX_SPEED,     READONLY | WRITABLE_Always},
+{ enum_L6470_MIN_SPEED    , REG_MIN_SPEED,    REG_SIZE_MIN_SPEED,     READONLY | WRITABLE_MStop},
+{ enum_L6470_KVAL_HOLD    , REG_KVAL_HOLD,    REG_SIZE_KVAL_HOLD,     READONLY | WRITABLE_Always},
+{ enum_L6470_KVAL_RUN     , REG_KVAL_RUN,     REG_SIZE_KVAL_RUN,      READONLY | WRITABLE_Always},
+{ enum_L6470_KVAL_ACC     , REG_KVAL_ACC,     REG_SIZE_KVAL_ACC,      READONLY | WRITABLE_Always},
+{ enum_L6470_KVAL_DEC     , REG_KVAL_DEC,     REG_SIZE_KVAL_DEC,      READONLY | WRITABLE_Always},
+{ enum_L6470_INT_SPEED    , REG_INT_SPEED,    REG_SIZE_INT_SPEED,     READONLY | WRITABLE_HiZ},
+{ enum_L6470_ST_SLP       , REG_ST_SLP,       REG_SIZE_ST_SLP,        READONLY | WRITABLE_HiZ},
+{ enum_L6470_FN_SLP_ACC   , REG_FN_SLP_ACC,   REG_SIZE_FN_SLP_ACC,    READONLY | WRITABLE_HiZ},
+{ enum_L6470_FN_SLP_DEC   , REG_FN_SLP_DEC,   REG_SIZE_FN_SLP_DEC,    READONLY | WRITABLE_HiZ},
+{ enum_L6470_K_THERM      , REG_K_THERM,      REG_SIZE_K_THERM,       READONLY | WRITABLE_Always},
+{ enum_L6470_ADC_OUT      , REG_ADC_OUT,      REG_SIZE_ADC_OUT,       READONLY }, //readonly
+{ enum_L6470_OCD_TH       , REG_OCD_TH,       REG_SIZE_OCD_TH,        READONLY | WRITABLE_Always},
+{ enum_L6470_STALL_TH     , REG_STALL_TH,     REG_SIZE_STALL_TH,      READONLY | WRITABLE_Always},
+{ enum_L6470_FS_SPD       , REG_FS_SPD,       REG_SIZE_FS_SPD,        READONLY | WRITABLE_Always},
+{ enum_L6470_STEP_MODE    , REG_STEP_MODE,    REG_STEP_MODE,          READONLY | WRITABLE_HiZ},
+{ enum_L6470_ALARM_EN     , REG_ALARM_EN,     REG_SIZE_ALARM_EN,      READONLY | WRITABLE_MStop},
+{ enum_L6470_CONFIG       , REG_CONFIG,       REG_SIZE_CONFIG,        READONLY | WRITABLE_HiZ},
+{ enum_L6470_STATUS       , REG_STATUS,       REG_SIZE_STATUS,        READONLY }, //readonly
+//{ enum_L6470_RESERVED_h1A , REG_RESERVED_h1A, REG_SIZE_RESERVED_h1A,  RESERVED }, //dummy
+//{ enum_L6470_RESERVED_h1B , REG_RESERVED_h1B, REG_SIZE_RESERVED_h1B,  RESERVED }  //dummy
 };
+
+
 const struct L6470_CMD L6470_cmd[CMD_NUM] =
-{	},
+{	
+{  enum_L6470_NOP,            CMD_NOP,            CMD_SIZE_NOP},
+{  enum_L6470_SETPARAM,       CMD_SETPARAM,       CMD_SIZE_SETPARAM},
+{  enum_L6470_GETPARAM,       CMD_GETPARAM,       CMD_SIZE_GETPARAM},
+{  enum_L6470_MOVECONT,       CMD_MOVECONT,       CMD_SIZE_MOVECONT},
+{  enum_L6470_MOVESTEPCLOCK,  CMD_MOVESTEPCLOCK,  CMD_SIZE_MOVESTEPCLOCK},
+{  enum_L6470_MOVESTEP,       CMD_MOVESTEP,       CMD_SIZE_MOVESTEP},
+{  enum_L6470_MOVEGOTO,       CMD_MOVEGOTO,       CMD_SIZE_MOVEGOTO},
+{  enum_L6470_MOVEGOTODIR,    CMD_MOVEGOTODIR,    CMD_SIZE_MOVEGOTODIR},
+{  enum_L6470_MOVEGOTOUNTIL,  CMD_MOVEGOTOUNTIL,  CMD_SIZE_MOVEGOTOUNTIL},
+{  enum_L6470_MOVERELEASE,    CMD_MOVERELEASE,    CMD_SIZE_MOVERELEASE},
+{  enum_L6470_GOHOME,         CMD_GOHOME,         CMD_SIZE_GOHOME},
+{  enum_L6470_GOMARK,         CMD_GOMARK,         CMD_SIZE_GOMARK},
+{  enum_L6470_RESETPOS,       CMD_RESETPOS,       CMD_SIZE_RESETPOS},
+{  enum_L6470_RESETDEVICE,    CMD_RESETDEVICE,    CMD_SIZE_RESETDEVICE},
+{  enum_L6470_STOPSOFT,       CMD_STOPSOFT,       CMD_SIZE_STOPSOFT},
+{  enum_L6470_STOPHARD,       CMD_STOPHARD,       CMD_SIZE_STOPHARD},
+{  enum_L6470_HIZSOFT,        CMD_HIZSOFT,        CMD_SIZE_HIZSOFT},
+{  enum_L6470_HIZHARD,        CMD_HIZHARD,        CMD_SIZE_HIZHARD},
+{  enum_L6470_GETSTATUS,      CMD_GETSTATUS,      CMD_SIZE_GETSTATUS}
+};
 
 
 
