@@ -317,6 +317,87 @@ uint16_t L6470_GetStatus(void)
 
 }
 
+
+// union L6470_packet gen_ABS_POS(int32_t val)
+// {
+//     union L6470_packet pkt = generate_pkt(enum_L6470_ABS_POS, val);
+//     return pkt;
+// }
+
+// union L6470_packet gen_EL_POS(int32_t val)
+// {
+//     union L6470_packet pkt = generate_pkt(enum_L6470_EL_POS, val);
+//     return pkt;
+// }
+
+// union L6470_packet gen_MARK(int32_t val)
+// {
+//     union L6470_packet pkt = generate_pkt(enum_L6470_MARK, val);
+//     return pkt;
+// }
+
+// union L6470_packet gen_ACC(int32_t val)
+// {
+//     union L6470_packet pkt = generate_pkt(enum_L6470_ACC, val);
+//     return pkt;
+// }
+
+// union L6470_packet gen_DEC(int32_t val)
+// {
+//     union L6470_packet pkt = generate_pkt(enum_L6470_DEC, val);
+//     return pkt;
+// }
+
+// union L6470_packet gen_MAX_SPEED(int32_t val)
+// {
+//     union L6470_packet pkt = generate_pkt(enum_L6470_MAX_SPEED, val);
+//     return pkt;
+// }
+
+def_genfunc(ABS_POS);
+def_genfunc(EL_POS);
+def_genfunc(MARK);
+def_genfunc(ACC);
+def_genfunc(DEC);
+def_genfunc(MAX_SPEED);
+def_genfunc(MIN_SPEED);
+def_genfunc(KVAL_HOLD);
+def_genfunc(KVAL_RUN);
+def_genfunc(KVAL_ACC);
+def_genfunc(KVAL_DEC);
+def_genfunc(INT_SPEED);
+def_genfunc(ST_SLP);
+def_genfunc(FN_SLP_ACC);
+def_genfunc(FN_SLP_DEC);
+def_genfunc(K_THERM);
+def_genfunc(OCD_TH);
+def_genfunc(STALL_TH);
+def_genfunc(FS_SPD);
+def_genfunc(STEP_MODE);
+def_genfunc(ALARM_EN);
+def_genfunc(CONFIG);
+
+static union L6470_packet generate_pkt(int enum_param,int32_t val)
+{
+    union L6470_packet pkt = {0};
+    pkt.data.reg_addr = L6470_param[enum_param].addr;
+
+    int size = L6470_param[enum_param].param_size;
+
+    if(8 >= size){
+        pkt.data.value8b[0] = (uint8_t)(val & 0xFF);
+    } else if (16 >= size){
+        pkt.data.value8b[0] = (uint8_t)((val & 0xFF00) >> 8);
+        pkt.data.value8b[1] = (uint8_t)((val & 0x00FF));
+    } else {
+        pkt.data.value8b[0] = (uint8_t)((val & 0xFF0000) >> 16);
+        pkt.data.value8b[1] = (uint8_t)((val & 0x00FF00) >> 8);
+        pkt.data.value8b[2] = (uint8_t)((val & 0x0000FF));
+    }
+    
+    return pkt;
+}
+
 #if defined (L6470_PRINT_MESSAGE)
 static void L6470_debug_print(const char *msg,union L6470_packet* send, union L6470_packet* get)
 {

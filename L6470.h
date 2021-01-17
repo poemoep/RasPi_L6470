@@ -12,6 +12,12 @@
 
 //----define inline function----
 #define bit2byte(x) ( ( x + 8 - 1 ) / 8 ) 
+#define def_genfunc(enum) \
+union L6470_pakcet gen_##enum(int32_t val)\
+{ \
+  union L6470_packet pkt = generate_pkt(enum_L6470_##enum, val); \
+  return pkt; \
+}
 
 //----define const value----
 
