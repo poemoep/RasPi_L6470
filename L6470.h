@@ -22,10 +22,49 @@
 #define MAX_SPEED_RESOLUTION (14.55) //[step/s]
 #define MIN_SPEED_RESOLUTION (0.238) //[step/s]
 #define INT_SPEED_RESOLUTION (0.0596) //[step/s]
+#define ST_SLP_RESOLUTION    (0.000015) //
+#define FN_SLP_ACC_RESOLUTION (0.000015) //
+#define FN_SLP_DEC_RESOLUTION (0.000015) //
+#define K_THERM_RESOLUTION ( 0.03125) //
+#define OCD_TH_RESOLUTION (375) // [mA]
+#define STALL_TH_RESOLUTION (31.25) // [mA]
+#define FS_SPD_RESOLUTION (15.25) // [step/s]
+#define FS_SPD_MIN        (FS_SPD_RESOLUTION/2) // [step/s]
 
 #define ENABLE  (1)
 #define DISABLE (0)
 #define ENABLE_LSPD (ENABLE << 12)
+
+// define for STEP_MODE
+#define SYNC_EN     (ENABLE << 7) //Output sync_clock from ^BUSY/SYNC
+#define STEP_FULL   (0b000)
+#define STEP_HALF   (0b001)
+#define STEP_4DIV   (0b010)
+#define STEP_8DIV   (0b011)
+#define STEP_16DIV  (0b100)
+#define STEP_32DIV  (0b101)
+#define STEP_64DIV  (0b110)
+#define STEP_128DIV (0b111)
+#define SYNC_FFS_2DIV   (0b000 << 4) // EL_POS[7]
+#define SYNC_FFS        (0b001 << 4) // EL_POS[6]
+#define SYNC_FFS_2TIMES (0b010 << 4) // EL_POS[5]
+#define SYNC_FFS_4TIMES (0b011 << 4) // EL_POS[4]
+#define SYNC_FFS_8TIMES (0b100 << 4) // EL_POS[3]
+#define SYNC_FFS_16TIMES (0b101 << 4) // EL_POS[2]
+#define SYNC_FFS_32TIMES (0b110 << 4) // EL_POS[1]
+#define SYNC_FFS_64TIMES (0b111 << 4) // EL_POS[0]
+
+// define for ALARM
+#define ALM_NOTHING          (0b00000000)
+#define ALM_OVERCURRENT      (0b00000001)
+#define ALM_THERMAL_SHUTDOWN (0b00000010)
+#define ALM_THERMAL_WARNING  (0b00000100)
+#define ALM_UDERVOLTAGE      (0b00001000)
+#define ALM_STALL_A          (0b00010000)
+#define ALM_STALL_B          (0b00100000)
+#define ALM_SW_TURNON        (0b01000000)
+#define ALM_CMD_WRONG        (0b10000000)
+
 
 #define DIR_RVS 0x00
 #define DIR_FWD 0x01

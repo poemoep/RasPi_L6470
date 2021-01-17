@@ -346,7 +346,7 @@ union L6470_packet gen_MARK(int32_t mark)
 }
 
 /* step_per_ss = N x ACC_RESOLUTION*/
-union L6470_packet gen_ACC(int32_t step_per_ss)
+union L6470_packet gen_ACC(float step_per_ss)
 {
     uint16_t val = (uint16_t)(step_per_ss / ACC_RESOLUTION) ;
 #if defined (L6470_PRINT_MESSAGE)
@@ -363,7 +363,7 @@ union L6470_packet gen_ACC(int32_t step_per_ss)
 }
 
 /* step_per_ss = N x DEC_RESOLUTION*/
-union L6470_packet gen_DEC(int32_t step_per_ss)
+union L6470_packet gen_DEC(float step_per_ss)
 {
     uint16_t val = (uint16_t)(step_per_ss / DEC_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
@@ -380,7 +380,7 @@ union L6470_packet gen_DEC(int32_t step_per_ss)
 }
 
 /* step_per_s = N x MAX_SPEED_RESOLUTION  */
-union L6470_packet gen_MAX_SPEED(int32_t step_per_s)
+union L6470_packet gen_MAX_SPEED(float step_per_s)
 {
     uint16_t val = (uint16_t)(step_per_s / MAX_SPEED_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
@@ -397,7 +397,7 @@ union L6470_packet gen_MAX_SPEED(int32_t step_per_s)
 }
 
 /* step_per_s = M x MIN_SPEED_RESOLUTION, enable_LSPD = ENABLE_LSPD or DISABLE */
-union L6470_packet gen_MIN_SPEED(int32_t step_per_s, int16_t enable_LSPD)
+union L6470_packet gen_MIN_SPEED(float step_per_s, int16_t enable_LSPD)
 {
     uint16_t val = (uint16_t)(step_per_s / MIN_SPEED_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
@@ -439,75 +439,141 @@ union L6470_packet gen_KVAL_DEC(uint8_t kval)
 }
 
 /* step_per_s = N x INT_SPEED_RESOLUTION */
-union L6470_packet gen_INT_SPEED(uint16_t step_per_s)
+union L6470_packet gen_INT_SPEED(float step_per_s)
 {
     uint32_t val = (step_per_s / INT_SPEED_RESOLUTION);
+#if defined (L6470_PRINT_MESSAGE)
+    if((val * INT_SPEED_RESOLUTION) != step_per_s){
+        printf("%s %s INT_SPEED step_per_s is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, INT_SPEED_RESOLUTION);
+    } 
+#endif
+
     union L6470_packet pkt = generate_pkt(enum_L6470_INT_SPEED, val);
     return pkt;
 }
-//ここまで
 
-union L6470_packet gen_ST_SLP(int32_t val)
+/* slp = N x ST_SLP_RESOLUTION */
+union L6470_packet gen_ST_SLP(float slp)
 {
+    uint8_t val = (uint8_t)(slp / ST_SLP_RESOLUTION);
+#if defined (L6470_PRINT_MESSAGE)
+    if((val * ST_SLP_RESOLUTION) != slp){
+        printf("%s %s ST_SLP slp is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, ST_SLP_RESOLUTION);
+    } 
+#endif
     union L6470_packet pkt = generate_pkt(enum_L6470_ST_SLP, val);
     return pkt;
 }
 
-
-union L6470_packet gen_FN_SLP_ACC(int32_t val)
+/* slp_acc = N x FN_SLP_ACC_RESOLUTION*/
+union L6470_packet gen_FN_SLP_ACC(float slp_acc)
 {
+    uint8_t val = (uint8_t)(slp_acc / FN_SLP_ACC_RESOLUTION);
+#if defined (L6470_PRINT_MESSAGE)
+    if((val * FN_SLP_ACC_RESOLUTION) != slp){
+        printf("%s %s FN_SLP_ACC slp_acc is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, FN_SLP_ACC_RESOLUTION);
+    } 
+#endif
     union L6470_packet pkt = generate_pkt(enum_L6470_FN_SLP_ACC, val);
     return pkt;
 }
 
-
-union L6470_packet gen_FN_SLP_DEC(int32_t val)
+/* slp_dec = N x FN_SLP_DEC_RESOLUTION*/
+union L6470_packet gen_FN_SLP_DEC(float slp_dec)
 {
+    uint8_t val = (uint8_t)(slp_dec / FN_SLP_DEC_RESOLUTION);
+#if defined (L6470_PRINT_MESSAGE)
+    if((val * FN_SLP_DEC_RESOLUTION) != slp){
+        printf("%s %s FN_SLP_DEC slp_dec is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, FN_SLP_DEC_RESOLUTION);
+    } 
+#endif
     union L6470_packet pkt = generate_pkt(enum_L6470_FN_SLP_DEC, val);
     return pkt;
 }
 
-
-union L6470_packet gen_K_THERM(int32_t val)
+/* k_therm = N x K_THERM_RESOLUTION */
+union L6470_packet gen_K_THERM(float k_therm)
 {
+    uint8_t val = (uint8_t)(k_therm / K_THERM_RESOLUTION);
+#if defined (L6470_PRINT_MESSAGE)
+    if((val * K_THERM_RESOLUTION) != k_therm){
+        printf("%s %s K_THERM k_therm is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, K_THERM_RESOLUTION);
+    } 
+#endif
     union L6470_packet pkt = generate_pkt(enum_L6470_K_THERM, val);
     return pkt;
 }
 
-
-union L6470_packet gen_OCD_TH(int32_t val)
+/* ocd_th = 375 to 6000 mA */
+union L6470_packet gen_OCD_TH(uint16_t ocd_th)
 {
+    uint8_t val = (uint8_t)((ocd_th - OCD_TH_RESOLUTION) / OCD_TH_RESOLUTION);
+#if defined (L6470_PRINT_MESSAGE)
+    if(((val * OCD_TH_RESOLUTION) + OCD_TH_RESOLUTION) != ocd_th){
+        printf("%s %s OCD_TH ocd_th is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, OCD_TH_RESOLUTION);
+    } 
+#endif
     union L6470_packet pkt = generate_pkt(enum_L6470_OCD_TH, val);
     return pkt;
 }
 
-
-union L6470_packet gen_STALL_TH(int32_t val)
+/* stall_th = 31.25 to 4000 mA */
+union L6470_packet gen_STALL_TH(float stall_th)
 {
+    uint8_t val = (uint8_t)((stall_th - STALL_TH_RESOLUTION) / STALL_TH_RESOLUTION);
+#if defined (L6470_PRINT_MESSAGE)
+    if(((val * STALL_TH_RESOLUTION) + STALL_TH_RESOLUTION) != stall_th){
+        printf("%s %s STALL_TH stall_th is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, STALL_TH_RESOLUTION);
+    } 
+#endif    
     union L6470_packet pkt = generate_pkt(enum_L6470_STALL_TH, val);
     return pkt;
 }
-
-union L6470_packet gen_FS_SPD(int32_t val)
+/* fs_spd = 7.63(FS_SPD_MIN) to 15625 [step/s] */
+union L6470_packet gen_FS_SPD(float fs_spd)
 {
+    uint16_t val = (uint16_t)((fs_spd - FS_SPD_MIN) / FS_SPD_RESOLUTION);
+#if defined (L6470_PRINT_MESSAGE)
+    if(((val * FS_SPD_RESOLUTION) + FS_SPD_MIN) != fs_spd){
+        printf("%s %s FS_SPD fs_spd is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, FS_SPD_RESOLUTION);
+    } 
+#endif   
+
     union L6470_packet pkt = generate_pkt(enum_L6470_FS_SPD, val);
     return pkt;
 }
 
-union L6470_packet gen_STEP_MODE(int32_t val)
+/* sync_en = SYNC_EN or DISABLE, sync_sel = SYNC_FFS_*, step_sel = STEP_* */
+union L6470_packet gen_STEP_MODE(uint8_t sync_en, uint8_t sync_sel, uint8_t step_sel)
 {
+#if defined (L6470_PRINT_MESSAGE)
+    if( sync_en > SYNC_EN)
+        printf("%s %s sync_en is binary. Use SYNC_EN or DISABLE\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION);
+    if( sync_sel > step_sel)
+        printf("%s %s sync_sel is less than equal step_sel.\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION);
+    if( (sync_sel & (7 << 4)) != sync_sel)
+        printf("%s %s sync_sel is 3bits(6 - 4 bit) param. Use SYNC_FFS_* \n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION);
+    if( (step_sel & 7) != step_sel)
+        printf("%s %s step_sel is 3bits(2 - 0 bit) param. Use STEP_* \n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION);
+    
+#endif
+    uint8_t val = (sync_en | sync_sel | step_sel);
     union L6470_packet pkt = generate_pkt(enum_L6470_STEP_MODE, val);
     return pkt;
 }
 
-union L6470_packet gen_ALARM_EN(int32_t val)
+/* alm = ALM_* | ALM_* ... */
+union L6470_packet gen_ALARM_EN(uint8_t alm)
 {
+    uint8_t val = alm;
     union L6470_packet pkt = generate_pkt(enum_L6470_ALARM_EN, val);
     return pkt;
 }
 
-union L6470_packet gen_CONFIG(int32_t val)
+/* f_pwm_int, f_pwm_dec, pow_sr, oc_sd, en_vscomp, sw_mode, ext_clk, osc_sel */
+union L6470_packet gen_CONFIG(uint8_t, f_pwm_int, uint8_t f_pwm_dec, uint8_t pow_sr, uint8_t oc_sd, uint8_t en_vscomp, uint8_t sw_mode, uint8_t ext_clk, uint8_t, osc_sel)
 {
+    uint16_t val = (f_pwm_int | f_pwm_dec | pow_sr | oc_sd | en_vscomp | sw_mode | ext_clk | osc_sel);
     union L6470_packet pkt = generate_pkt(enum_L6470_CONFIG, val);
     return pkt;
 }
