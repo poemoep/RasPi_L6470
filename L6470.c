@@ -149,7 +149,7 @@ int32_t L6470_GetParam(int enum_param)
 {
     union L6470_packet pkt={0};
     int SPI_res = 0;
-    int32_t ret;
+    int32_t ret = 100;
 
     int size = L6470_cmd[enum_L6470_GETPARAM].send_bit_size;
     pkt.data.reg_addr = (L6470_param[enum_param].addr | L6470_cmd[enum_L6470_GETPARAM].addr);
