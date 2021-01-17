@@ -149,7 +149,7 @@ int32_t L6470_GetParam(int enum_param)
 {
     union L6470_packet pkt={0};
     int SPI_res = 0;
-    uint32_t ret;
+    int32_t ret;
 
     int size = L6470_cmd[enum_L6470_GETPARAM].send_bit_size;
     pkt.data.reg_addr = (L6470_param[enum_param].addr | L6470_cmd[enum_L6470_GETPARAM].addr);
@@ -325,13 +325,13 @@ static void L6470_debug_print(const char *msg,union L6470_packet* send, union L6
 {
     if(msg != NULL)
     {
-        printf("%s %s send:%2x %2x %2x %2x \t len:%d\n", L6470_PRINT_HEADER, msg, 
+        printf("%s %s send:0x%02x 0x%02x 0x%02x 0x%02x \t len:%d\n", L6470_PRINT_HEADER, msg, 
 				send->value8b[0], 
 				send->value8b[1], 
 				send->value8b[2], 
 				send->value8b[3], 1);
         if (get != (union L6470_packet*)NULL)
-            printf("%s %s  get:%2x %2x %2x %2x \t len:%d\n", L6470_PRINT_HEADER, msg,  
+            printf("%s %s  get:0x%02x 0x%02x 0x%02x 0x%02x \t len:%d\n", L6470_PRINT_HEADER, msg,  
 			         get->value8b[0], 
 			         get->value8b[1], 
 			         get->value8b[2], 

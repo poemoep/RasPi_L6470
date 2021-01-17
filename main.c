@@ -41,10 +41,10 @@ int main(int argc, char** argv)
     for(int i = 0; i<1; i++){
         L6470_MoveStep(DIR_FWD,200);
         sleep(1);
-    pos = L6470_GetAbsPos();
+    	pos = L6470_GetAbsPos();
         L6470_MoveStep(DIR_RVS,200);
         sleep(1);
-    pos = L6470_GetAbsPos();
+    	pos = L6470_GetAbsPos();
     }
     sleep(3);
 
