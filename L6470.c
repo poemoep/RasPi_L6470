@@ -470,7 +470,7 @@ union L6470_packet gen_FN_SLP_ACC(float slp_acc)
 {
     uint8_t val = (uint8_t)(slp_acc / FN_SLP_ACC_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
-    if((val * FN_SLP_ACC_RESOLUTION) != slp){
+    if((val * FN_SLP_ACC_RESOLUTION) != slp_acc){
         printf("%s %s FN_SLP_ACC slp_acc is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, FN_SLP_ACC_RESOLUTION);
     } 
 #endif
@@ -483,7 +483,7 @@ union L6470_packet gen_FN_SLP_DEC(float slp_dec)
 {
     uint8_t val = (uint8_t)(slp_dec / FN_SLP_DEC_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
-    if((val * FN_SLP_DEC_RESOLUTION) != slp){
+    if((val * FN_SLP_DEC_RESOLUTION) != slp_dec){
         printf("%s %s FN_SLP_DEC slp_dec is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, FN_SLP_DEC_RESOLUTION);
     } 
 #endif
@@ -571,7 +571,7 @@ union L6470_packet gen_ALARM_EN(uint8_t alm)
 }
 
 /* f_pwm_int, f_pwm_dec, pow_sr, oc_sd, en_vscomp, sw_mode, ext_clk, osc_sel */
-union L6470_packet gen_CONFIG(uint8_t, f_pwm_int, uint8_t f_pwm_dec, uint8_t pow_sr, uint8_t oc_sd, uint8_t en_vscomp, uint8_t sw_mode, uint8_t ext_clk, uint8_t, osc_sel)
+union L6470_packet gen_CONFIG(uint8_t f_pwm_int, uint8_t f_pwm_dec, uint8_t pow_sr, uint8_t oc_sd, uint8_t en_vscomp, uint8_t sw_mode, uint8_t ext_clk, uint8_t osc_sel)
 {
     uint16_t val = (f_pwm_int | f_pwm_dec | pow_sr | oc_sd | en_vscomp | sw_mode | ext_clk | osc_sel);
     union L6470_packet pkt = generate_pkt(enum_L6470_CONFIG, val);

@@ -383,6 +383,8 @@ uint16_t L6470_GetStatus(void);
 static void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,const char* msg);
 static void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg);
 
+static union L6470_packet generate_pkt(int enum_param,int32_t val);
+
 
 
 #if defined (L6470_PRINT_MESSAGE)
