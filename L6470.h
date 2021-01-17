@@ -12,17 +12,20 @@
 
 //----define inline function----
 #define bit2byte(x) ( ( x + 8 - 1 ) / 8 ) 
-#define def_genfunc(enum) \
-union L6470_pakcet gen_##enum(int32_t val)\
-{ \
-  union L6470_packet pkt = generate_pkt(enum_L6470_##enum, val); \
-  return pkt; \
-}
 
 //----define const value----
 
-#define ADDR_SIZE                (8 )
+#define ADDR_SIZE    (8 )
+#define L6470_TICK   (250) // ns
+#define ACC_RESOLUTION    (14.55) //[step/s^2]
+#define DEC_RESOLUTION     ACC_RESOLUTION
+#define MAX_SPEED_RESOLUTION (14.55) //[step/s]
+#define MIN_SPEED_RESOLUTION (0.238) //[step/s]
+#define INT_SPEED_RESOLUTION (0.0596) //[step/s]
 
+#define ENABLE  (1)
+#define DISABLE (0)
+#define ENABLE_LSPD (ENABLE << 12)
 
 #define DIR_RVS 0x00
 #define DIR_FWD 0x01
@@ -345,6 +348,7 @@ static void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg);
 
 #if defined (L6470_PRINT_MESSAGE)
 #define L6470_PRINT_HEADER "[L6470 DEBUG]: "
+#define L6470_PRINT_CAUTION "Caution"
 static void L6470_debug_print(const char *msg,union L6470_packet* send, union L6470_packet* get);
 #endif
 
