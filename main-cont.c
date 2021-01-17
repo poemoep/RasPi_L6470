@@ -11,8 +11,8 @@ int main(int argc, char** argv)
 
 
     int pos_aim,pos;
-    L6470_MoveStepClock(DIR_RVS);
-   //L6470_MoveCont(DIR_RVS,20);
+   // L6470_MoveStepClock(DIR_RVS);
+   L6470_MoveCont(DIR_RVS,40000);
     while(1)
     	{
  	    pos = L6470_GetAbsPos();

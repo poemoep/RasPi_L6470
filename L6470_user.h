@@ -19,7 +19,7 @@ const union L6470_packet L6470_user_setting[PARAM_NUM] =
     {L6470_param[enum_L6470_MARK].addr,          0x00,   0x00,   0x00}, //0x000000
     {L6470_param[enum_L6470_ACC].addr,           0x00,   0x8A,   0x00}, //0x08A
     {L6470_param[enum_L6470_DEC].addr,           0x00,   0x8A,   0x00}, //0x08A
-    {L6470_param[enum_L6470_MAX_SPEED].addr,     0x00,   0x41,   0x00}, //0x041
+    {L6470_param[enum_L6470_MAX_SPEED].addr,     0x03,   0xFF,   0x00}, //0x041
     {L6470_param[enum_L6470_MIN_SPEED].addr,     0x00,   0x00,   0x00}, //0x000
     {L6470_param[enum_L6470_KVAL_HOLD].addr,     0x29,   0x00,   0x00}, //0x29
     {L6470_param[enum_L6470_KVAL_RUN].addr,      0x29,   0x00,   0x00}, //0x29
@@ -32,7 +32,7 @@ const union L6470_packet L6470_user_setting[PARAM_NUM] =
     {L6470_param[enum_L6470_K_THERM].addr,       0x00,   0x00,   0x00}, //0x0
     {L6470_param[enum_L6470_OCD_TH].addr,        0x08,   0x00,   0x00}, //0x8
     {L6470_param[enum_L6470_STALL_TH].addr,      0x40,   0x00,   0x00}, //0x40
-    {L6470_param[enum_L6470_FS_SPD].addr,        0x00,   0x27,   0x00}, //0x027
+    {L6470_param[enum_L6470_FS_SPD].addr,        0x00,   0x08,   0x00}, //0x027
     {L6470_param[enum_L6470_STEP_MODE].addr,     0x00,   0x07,   0x00}, //0x07
     {L6470_param[enum_L6470_ALARM_EN].addr,      0xFF,   0x00,   0x00}, //0xFF
     {L6470_param[enum_L6470_CONFIG].addr,        0x2E,   0x88,   0x00}, //0x2E88

@@ -311,7 +311,7 @@ void L6470_SPI_init(void);
 void L6470_reg_size_init(void);
 void L6470_setting_init(void);
 void L6470_init(void);
-int  L6470_rw(union L6470_packet data,int len,const char* msg);
+int  L6470_rw(union L6470_packet *pkt,int len,const char* msg);
 void L6470_nop(int times);
 void L6470_SetParam(int enum_param,uint32_t value);
 int32_t L6470_GetParam(int param);

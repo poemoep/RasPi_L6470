@@ -10,10 +10,10 @@ int main(int argc, char** argv)
     int pos_aim,pos;
 
     pos = L6470_GetAbsPos();
-    L6470_MoveCont(DIR_FWD, 256000);
+    L6470_MoveCont(DIR_FWD, 25600);
     sleep(5);
     pos = L6470_GetAbsPos();
-    L6470_MoveCont(DIR_FWD, 512000);
+    L6470_MoveCont(DIR_FWD, 51200);
     sleep(5);
     pos = L6470_GetAbsPos();
     
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
         sleep(1);
     }
     
-    L6470_MoveGoToUntil(ACT_POS_TO_MARK,DIR_FWD,1000);
+    L6470_MoveGoToUntil(ACT_POS_TO_MARK,DIR_FWD,10000);
     for(int i= 0; i<12; i++){
 	pos = L6470_GetAbsPos();
         sleep(1);

@@ -54,7 +54,7 @@ void L6470_setting_init(void)
 #ifdef L6470_PRINT_MESSAGE
             union L6470_packet send = L6470_setting[reg];
 #endif
-            SPI_res = L6470_rw(pkt_temp, (int)(bit2byte(len + ADDR_SIZE)), NULL);
+            SPI_res = L6470_rw(&(pkt_temp), (int)(bit2byte(len + ADDR_SIZE)), NULL);
 #ifdef L6470_PRINT_MESSAGE
             L6470_debug_print("setting_init",&(send),&(L6470_setting[reg]));
 #endif
@@ -90,24 +90,25 @@ void L6470_init(void)
 #endif
 }
 
-int L6470_rw(union L6470_packet pkt,int len, const char* msg)
+int L6470_rw(union L6470_packet *pkt,int len, const char* msg)
 {
-    uint8_t *data;
-    data = pkt.value8b;
+    //uint8_t *data;
+    //data = pkt->value8b;
 
 #ifdef L6470_PRINT_MESSAGE
-    union L6470_packet send = pkt;
+    union L6470_packet send = *pkt;
 #endif
 
 
 	int i = 0,j = 0;
 	for (i = 0; i<len; i++){
-		j += wiringPiSPIDataRW(L6470_SPI_CH, data,1);
-		data++;
+	//	j += wiringPiSPIDataRW(L6470_SPI_CH, data,1);
+		j += wiringPiSPIDataRW(L6470_SPI_CH, (unsigned char *)(pkt->value8b + i),1);
+	//	data++;
 	}
 
 #ifdef L6470_PRINT_MESSAGE
-    L6470_debug_print(msg,&(send),&(pkt));
+    L6470_debug_print(msg,&(send),pkt);
 #endif
 
    return j; 
@@ -119,7 +120,7 @@ void L6470_nop(int times)
     int SPI_res = 0;
     int size = L6470_cmd[enum_L6470_NOP].send_bit_size;
 
-    L6470_rw(pkt,times, "NOP");
+    L6470_rw(&(pkt),times, "NOP");
 }
 
 void L6470_SetParam(int enum_param, uint32_t value)
@@ -141,7 +142,7 @@ void L6470_SetParam(int enum_param, uint32_t value)
         pkt.value8b[3] = (value & 0x0000FF);
     }
     
-    SPI_res = L6470_rw(pkt,bit2byte(size + ADDR_SIZE), "SetParam");
+    SPI_res = L6470_rw(&(pkt),bit2byte(size + ADDR_SIZE), "SetParam");
 
 }
 
@@ -154,10 +155,10 @@ int32_t L6470_GetParam(int enum_param)
     int size = L6470_cmd[enum_L6470_GETPARAM].send_bit_size;
     pkt.data.reg_addr = (L6470_param[enum_param].addr | L6470_cmd[enum_L6470_GETPARAM].addr);
 
-    SPI_res = L6470_rw(pkt,bit2byte(size + ADDR_SIZE),"GetParam");
+    SPI_res = L6470_rw(&(pkt),bit2byte(size + ADDR_SIZE),"GetParam");
 
     //rewrite addr
-    pkt.data.reg_addr = (L6470_param[enum_param].addr | L6470_cmd[enum_L6470_GETPARAM].addr);
+    pkt.data.reg_addr = L6470_param[enum_param].addr;
     L6470_setting[enum_param] = pkt;
 
 
@@ -168,8 +169,6 @@ int32_t L6470_GetParam(int enum_param)
     }else{
         ret = (pkt.value8b[1] << 16) + (pkt.value8b[2] << 8) + (pkt.value8b[3]);
     }
-
-    printf("debug size:%d, ret%d\n " ,size,ret);
 
     return ret;
 }
@@ -259,7 +258,7 @@ static void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,co
     int size = cmd.send_bit_size;
     pkt.data.reg_addr = (cmd.addr | orprm);
 
-    if(pow(2,cmd.send_bit_size) < arg_param)
+    if(pow(2,cmd.send_bit_size) < abs(arg_param))
     {
         printf("%s AbortCmd size_over cmdsize:2^%d, but arg is %d\n ",L6470_PRINT_HEADER, cmd.send_bit_size,arg_param);
         return;
@@ -269,7 +268,7 @@ static void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,co
     pkt.data.value8b[1] = ((arg_param & 0x00FF00) >> 8);
     pkt.data.value8b[2] = ((arg_param & 0x0000FF));
 
-    SPI_res = L6470_rw(pkt,bit2byte(size + ADDR_SIZE),msg);
+    SPI_res = L6470_rw(&(pkt),bit2byte(size + ADDR_SIZE),msg);
 }
 
 static void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg)
@@ -280,7 +279,7 @@ static void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg)
     int size = cmd.send_bit_size;
     pkt.data.reg_addr = cmd.addr;
 
-    SPI_res = L6470_rw(pkt,bit2byte(size + ADDR_SIZE),msg);
+    SPI_res = L6470_rw(&(pkt),bit2byte(size + ADDR_SIZE),msg);
 
 }
 
@@ -291,10 +290,8 @@ int32_t L6470_GetAbsPos(void)
     union L6470_packet pkt;
     pos = L6470_GetParam(enum_L6470_ABS_POS);
  
-    ret = ((pos & 0x0000FF) << 16) + ((pos & 0x00FF00)) + ((pos & 0xFF0000) >> 16); 
- 
     if(((pos & 0x200000) >> 21) == 1){
-	    ret = (-1) * ((~ret + 1) & 0x3FFFFF);	
+	    pos = (-1) * ((~pos + 1) & 0x3FFFFF);	
     }
 
 #ifdef L6470_PRINT_MESSAGE
@@ -314,7 +311,7 @@ uint16_t L6470_GetStatus(void)
     int size = L6470_param[enum_L6470_GETSTATUS].param_size;
     pkt.data.reg_addr = L6470_cmd[enum_L6470_GETSTATUS].addr;
 
-    SPI_res = L6470_rw(pkt,bit2byte(size + ADDR_SIZE),"GetStatus");
+    SPI_res = L6470_rw(&(pkt),bit2byte(size + ADDR_SIZE),"GetStatus");
 
     return ((pkt.value8b[2] << 8) & (pkt.value8b[3]));
 
@@ -325,17 +322,17 @@ static void L6470_debug_print(const char *msg,union L6470_packet* send, union L6
 {
     if(msg != NULL)
     {
-        printf("%s %s send:0x%02x 0x%02x 0x%02x 0x%02x \t len:%d\n", L6470_PRINT_HEADER, msg, 
+        printf("%s %s send:0x%02x 0x%02x 0x%02x 0x%02x\n", L6470_PRINT_HEADER, msg, 
 				send->value8b[0], 
 				send->value8b[1], 
 				send->value8b[2], 
-				send->value8b[3], 1);
+				send->value8b[3]);
         if (get != (union L6470_packet*)NULL)
-            printf("%s %s  get:0x%02x 0x%02x 0x%02x 0x%02x \t len:%d\n", L6470_PRINT_HEADER, msg,  
+            printf("%s %s  get:0x%02x 0x%02x 0x%02x 0x%02x\n", L6470_PRINT_HEADER, msg,  
 			         get->value8b[0], 
 			         get->value8b[1], 
 			         get->value8b[2], 
-			         get->value8b[3], 1);
+			         get->value8b[3]);
     }
 }
 #endif
