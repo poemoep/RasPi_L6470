@@ -351,10 +351,10 @@ union L6470_packet gen_ACC(float step_per_ss)
     uint16_t val = (uint16_t)(step_per_ss / ACC_RESOLUTION) ;
 #if defined (L6470_PRINT_MESSAGE)
     if(val == 0){
-        printf("%s %s ACC step_per_ss is more than equal %d\nset minumum value.\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, ACC_RESOLUTION);
+        printf("%s %s ACC step_per_ss is more than equal %f\nset minumum value.\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, ACC_RESOLUTION);
         val = 1;
     } else if((val * ACC_RESOLUTION) != step_per_ss){
-        printf("%s %s ACC step_per_ss is indivisible (be multiple of %d)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, ACC_RESOLUTION);
+        printf("%s %s ACC step_per_ss is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, ACC_RESOLUTION);
     } 
 #endif
 
@@ -368,10 +368,10 @@ union L6470_packet gen_DEC(float step_per_ss)
     uint16_t val = (uint16_t)(step_per_ss / DEC_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if(val == 0){
-        printf("%s %s DEC step_per_ss is more than equal %d\nset minumum value.\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, DEC_RESOLUTION);
+        printf("%s %s DEC step_per_ss is more than equal %f\nset minumum value.\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, DEC_RESOLUTION);
         val = 1;
     } else if((val * DEC_RESOLUTION) != step_per_ss){
-        printf("%s %s DEC step_per_ss is indivisible (be multiple of %d)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, DEC_RESOLUTION);
+        printf("%s %s DEC step_per_ss is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, DEC_RESOLUTION);
     } 
 #endif
 
@@ -385,10 +385,10 @@ union L6470_packet gen_MAX_SPEED(float step_per_s)
     uint16_t val = (uint16_t)(step_per_s / MAX_SPEED_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if(val == 0){
-        printf("%s %s MAX_SPEED step_per_s is more than equal %d\nset minumum value.\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, MAX_SPEED_RESOLUTION);
+        printf("%s %s MAX_SPEED step_per_s is more than equal %f\nset minumum value.\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, MAX_SPEED_RESOLUTION);
         val = 1;
     } else if((val * MAX_SPEED_RESOLUTION) != step_per_s){
-        printf("%s %s ACC step_per_ss is indivisible (be multiple of %d)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, MAX_SPEED_RESOLUTION);
+        printf("%s %s ACC step_per_ss is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, MAX_SPEED_RESOLUTION);
     } 
 #endif
 
@@ -402,7 +402,7 @@ union L6470_packet gen_MIN_SPEED(float step_per_s, int16_t enable_LSPD)
     uint16_t val = (uint16_t)(step_per_s / MIN_SPEED_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if((val * MIN_SPEED_RESOLUTION) != step_per_s){
-        printf("%s %s MIN step_per_s is indivisible (be multiple of %d)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, MIN_SPEED_RESOLUTION);
+        printf("%s %s MIN step_per_s is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, MIN_SPEED_RESOLUTION);
     } 
 #endif
     val |= enable_LSPD;
@@ -510,7 +510,7 @@ union L6470_packet gen_OCD_TH(uint16_t ocd_th)
     uint8_t val = (uint8_t)((ocd_th - OCD_TH_RESOLUTION) / OCD_TH_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if(((val * OCD_TH_RESOLUTION) + OCD_TH_RESOLUTION) != ocd_th){
-        printf("%s %s OCD_TH ocd_th is indivisible (be multiple of %f)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, OCD_TH_RESOLUTION);
+        printf("%s %s OCD_TH ocd_th is indivisible (be multiple of %d)\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, OCD_TH_RESOLUTION);
     } 
 #endif
     union L6470_packet pkt = generate_pkt(enum_L6470_OCD_TH, val);
