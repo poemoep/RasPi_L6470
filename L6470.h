@@ -294,11 +294,6 @@ union L6470_packet{
   uint32_t value32b;
 };
 
-// extern const struct L6470_PARAM L6470_param[PARAM_NUM];
-
-// extern const struct L6470_CMD L6470_cmd[CMD_NUM];
-
-
 const struct L6470_PARAM L6470_param[PARAM_NUM] =
 {
 { enum_L6470_ABS_POS      , REG_ABS_POS,      REG_SIZE_ABS_POS,       READONLY | WRITABLE_MStop },
@@ -382,6 +377,30 @@ int32_t L6470_GetAbsPos(void);
 uint16_t L6470_GetStatus(void);
 static void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,const char* msg);
 static void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg);
+
+union L6470_packet gen_ABS_POS(int32_t abs_pos);
+union L6470_packet gen_EL_POS(uint8_t step, uint8_t el_step);
+union L6470_packet gen_MARK(int32_t mark);
+union L6470_packet gen_ACC(float step_per_ss);
+union L6470_packet gen_DEC(float step_per_ss);
+union L6470_packet gen_MAX_SPEED(float step_per_s);
+union L6470_packet gen_MIN_SPEED(float step_per_s, int16_t enable_LSPD);
+union L6470_packet gen_KVAL_HOLD(uint8_t kval);
+union L6470_packet gen_KVAL_RUN(uint8_t kval);
+union L6470_packet gen_KVAL_ACC(uint8_t kval);
+union L6470_packet gen_KVAL_DEC(uint8_t kval);
+union L6470_packet gen_INT_SPEED(float step_per_s);
+union L6470_packet gen_ST_SLP(float slp);
+union L6470_packet gen_FN_SLP_ACC(float slp_acc);
+union L6470_packet gen_FN_SLP_DEC(float slp_dec);
+union L6470_packet gen_K_THERM(float k_therm);
+union L6470_packet gen_OCD_TH(uint16_t ocd_th);
+union L6470_packet gen_STALL_TH(float stall_th);
+union L6470_packet gen_FS_SPD(float fs_spd);
+union L6470_packet gen_STEP_MODE(uint8_t sync_en, uint8_t sync_sel, uint8_t step_sel);
+union L6470_packet gen_ALARM_EN(uint8_t alm);
+union L6470_packet gen_CONFIG(uint8_t f_pwm_int, uint8_t f_pwm_dec, uint8_t pow_sr, uint8_t oc_sd, uint8_t en_vscomp, uint8_t sw_mode, uint8_t ext_clk, uint8_t osc_sel);
+
 
 static union L6470_packet generate_pkt(int enum_param,int32_t val);
 
