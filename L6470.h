@@ -12,7 +12,7 @@
 
 //----define inline function----
 #define bit2byte(x) ( ( x + 8 - 1 ) / 8 ) 
-
+#define ustep(x)    ( ( x & 127) )
 //----define const value----
 
 #define ADDR_SIZE    (8 )
@@ -35,8 +35,16 @@
 #define DISABLE (0)
 #define ENABLE_LSPD (ENABLE << 12)
 
+
 // define for STEP_MODE
 #define SYNC_EN     (ENABLE << 7) //Output sync_clock from ^BUSY/SYNC
+
+#define EL_POS_ofset     (7)
+#define EL_POS_0deg      (0b00 << EL_POS_ofset)
+#define EL_POS_90        (0b01 << EL_POS_ofset)
+#define EL_POS_180deg    (0b10 << EL_POS_ofset)
+#define EL_POS_270deg    (0b11 << EL_POS_ofset)
+
 #define STEP_FULL   (0b000)
 #define STEP_HALF   (0b001)
 #define STEP_4DIV   (0b010)
@@ -45,6 +53,7 @@
 #define STEP_32DIV  (0b101)
 #define STEP_64DIV  (0b110)
 #define STEP_128DIV (0b111)
+
 #define SYNC_FFS_2DIV   (0b000 << 4) // EL_POS[7]
 #define SYNC_FFS        (0b001 << 4) // EL_POS[6]
 #define SYNC_FFS_2TIMES (0b010 << 4) // EL_POS[5]
