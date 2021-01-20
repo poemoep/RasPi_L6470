@@ -4,15 +4,16 @@
 
 int output_header(void);
 int output_footer(void);
+int print_pkt(union L6470_packet pkt);
 
 int main (int argc, char* argv)
 {
     output_header();
 
 
-    print_pkt(gen_ABS_POS(0));
-    print_pkt(gen_EL_POS(STEP_ePOS_0deg | 0));
-    print_pkt(gen_MARK(0));
+    print_pkt(gen_ABS_POS(4522831));
+    print_pkt(gen_EL_POS(STEP_ePOS_90deg | 67));
+    print_pkt(gen_MARK(2097151));
     print_pkt(gen_ACC(300));
     print_pkt(gen_DEC(400));
     print_pkt(gen_MAX_SPEED(400000));
