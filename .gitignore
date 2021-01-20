@@ -1,3 +1,4 @@
 wiringPi/
 wiringPi.h
 wiringPiSPI.h
+*.o
