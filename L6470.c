@@ -80,7 +80,17 @@ const struct L6470_CMD L6470_cmd[CMD_NUM] =
 {  enum_L6470_GETSTATUS,      CMD_GETSTATUS,      CMD_SIZE_GETSTATUS}
 };
 
+static void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,const char* msg);
+static void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg);
+static union L6470_packet generate_pkt(int enum_param,int32_t val);
+static union L6470_packet generate_pkt_with_percentage(int enum_param, int32_t percentage);
 
+
+#if defined (L6470_PRINT_MESSAGE)
+#define L6470_PRINT_HEADER "[L6470 DEBUG]: "
+#define L6470_PRINT_CAUTION "Caution"
+static void L6470_debug_print(const char *msg,union L6470_packet* send, union L6470_packet* get);
+#endif
 
 void L6470_setting_init(void)
 {

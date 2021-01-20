@@ -407,8 +407,6 @@ void L6470_HiZSoft(void);
 void L6470_HiZHard(void);
 int32_t L6470_GetAbsPos(void);
 uint16_t L6470_GetStatus(void);
-static void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,const char* msg);
-static void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg);
 
 union L6470_packet gen_ABS_POS(int32_t abs_pos);
 union L6470_packet gen_EL_POS(int32_t step_el_step);
@@ -433,16 +431,6 @@ union L6470_packet gen_STEP_MODE(int32_t sync_en_sync_sel_step_sel);
 union L6470_packet gen_ALARM_EN(int32_t alm);
 union L6470_packet gen_CONFIG(int32_t param);
 
-
-static union L6470_packet generate_pkt(int enum_param,int32_t val);
-static union L6470_packet generate_pkt_with_percentage(int enum_param, int32_t percentage);
-
-
-#if defined (L6470_PRINT_MESSAGE)
-#define L6470_PRINT_HEADER "[L6470 DEBUG]: "
-#define L6470_PRINT_CAUTION "Caution"
-static void L6470_debug_print(const char *msg,union L6470_packet* send, union L6470_packet* get);
-#endif
 
 #endif
 
