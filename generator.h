@@ -48,16 +48,16 @@
 #define USER_FN_SLP_ACC		(615)
 
 /* FN_SLP_DEC = 0 to 4000 [x0.000001 ] */
-#define USER_FN_SLP_DEC		(615))
+#define USER_FN_SLP_DEC		(615)
 
 /* K_THERM = 100000 to 146875 [x0.00001]*/
 #define USER_K_THERM		(1.0 * 1000000)
 
 /* OCD_TH = 375 to 6000 [mA]*/
-#define USER_OCD_TH		    (338))
+#define USER_OCD_TH		    (338)
 
 /* STALL_TH = 3125 to 400000 [x 0.01 mA]*/
-#define USER_STALL_TH		(2030 * 100))
+#define USER_STALL_TH		(2030 * 100)
 
 /* FS_SPD = 763 to 1562500 [x0.01 step/s]*/
 #define USER_FS_SPD		    (602.7 * 100)
@@ -65,7 +65,7 @@
 /* USER_STEP_MODE = SYNC_EN (if use SYNC_EN) */
 /*               |= (SYNC_FFS_2DIV | SYNC_FFS | SYNC_FFS_2TIMES | SYNC_FFS_4TIMES | SYNC_FFS_8TIMES | SYNC_FFS_16TIMES | SYNC_FFS_32TIMES | SYNC_FFS_64TIMES) */
 /*              |= (STEP_FULL | STEP_HALF | STEP_4DIV | STEP_8DIV | STEP_16DIV | STEP_32DIV | STEP_64DIV | STEP_128DIV) */ 
-#define USER_STEP_MODE		(STEP_128DIV))
+#define USER_STEP_MODE		(STEP_128DIV)
 
 /* ALARM_EN = ALM_FULL (if use all alarm) */
 /*          = ALM_NOTHING (if use no alarm) */

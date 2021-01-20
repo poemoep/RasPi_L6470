@@ -133,7 +133,7 @@
 #define POW_SR_MASK     (1 << POW_SR_ofset)
 
 #define POW_SR_VFAST    (0b00 << POW_SR_ofset)
-#define POW_SR_FAST     (0b11 << POW_SW_ofset)
+#define POW_SR_FAST     (0b11 << POW_SR_ofset)
 #define POW_SR_MIDDLE   (0b10 << POW_SR_ofset)
 #define POW_SR_SLOW     (0b01 << POW_SR_ofset)
 

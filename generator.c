@@ -14,8 +14,8 @@ int main (int argc, char** argv)
     print_pkt(gen_ABS_POS(USER_ABS_POS));
     print_pkt(gen_EL_POS(USER_EL_POS));
     print_pkt(gen_MARK(USER_MARK));
-    print_pkt(gen_ACC(USER_ACC);
-    print_pkt(gen_DEC(USER_DEC);
+    print_pkt(gen_ACC(USER_ACC));
+    print_pkt(gen_DEC(USER_DEC));
     print_pkt(gen_MAX_SPEED(USER_MAX_SPEED));
     print_pkt(gen_MIN_SPEED(USER_MIN_SPEED));
     print_pkt(gen_KVAL_HOLD(USER_KVAL_HOLD));
