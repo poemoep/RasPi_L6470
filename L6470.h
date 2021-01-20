@@ -15,21 +15,21 @@
 #define ustep(x)    ( ( x & 127) )
 //----define const value----
 
-#define ADDR_SIZE    (8 )
-#define L6470_TICK   (250) // ns
-#define ACC_RESOLUTION    (1455) //[x0.01 step/s^2]
-#define DEC_RESOLUTION     ACC_RESOLUTION
-#define MAX_SPEED_RESOLUTION (1455) //[x0.01 step/s]
-#define MIN_SPEED_RESOLUTION (238) //[x0.001 step/s]
-#define INT_SPEED_RESOLUTION (596) //[x0.0001 step/s]
-#define ST_SLP_RESOLUTION    (15) // [x0.000001]
+#define ADDR_SIZE             (8 )
+#define L6470_TICK            (250) // ns
+#define ACC_RESOLUTION        (1455) //[x0.01 step/s^2]
+#define DEC_RESOLUTION        ACC_RESOLUTION
+#define MAX_SPEED_RESOLUTION  (1455) //[x0.01 step/s]
+#define MIN_SPEED_RESOLUTION  (238) //[x0.001 step/s]
+#define INT_SPEED_RESOLUTION  (596) //[x0.0001 step/s]
+#define ST_SLP_RESOLUTION     (15) // [x0.000001]
 #define FN_SLP_ACC_RESOLUTION (15) //[x0.000001]
 #define FN_SLP_DEC_RESOLUTION (15) //[x0.000001]
-#define K_THERM_RESOLUTION (3125) //[x0.00001]
-#define OCD_TH_RESOLUTION (375) // [mA]
-#define STALL_TH_RESOLUTION (3125) // [x0.01 mA]
-#define FS_SPD_RESOLUTION (1525) // [x0.01 step/s]
-#define FS_SPD_MIN        (FS_SPD_RESOLUTION/2) // [step/s]
+#define K_THERM_RESOLUTION    (3125) //[x0.00001]
+#define OCD_TH_RESOLUTION     (375) // [mA]
+#define STALL_TH_RESOLUTION   (3125) // [x0.01 mA]
+#define FS_SPD_RESOLUTION     (1525) // [x0.01 step/s]
+#define FS_SPD_MIN            (FS_SPD_RESOLUTION/2) // [step/s]
 
 #define ENABLE  (1)
 #define DISABLE (0)
@@ -87,6 +87,7 @@
 #define ALM_STALL_B          (0b00100000)
 #define ALM_SW_TURNON        (0b01000000)
 #define ALM_CMD_WRONG        (0b10000000)
+#define ALM_FULL             (0b11111111)
 
 // define for CONFIG
 
@@ -468,10 +469,10 @@ union L6470_packet gen_ACC(int32_t step_per_ss);
 union L6470_packet gen_DEC(int32_t step_per_ss);
 union L6470_packet gen_MAX_SPEED(int32_t step_per_s);
 union L6470_packet gen_MIN_SPEED(int32_t enable_LSPD_step_per_s);
-union L6470_packet gen_KVAL_HOLD(int32_t kval);
-union L6470_packet gen_KVAL_RUN(int32_t kval);
-union L6470_packet gen_KVAL_ACC(int32_t kval);
-union L6470_packet gen_KVAL_DEC(int32_t kval);
+union L6470_packet gen_KVAL_HOLD(int32_t percentage);
+union L6470_packet gen_KVAL_RUN(int32_t percentage);
+union L6470_packet gen_KVAL_ACC(int32_t percentage);
+union L6470_packet gen_KVAL_DEC(int32_t percentage);
 union L6470_packet gen_INT_SPEED(int32_t step_per_s);
 union L6470_packet gen_ST_SLP(int32_t slp);
 union L6470_packet gen_FN_SLP_ACC(int32_t slp_acc);

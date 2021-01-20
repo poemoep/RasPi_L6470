@@ -432,14 +432,14 @@ union L6470_packet gen_MIN_SPEED(int32_t enable_LSPD_step_per_s)
     return pkt;
 }
 
-/* kval = 0 to 255 */
+/* percentage = 0 to 100 */
 union L6470_packet gen_KVAL_HOLD(int32_t percentage)
 {
     union L6470_packet pkt = generate_pkt_with_percentage(enum_L6470_KVAL_HOLD, percentage);
     return pkt;
 }
 
-/* kval = 0 to 255 */
+/* percentage = 0 to 100 */
 union L6470_packet gen_KVAL_RUN(int32_t percentage)
 {
     union L6470_packet pkt = generate_pkt_with_percentage(enum_L6470_KVAL_RUN, percentage);
@@ -453,7 +453,7 @@ union L6470_packet gen_KVAL_ACC(int32_t percentage)
     return pkt;
 }
 
-/* percentage = 0 to 255 */
+/* percentage = 0 to 100 */
 union L6470_packet gen_KVAL_DEC(int32_t percentage)
 {
     union L6470_packet pkt = generate_pkt_with_percentage(enum_L6470_KVAL_DEC, percentage);
