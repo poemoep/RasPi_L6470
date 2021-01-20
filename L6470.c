@@ -577,7 +577,7 @@ union L6470_packet gen_STEP_MODE(int32_t mode)
     uint8_t sync_en = (mode & SYNC_EN);
     uint8_t sync_sel = (mode & SYNC_SEL_MASK);
     uint8_t step_sel = (mode & STEP_SEL_MASK);
-    if( sync_sel > step_sel)
+    if( (sync_sel >> SYNC_SEL_ofset) > step_sel)
         printf("%s %s sync_sel is less than equal step_sel.\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION);    
 #endif
     int32_t val = mode;

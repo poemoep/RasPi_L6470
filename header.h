@@ -17,24 +17,23 @@ const union L6470_packet L6470_user_setting[PARAM_NUM] =
 [L6470 DEBUG]:  Caution el_step is selected 67
     {	0x02,	0x00,	0xc3,	0x00},
     {	0x03,	0x1f,	0xff,	0xff},
-[L6470 DEBUG]:  Caution ACC step_per_ss is more than equal 1455 [x0.01 step/s^2]
-[L6470 DEBUG]:  Caution set minumum value.
-    {	0x05,	0x00,	0x01,	0x00},
-[L6470 DEBUG]:  Caution DEC step_per_ss is more than equal 1455 [x0.01 step/s^2]
-[L6470 DEBUG]:  Caution set minumum value.
-    {	0x06,	0x00,	0x01,	0x00},
+[L6470 DEBUG]:  Caution ACC is rounded to 2910 [x0.01 step/s^2]
+    {	0x05,	0x00,	0x02,	0x00},
+[L6470 DEBUG]:  Caution DEC is rounded to 2910 [x0.01 step/s^2]
+    {	0x06,	0x00,	0x02,	0x00},
 [L6470 DEBUG]:  Caution MAX_SPEED is rounded to 398670 [x0.01 step/s]
     {	0x07,	0x01,	0x12,	0x00},
+[L6470 DEBUG]:  Caution MIN_SPEED is over
     {	0x00,	0x00,	0x00,	0x00},
-[L6470 DEBUG]:  Caution percentage is round to 76[%]
+[L6470 DEBUG]:  Caution percentage is round to 29[%]
     {	0x09,	0x4c,	0x00,	0x00},
-[L6470 DEBUG]:  Caution percentage is round to 127[%]
+[L6470 DEBUG]:  Caution percentage is round to 49[%]
     {	0x0a,	0x7f,	0x00,	0x00},
     {	0x0b,	0xcc,	0x00,	0x00},
-[L6470 DEBUG]:  Caution percentage is round to 229[%]
+[L6470 DEBUG]:  Caution percentage is round to 89[%]
     {	0x0c,	0xe5,	0x00,	0x00},
-[L6470 DEBUG]:  Caution INT_SPEED is rounded to 0 [x0.0001 step/s] 
-    {	0x0d,	0x00,	0x00,	0x00},
+[L6470 DEBUG]:  Caution INT_SPEED is rounded to 596 [x0.0001 step/s] 
+    {	0x0d,	0x00,	0x01,	0x00},
 [L6470 DEBUG]:  Caution ST_SLP is rounded to 90 [x0.000001] 
     {	0x0e,	0x06,	0x00,	0x00},
     {	0x0f,	0x02,	0x00,	0x00},
@@ -43,10 +42,10 @@ const union L6470_packet L6470_user_setting[PARAM_NUM] =
 [L6470 DEBUG]:  Caution K_THERM is rounded to 28126 [x0.00001]
     {	0x11,	0x09,	0x00,	0x00},
     {	0x13,	0x07,	0x00,	0x00},
-    {	0x14,	0x00,	0x00,	0x00},
-[L6470 DEBUG]:  Caution FS_SPD is rounded to 762 [x0.01 step/s]
-    {	0x15,	0x00,	0x00,	0x00},
-[L6470 DEBUG]:  Caution sync_sel is less than equal step_sel.
+[L6470 DEBUG]:  Caution STALL_TH is rounded to 6250 [x0.01 mA]
+    {	0x14,	0x01,	0x00,	0x00},
+[L6470 DEBUG]:  Caution FS_SPD is rounded to 2287 [x0.01 step/s]
+    {	0x15,	0x00,	0x01,	0x00},
     {	0x16,	0x00,	0x00,	0xe7},
     {	0x17,	0xff,	0x00,	0x00},
     {	0x18,	0xd8,	0xbb,	0x00},
