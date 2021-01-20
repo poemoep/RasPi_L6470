@@ -8,33 +8,6 @@ int output_footer(void);
 int main (int argc, char* argv)
 {
     output_header();
-
-print_pkt(gen_ABS_POS(int32_t abs_pos));
-print_pkt(gen_EL_POS(uint8_t step, uint8_t el_step));
-print_pkt(gen_MARK(int32_t mark));
-print_pkt(gen_ACC(float step_per_ss));
-print_pkt(gen_DEC(float step_per_ss));
-print_pkt(gen_MAX_SPEED(float step_per_s));
-print_pkt(gen_MIN_SPEED(float step_per_s, int16_t enable_LSPD));
-print_pkt(gen_KVAL_HOLD(uint8_t kval));
-print_pkt(gen_KVAL_RUN(uint8_t kval));
-print_pkt(gen_KVAL_ACC(uint8_t kval));
-print_pkt(gen_KVAL_DEC(uint8_t kval));
-print_pkt(gen_INT_SPEED(float step_per_s));
-print_pkt(gen_ST_SLP(float slp));
-print_pkt(gen_FN_SLP_ACC(float slp_acc));
-print_pkt(gen_FN_SLP_DEC(float slp_dec));
-print_pkt(gen_K_THERM(float k_therm));
-print_pkt(gen_OCD_TH(uint16_t ocd_th));
-print_pkt(gen_STALL_TH(float stall_th));
-print_pkt(gen_FS_SPD(float fs_spd));
-print_pkt(gen_STEP_MODE(uint8_t sync_en, uint8_t sync_sel, uint8_t step_sel));
-print_pkt(gen_ALARM_EN(uint8_t alm));
-print_pkt(gen_CONFIG(uint8_t f_pwm_int, uint8_t f_pwm_dec, uint8_t pow_sr, uint8_t oc_sd, uint8_t en_vscomp, uint8_t sw_mode, uint8_t ext_clk, uint8_t osc_sel));
-
-
-
-
     output_footer();
 
     return 0;

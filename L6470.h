@@ -17,33 +17,46 @@
 
 #define ADDR_SIZE    (8 )
 #define L6470_TICK   (250) // ns
-#define ACC_RESOLUTION    (14.55) //[step/s^2]
+#define ACC_RESOLUTION    (1455) //[x0.01 step/s^2]
 #define DEC_RESOLUTION     ACC_RESOLUTION
-#define MAX_SPEED_RESOLUTION (14.55) //[step/s]
-#define MIN_SPEED_RESOLUTION (0.238) //[step/s]
-#define INT_SPEED_RESOLUTION (0.0596) //[step/s]
-#define ST_SLP_RESOLUTION    (0.000015) //
-#define FN_SLP_ACC_RESOLUTION (0.000015) //
-#define FN_SLP_DEC_RESOLUTION (0.000015) //
-#define K_THERM_RESOLUTION ( 0.03125) //
+#define MAX_SPEED_RESOLUTION (1455) //[x0.01 step/s]
+#define MIN_SPEED_RESOLUTION (238) //[x0.001 step/s]
+#define INT_SPEED_RESOLUTION (596) //[x0.0001 step/s]
+#define ST_SLP_RESOLUTION    (15) // [x0.000001]
+#define FN_SLP_ACC_RESOLUTION (15) //[x0.000001]
+#define FN_SLP_DEC_RESOLUTION (15) //[x0.000001]
+#define K_THERM_RESOLUTION (3125) //[x0.00001]
 #define OCD_TH_RESOLUTION (375) // [mA]
-#define STALL_TH_RESOLUTION (31.25) // [mA]
-#define FS_SPD_RESOLUTION (15.25) // [step/s]
+#define STALL_TH_RESOLUTION (3125) // [x0.01 mA]
+#define FS_SPD_RESOLUTION (1525) // [x0.01 step/s]
 #define FS_SPD_MIN        (FS_SPD_RESOLUTION/2) // [step/s]
 
 #define ENABLE  (1)
 #define DISABLE (0)
-#define ENABLE_LSPD (ENABLE << 12)
 
+#define MIN_SPEED_MASK    (0b11111111111111111111) /* use 20 bits */
+#define ENABLE_LSPD_MAGIC (25) /* magic number */
+#define ENABLE_LSPD (ENABLE << ENABLE_LSPD_MAGIC)
+#define ENABLE_LSPD_BIT (ENABLE << 12)
+
+#define KVAL_MASK   (255)
+
+// define for EL_POS 
+#define STEP_ePOS_ofset     (7)
+#define STEP_ePOS_MASK      (11 << STEP_ePOS_ofset)
+#define STEP_ePOS_0deg      (0b00 << STEP_ePOS_ofset)
+#define STEP_ePOS_90deg     (0b01 << STEP_ePOS_ofset)
+#define STEP_ePOS_180deg    (0b10 << STEP_ePOS_ofset)
+#define STEP_ePOS_270deg    (0b11 << STEP_ePOS_ofset)
+
+#define STEP_EL_STEP_MASK   (127)
 
 // define for STEP_MODE
-#define SYNC_EN     (ENABLE << 7) //Output sync_clock from ^BUSY/SYNC
-
-#define EL_POS_ofset     (7)
-#define EL_POS_0deg      (0b00 << EL_POS_ofset)
-#define EL_POS_90        (0b01 << EL_POS_ofset)
-#define EL_POS_180deg    (0b10 << EL_POS_ofset)
-#define EL_POS_270deg    (0b11 << EL_POS_ofset)
+#define SYNC_EN_ofset (7)
+#define SYNC_EN     (ENABLE << SYNC_EN_ofset) //Output sync_clock from ^BUSY/SYNC
+#define SYNC_SEL_ofset (4)
+#define SYNC_SEL_MASK (0b0111 << SYNC_SEL_ofset)
+#define STEP_SEL_MASK (0b00000111)
 
 #define STEP_FULL   (0b000)
 #define STEP_HALF   (0b001)
@@ -54,14 +67,15 @@
 #define STEP_64DIV  (0b110)
 #define STEP_128DIV (0b111)
 
-#define SYNC_FFS_2DIV   (0b000 << 4) // EL_POS[7]
-#define SYNC_FFS        (0b001 << 4) // EL_POS[6]
-#define SYNC_FFS_2TIMES (0b010 << 4) // EL_POS[5]
-#define SYNC_FFS_4TIMES (0b011 << 4) // EL_POS[4]
-#define SYNC_FFS_8TIMES (0b100 << 4) // EL_POS[3]
-#define SYNC_FFS_16TIMES (0b101 << 4) // EL_POS[2]
-#define SYNC_FFS_32TIMES (0b110 << 4) // EL_POS[1]
-#define SYNC_FFS_64TIMES (0b111 << 4) // EL_POS[0]
+#define SYNC_FFS_ofset  (4)
+#define SYNC_FFS_2DIV   (0b000 << SYNC_FFS_ofset) // EL_POS[7]
+#define SYNC_FFS        (0b001 << SYNC_FFS_ofset) // EL_POS[6]
+#define SYNC_FFS_2TIMES (0b010 << SYNC_FFS_ofset) // EL_POS[5]
+#define SYNC_FFS_4TIMES (0b011 << SYNC_FFS_ofset) // EL_POS[4]
+#define SYNC_FFS_8TIMES (0b100 << SYNC_FFS_ofset) // EL_POS[3]
+#define SYNC_FFS_16TIMES (0b101 << SYNC_FFS_ofset) // EL_POS[2]
+#define SYNC_FFS_32TIMES (0b110 << SYNC_FFS_ofset) // EL_POS[1]
+#define SYNC_FFS_64TIMES (0b111 << SYNC_FFS_ofset) // EL_POS[0]
 
 // define for ALARM
 #define ALM_NOTHING          (0b00000000)
@@ -74,7 +88,67 @@
 #define ALM_SW_TURNON        (0b01000000)
 #define ALM_CMD_WRONG        (0b10000000)
 
+// define for CONFIG
 
+#define OSC_SEL_ofset (0)
+#define OSC_SEL_MASK  (0b111 << OSC_SEL_ofset)
+
+#define EXT_CLK_ofset (3)
+#define EXT_CLK_MASK  (1 << EXT_CLK_ofset) 
+
+#define USE_INTCLK_16M (0b0000) /* No output clk */
+#define USE_CLKOUT_2M  (0b1000) /* output 2M */
+#define USE_CLKOUT_4M  (0b1001) /* output 2M */
+#define USE_CLKOUT_8M  (0b1010) /* output 2M */
+#define USE_CLKOUT_16M (0b1011) /* output 2M */
+
+#define USE_XTLA_8M    (0b0100) /* Crystal or resonator */
+#define USE_XTLA_16M   (0b0101) /* Crystal or resonator */
+#define USE_XTLA_24M   (0b0110) /* Crystal or resonator */
+#define USE_XTLA_32M   (0b0111) /* Crystal or resonator */
+
+#define USE_EXTCLK_8M  (0b1100) /* output 8M (Inverted) */
+#define USE_EXTCLK_16M (0b1101) /* output 16M (Inverted) */
+#define USE_EXTCLK_24M (0b1110) /* output 24M (Inverted) */
+#define USE_EXTCLK_32M (0b1111) /* output 32M (Inverted) */
+
+#define SW_MODE_ofset                (4)
+#define SW_MODE_MASK                 (1 << SW_MODE_ofset)
+#define DISABLE_SW_STOPHARD_IRQ (SW_MODE_MASK)
+
+/* VS COMPensate */
+#define EN_VSCOMP_ofset (5)
+#define EN_VSCOMP_MASK  (1 << EN_VSCOMP_ofset)
+#define ENABLE_VSCOMP       EN_VSCOMP_MASK
+
+/* RESERVED 6bit */
+
+/* Overcurrent Shut Down */
+#define OC_SD_ofset     (7)
+#define OC_SD_MASK      (1 << OC_SD_ofset)
+#define ENABLE_OC_SD    (OC_SD_MASK)  
+
+/* POWer Sley Rate */
+#define POW_SR_ofset    (8)
+#define POW_SR_MASK     (1 << POW_SR_ofset)
+
+#define POW_SR_VFAST    (0b00 << POW_SR_ofset)
+#define POW_SR_FAST     (0b11 << POW_SW_ofset)
+#define POW_SR_MIDDLE   (0b10 << POW_SR_ofset)
+#define POW_SR_SLOW     (0b01 << POW_SR_ofset)
+
+/* F_PWM_DEC */
+#define F_PWM_DEC_ofset (10)
+#define F_PWM_DEC_MASK  (0b111 << F_PWM_DEC_ofset)
+#define F_PWM_DEC(x)    (x << F_PWM_DEC_ofset)
+
+/* F_PWM_ACC */
+#define F_PWM_INT_ofset (13)
+#define F_PWM_INT_MASK  (0b111 << F_PWM_INT_ofset)
+#define F_PWM_INT(x)    (x << F_PWM_INT_ofset)
+
+
+// define 
 #define DIR_RVS 0x00
 #define DIR_FWD 0x01
 
@@ -388,31 +462,31 @@ static void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,co
 static void L6470_ExecCmd_NoArg(struct L6470_CMD cmd, const char* msg);
 
 union L6470_packet gen_ABS_POS(int32_t abs_pos);
-union L6470_packet gen_EL_POS(uint8_t step, uint8_t el_step);
+union L6470_packet gen_EL_POS(int32_t step_el_step);
 union L6470_packet gen_MARK(int32_t mark);
-union L6470_packet gen_ACC(float step_per_ss);
-union L6470_packet gen_DEC(float step_per_ss);
-union L6470_packet gen_MAX_SPEED(float step_per_s);
-union L6470_packet gen_MIN_SPEED(float step_per_s, int16_t enable_LSPD);
-union L6470_packet gen_KVAL_HOLD(uint8_t kval);
-union L6470_packet gen_KVAL_RUN(uint8_t kval);
-union L6470_packet gen_KVAL_ACC(uint8_t kval);
-union L6470_packet gen_KVAL_DEC(uint8_t kval);
-union L6470_packet gen_INT_SPEED(float step_per_s);
-union L6470_packet gen_ST_SLP(float slp);
-union L6470_packet gen_FN_SLP_ACC(float slp_acc);
-union L6470_packet gen_FN_SLP_DEC(float slp_dec);
-union L6470_packet gen_K_THERM(float k_therm);
-union L6470_packet gen_OCD_TH(uint16_t ocd_th);
-union L6470_packet gen_STALL_TH(float stall_th);
-union L6470_packet gen_FS_SPD(float fs_spd);
-union L6470_packet gen_STEP_MODE(uint8_t sync_en, uint8_t sync_sel, uint8_t step_sel);
-union L6470_packet gen_ALARM_EN(uint8_t alm);
-union L6470_packet gen_CONFIG(uint8_t f_pwm_int, uint8_t f_pwm_dec, uint8_t pow_sr, uint8_t oc_sd, uint8_t en_vscomp, uint8_t sw_mode, uint8_t ext_clk, uint8_t osc_sel);
+union L6470_packet gen_ACC(int32_t step_per_ss);
+union L6470_packet gen_DEC(int32_t step_per_ss);
+union L6470_packet gen_MAX_SPEED(int32_t step_per_s);
+union L6470_packet gen_MIN_SPEED(int32_t enable_LSPD_step_per_s);
+union L6470_packet gen_KVAL_HOLD(int32_t kval);
+union L6470_packet gen_KVAL_RUN(int32_t kval);
+union L6470_packet gen_KVAL_ACC(int32_t kval);
+union L6470_packet gen_KVAL_DEC(int32_t kval);
+union L6470_packet gen_INT_SPEED(int32_t step_per_s);
+union L6470_packet gen_ST_SLP(int32_t slp);
+union L6470_packet gen_FN_SLP_ACC(int32_t slp_acc);
+union L6470_packet gen_FN_SLP_DEC(int32_t slp_dec);
+union L6470_packet gen_K_THERM(int32_t k_therm);
+union L6470_packet gen_OCD_TH(int32_t ocd_th);
+union L6470_packet gen_STALL_TH(int32_t stall_th);
+union L6470_packet gen_FS_SPD(int32_t fs_spd);
+union L6470_packet gen_STEP_MODE(int32_t sync_en_sync_sel_step_sel);
+union L6470_packet gen_ALARM_EN(int32_t alm);
+union L6470_packet gen_CONFIG(int32_t param);
 
 
 static union L6470_packet generate_pkt(int enum_param,int32_t val);
-
+static union L6470_packet generate_pkt_with_percentage(int enum_param, int32_t percentage);
 
 
 #if defined (L6470_PRINT_MESSAGE)
