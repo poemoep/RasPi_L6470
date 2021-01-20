@@ -10,10 +10,10 @@ PROGRAM       = test
 all:            $(PROGRAM) $(GENPROGRAM)
 
 $(PROGRAM):     $(MAINOBJS)
-                $(CC) $(MAINOBJS) $(LDFLAGS) $(LIBS) -o $(PROGRAM)
+	$(CC) $(MAINOBJS) $(LDFLAGS) $(LIBS) -o $(PROGRAM)
 
 $(GENPROGRAM):  $(GENOBJS)
-                $(CC) $(GENOBJS) $(LDFLAGS) $(LIBS) -o $(GENPROGRAM)
+	$(CC) $(GENOBJS) $(LDFLAGS) $(LIBS) -o $(GENPROGRAM)
 
 
 clean:;         rm -f *.o *~ $(PROGRAM) $(GENPROGRAM)
