@@ -6,7 +6,7 @@ int output_header(void);
 int output_footer(void);
 int print_pkt(union L6470_packet pkt);
 
-int main (int argc, char* argv)
+int main (int argc, char** argv)
 {
     output_header();
 
@@ -86,11 +86,4 @@ printf("#endif\n");
 
 
 return 0;
-}
-
-int output_param(union L6470_packet pkt)
-{
-
-
-
 }
