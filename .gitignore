@@ -2,3 +2,5 @@ wiringPi/
 wiringPi.h
 wiringPiSPI.h
 *.o
+gen
+test
