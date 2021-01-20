@@ -99,19 +99,18 @@
 
 #define USE_INTCLK_16M (0b0000) /* No output clk */
 #define USE_CLKOUT_2M  (0b1000) /* output 2M */
-#define USE_CLKOUT_4M  (0b1001) /* output 2M */
-#define USE_CLKOUT_8M  (0b1010) /* output 2M */
-#define USE_CLKOUT_16M (0b1011) /* output 2M */
-
+#define USE_CLKOUT_4M  (0b1001) /* output 4M */
+#define USE_CLKOUT_8M  (0b1010) /* output 8M */
+#define USE_CLKOUT_16M (0b1011) /* output 16M */
 #define USE_XTLA_8M    (0b0100) /* Crystal or resonator */
 #define USE_XTLA_16M   (0b0101) /* Crystal or resonator */
 #define USE_XTLA_24M   (0b0110) /* Crystal or resonator */
 #define USE_XTLA_32M   (0b0111) /* Crystal or resonator */
 
-#define USE_EXTCLK_8M  (0b1100) /* output 8M (Inverted) */
-#define USE_EXTCLK_16M (0b1101) /* output 16M (Inverted) */
-#define USE_EXTCLK_24M (0b1110) /* output 24M (Inverted) */
-#define USE_EXTCLK_32M (0b1111) /* output 32M (Inverted) */
+#define USE_EXTCLKSRC_8M  (0b1100) /* Forcibly output 8M (Inverted) */
+#define USE_EXTCLKSRC_16M (0b1101) /* Forcibly output 16M (Inverted) */
+#define USE_EXTCLKSRC_24M (0b1110) /* Forcibly output 24M (Inverted) */
+#define USE_EXTCLKSRC_32M (0b1111) /* Forcibly output 32M (Inverted) */
 
 #define SW_MODE_ofset                (4)
 #define SW_MODE_MASK                 (1 << SW_MODE_ofset)
@@ -296,10 +295,6 @@ typedef enum{
 #define CMD_HIZSOFT       0b10100000
 #define CMD_HIZHARD       0b10101000
 #define CMD_GETSTATUS     0b11010000
-
-
-
-
 
 #define REG_SIZE_ABS_POS    (22)
 #define REG_SIZE_EL_POS     (9 )

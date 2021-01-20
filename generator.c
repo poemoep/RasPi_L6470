@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "L6470.h"
-
+#include "generator.h"
 
 int output_header(void);
 int output_footer(void);
@@ -11,30 +11,28 @@ int main (int argc, char** argv)
     output_header();
 
 
-    print_pkt(gen_ABS_POS(4522831));
-    print_pkt(gen_EL_POS(STEP_ePOS_90deg | 67));
-    print_pkt(gen_MARK(2097151));
-    print_pkt(gen_ACC(3000));
-    print_pkt(gen_DEC(4000));
-    print_pkt(gen_MAX_SPEED(400000));
-    print_pkt(gen_MIN_SPEED(100000 | ENABLE_LSPD));
-    print_pkt(gen_KVAL_HOLD(30));
-    print_pkt(gen_KVAL_RUN(50));
-    print_pkt(gen_KVAL_ACC(80));
-    print_pkt(gen_KVAL_DEC(90));
-    print_pkt(gen_INT_SPEED(1000));
-    print_pkt(gen_ST_SLP(100));
-    print_pkt(gen_FN_SLP_ACC(30));
-    print_pkt(gen_FN_SLP_DEC(100));
-    print_pkt(gen_K_THERM(30000));
-    print_pkt(gen_OCD_TH(3000));
-    print_pkt(gen_STALL_TH(8000));
-    print_pkt(gen_FS_SPD(3000));
-    print_pkt(gen_STEP_MODE(SYNC_EN | SYNC_FFS_32TIMES | STEP_128DIV));
-    print_pkt(gen_ALARM_EN(ALM_FULL));
-    print_pkt(gen_CONFIG(F_PWM_INT(0b110) | F_PWM_DEC(0b110) | POW_SR_VFAST | ENABLE_OC_SD | ENABLE_VSCOMP 
-                        |DISABLE_SW_STOPHARD_IRQ |USE_INTCLK_16M | USE_CLKOUT_16M));
-
+    print_pkt(gen_ABS_POS(USER_ABS_POS));
+    print_pkt(gen_EL_POS(USER_EL_POS));
+    print_pkt(gen_MARK(USER_MARK));
+    print_pkt(gen_ACC(USER_ACC);
+    print_pkt(gen_DEC(USER_DEC);
+    print_pkt(gen_MAX_SPEED(USER_MAX_SPEED));
+    print_pkt(gen_MIN_SPEED(USER_MIN_SPEED));
+    print_pkt(gen_KVAL_HOLD(USER_KVAL_HOLD));
+    print_pkt(gen_KVAL_RUN(USER_KVAL_RUN));
+    print_pkt(gen_KVAL_ACC(USER_KVAL_ACC));
+    print_pkt(gen_KVAL_DEC(USER_KVAL_DEC));
+    print_pkt(gen_INT_SPEED(USER_INT_SPEED));
+    print_pkt(gen_ST_SLP(USER_ST_SLP));
+    print_pkt(gen_FN_SLP_ACC(USER_FN_SLP_ACC));
+    print_pkt(gen_FN_SLP_DEC(USER_FN_SLP_DEC));
+    print_pkt(gen_K_THERM(USER_K_THERM));
+    print_pkt(gen_OCD_TH(USER_OCD_TH));
+    print_pkt(gen_STALL_TH(USER_STALL_TH));
+    print_pkt(gen_FS_SPD(USER_FS_SPD));
+    print_pkt(gen_STEP_MODE(USER_STEP_MODE));
+    print_pkt(gen_ALARM_EN(USER_ALARM_EN));
+    print_pkt(gen_CONFIG(USER_CONFIG));
 
     output_footer();
 
@@ -44,7 +42,7 @@ int main (int argc, char** argv)
 
 int print_pkt(union L6470_packet pkt)
 {
-    printf("    {\t0x%02x,\t0x%02x,\t0x%02x,\t0x%02x},\n",pkt.value8b[0], pkt.value8b[1], pkt.value8b[2], pkt.value8b[3]);
+    printf("    {{\t0x%02x,\t{0x%02x,\t0x%02x,\t0x%02x}}},\n",pkt.value8b[0], pkt.value8b[1], pkt.value8b[2], pkt.value8b[3]);
     return 0;
 }
 
@@ -53,15 +51,15 @@ int output_header()
 printf("#include \"L6470.h\"\n");
 printf("#ifndef __L6470_USER_HEADER__\n");
 printf("#define __L6470_USER_HEADER__\n");
-
+printf("\n");
 printf("//#define L6470_DAISY_CHAIN\n");
 printf("#define L6470_SPI_CH 0  // 0 or 1\n");
 printf("#define SPI_SPEED 1000000 // [Hz]\n");
-
+printf("\n");
 printf("#if defined (L6470_DAISY_CHAIN)\n"); 
 printf("#define L6470_DEV_NUM 2\n");
 printf("#endif\n");
-\
+printf("\n");
 printf("const union L6470_packet L6470_user_setting[PARAM_NUM] =\n");
 printf("{// L6470_PARAM_addr,     setting[2],setting[1],setting[0]} //reset_val\n");
 printf("//Left justified, MSB first\n");
