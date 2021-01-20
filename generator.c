@@ -9,6 +9,7 @@ int main (int argc, char* argv)
 {
     output_header();
 
+
     print_pkt(gen_ABS_POS(0));
     print_pkt(gen_EL_POS(STEP_ePOS_0deg | 0));
     print_pkt(gen_MARK(0));
