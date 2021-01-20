@@ -20,23 +20,23 @@
 #define USER_DEC		    (200800)
 
 /* MAX_SPEED = 1525 to 1561000 [x0.01 step/s]*/
-#define USER_MAX_SPEED		(991800)
+#define USER_MAX_SPEED		(99180)
 
 /* MIX_SPEED = 0 to 976300 [x0.001 step/s]*/
 /*          |= ENABLE_LSPD (if use LSPD)*/
 #define USER_MIN_SPEED		(0)
 
 /*KVA_HOLD = 0 to 100 [%] */
-#define USER_KVAL_HOLD		(16)
+#define USER_KVAL_HOLD		(17)
 
 /*KVA_HOLD = 0 to 100 [%] */
-#define USER_KVAL_RUN		(16)
+#define USER_KVAL_RUN		(17)
 
 /*KVA_HOLD = 0 to 100 [%] */
-#define USER_KVAL_ACC		(16)
+#define USER_KVAL_ACC		(17)
 
 /*KVA_HOLD = 0 to 100 [%] */
-#define USER_KVAL_DEC		(16)
+#define USER_KVAL_DEC		(17)
 
 /* INT_SPEED = 0 to 9765000 [x0.0001 step/s] */
 #define USER_INT_SPEED		(615000)
