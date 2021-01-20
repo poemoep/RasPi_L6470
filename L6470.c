@@ -414,7 +414,12 @@ union L6470_packet gen_MAX_SPEED(int32_t step_per_s)
 union L6470_packet gen_MIN_SPEED(int32_t enable_LSPD_step_per_s)
 {
     union L6470_packet pkt = {0};
-    if( 0 != (enable_LSPD_step_per_s & 0x7E000000) ) {return pkt;} /*check 0b0111 1110 000~ */
+    if( 0 != (enable_LSPD_step_per_s & 0x7E000000) ) {
+#if defined (L6470_PRINT_MESSAGE)
+        printf("%s %s MIN_SPEED is over\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION);
+#endif
+    return pkt;
+    } /*check 0b0111 1110 000~ */
 
     int32_t step_per_s = (enable_LSPD_step_per_s & MIN_SPEED_MASK); /* 20 bits */
     int32_t enable_LSPD = (enable_LSPD_step_per_s & ENABLE_LSPD); /* 25 bit */
@@ -644,7 +649,7 @@ static union L6470_packet generate_pkt_with_percentage(int enum_param, int32_t p
     int32_t val = ((255 * percentage) / 100);
 #if defined (L6470_PRINT_MESSAGE)
     if(((val * 100) / 255) != percentage)
-        printf("%s %s percentage is round to %d[%%]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION,val);
+        printf("%s %s percentage is round to %d[%%]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION,(val * 100) / 255);
 #endif
     pkt = generate_pkt(enum_param,val);
     return pkt;
