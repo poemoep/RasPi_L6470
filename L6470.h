@@ -378,8 +378,8 @@ union L6470_packet{
 };
 
 extern union L6470_packet *L6470_setting;
-extern struct L6470_PARAM *L6470_param;
-extern struct L6470_CMD   *L6470_CMD;
+extern const struct L6470_PARAM L6470_param[PARAM_NUM];
+extern const struct L6470_CMD   L6470_CMD[CMD_NUM];
 
 //----prottype declaration---
 void L6470_SPI_init(void);
