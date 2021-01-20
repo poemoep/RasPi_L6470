@@ -16,7 +16,7 @@ const union L6470_packet L6470_user_setting[PARAM_NUM] =
 [L6470 DEBUG]:  Caution step is selected STEP_ePOS_90deg.
 [L6470 DEBUG]:  Caution el_step is selected 67
     {	0x02,	0x00,	0xc3,	0x00},
-    {	0x03,	0x03,	0xe1,	0xe0},
+    {	0x03,	0x1f,	0xff,	0xff},
 [L6470 DEBUG]:  Caution ACC step_per_ss is more than equal 1455 [x0.01 step/s^2]
 [L6470 DEBUG]:  Caution set minumum value.
     {	0x05,	0x00,	0x01,	0x00},
