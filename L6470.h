@@ -143,7 +143,7 @@
 #define F_PWM_DEC_MASK  (0b111 << F_PWM_DEC_ofset)
 #define F_PWM_DEC(x)    (x << F_PWM_DEC_ofset)
 
-/* F_PWM_ACC */
+/* F_PWM_INT */
 #define F_PWM_INT_ofset (13)
 #define F_PWM_INT_MASK  (0b111 << F_PWM_INT_ofset)
 #define F_PWM_INT(x)    (x << F_PWM_INT_ofset)
