@@ -26,17 +26,17 @@
 /*          |= ENABLE_LSPD (if use LSPD)*/
 #define USER_MIN_SPEED		(0)
 
-/*KVA_HOLD = 0 to 100 [%] */
-#define USER_KVAL_HOLD		(17)
+/*KVA_HOLD = 0 to 10000 [0.01%] */
+#define USER_KVAL_HOLD		(1602)
 
-/*KVA_HOLD = 0 to 100 [%] */
-#define USER_KVAL_RUN		(17)
+/*KVA_HOLD = 0 to 10000 [0.01%] */
+#define USER_KVAL_RUN		(1602)
 
-/*KVA_HOLD = 0 to 100 [%] */
-#define USER_KVAL_ACC		(17)
+/*KVA_HOLD = 0 to 10000 [0.01%] */
+#define USER_KVAL_ACC		(1602)
 
-/*KVA_HOLD = 0 to 100 [%] */
-#define USER_KVAL_DEC		(17)
+/*KVA_HOLD = 0 to 10000 [0.01%] */
+#define USER_KVAL_DEC		(1602)
 
 /* INT_SPEED = 0 to 9765000 [x0.0001 step/s] */
 #define USER_INT_SPEED		(615000)
