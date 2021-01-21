@@ -711,10 +711,10 @@ static union L6470_packet generate_pkt_with_percentage(int enum_param, int32_t p
         return pkt; /* 0x00 pkt */  
     } /*0 to 10000*/
 
-    int32_t val = ((255 * percentage) / 10000);
+    int32_t val = (int32_t)round((255 * percentage) / 10000);
 #if defined (L6470_PRINT_MESSAGE)
-    if(((val * 10000) / 255) != percentage)
-        printf("%s %s percentage is round to %d[0.01%%]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION,(val * 10000) / 255);
+    if((int32_t)round((val * 10000) / 255) != percentage)
+        printf("%s %s percentage is round to %d[0.01%%]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION,(int32_t)round((val * 10000)/ 255));
 #endif
     pkt = generate_pkt(enum_param,val);
     return pkt;
