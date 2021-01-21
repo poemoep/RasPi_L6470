@@ -385,7 +385,7 @@ uint16_t L6470_GetStatus(void)
 union L6470_packet gen_ABS_POS(int32_t abs_pos)
 {
 #if defined (L6470_PRINT_MESSAGE)
-    if( (abs_pos > (int32_t)(pow(2,21)-1)) | (abs_pos < (int32_t)(pow(2,-21))) )
+    if( (abs_pos > (int32_t)(pow(2,21)-1)) | (abs_pos < (int32_t)((-1)*pow(2,21))) )
         printf("%s %s abs_pos is over/under flow\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION);
 #endif
     int32_t val = abs_pos & (int32_t)(pow(2,22)-1);
@@ -412,8 +412,8 @@ union L6470_packet gen_EL_POS(int32_t step_el_step)
 union L6470_packet gen_MARK(int32_t mark)
 {
 #if defined (L6470_PRINT_MESSAGE)
-    if( (mark > (pow(2,21)-1)) | (mark < pow(2,-21)) )
-        printf("%s %s abs_pos is over/under flow\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION);
+    if( (mark > (int32_t)(pow(2,21)-1)) | (mark < (int32_t)((-1)*pow(2,21))) )
+        printf("%s %s MARK is over/under flow\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION);
 #endif
     int32_t val = ( mark & (int32_t)(pow(2,22) - 1) );
     union L6470_packet pkt = generate_pkt(enum_L6470_MARK, mark);
