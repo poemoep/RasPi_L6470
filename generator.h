@@ -54,7 +54,7 @@
 #define USER_K_THERM		(1.0 * 100000)
 
 /* OCD_TH = 375 to 6000 [mA]*/
-#define USER_OCD_TH		    (338)
+#define USER_OCD_TH		    (3.38 * 1000)
 
 /* STALL_TH = 3125 to 400000 [x 0.01 mA]*/
 #define USER_STALL_TH		(2030 * 100)
