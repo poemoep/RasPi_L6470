@@ -501,28 +501,28 @@ union L6470_packet gen_MIN_SPEED(int32_t enable_LSPD_step_per_s)
     return pkt;
 }
 
-/* percentage = 0 to 100 */
+/* percentage = 0 to 10000 [0.01%]*/
 union L6470_packet gen_KVAL_HOLD(int32_t percentage)
 {
     union L6470_packet pkt = generate_pkt_with_percentage(enum_L6470_KVAL_HOLD, percentage);
     return pkt;
 }
 
-/* percentage = 0 to 100 */
+/* percentage = 0 to 10000 [0.01%] */
 union L6470_packet gen_KVAL_RUN(int32_t percentage)
 {
     union L6470_packet pkt = generate_pkt_with_percentage(enum_L6470_KVAL_RUN, percentage);
     return pkt;
 }
 
-/* percentage = 0 to 100 */
+/* percentage = 0 to 10000 [0.01%] */
 union L6470_packet gen_KVAL_ACC(int32_t percentage)
 {
     union L6470_packet pkt = generate_pkt_with_percentage(enum_L6470_KVAL_ACC, percentage);
     return pkt;
 }
 
-/* percentage = 0 to 100 */
+/* percentage = 0 to 10000 [0.01%] */
 union L6470_packet gen_KVAL_DEC(int32_t percentage)
 {
     union L6470_packet pkt = generate_pkt_with_percentage(enum_L6470_KVAL_DEC, percentage);
@@ -699,21 +699,22 @@ static union L6470_packet generate_pkt(int enum_param,int32_t val)
     return pkt;
 }
 
+/* percentage = 0 to 10000 [x0.01%] */
 static union L6470_packet generate_pkt_with_percentage(int enum_param, int32_t percentage)
 {
     union L6470_packet pkt = {0};
-    if( (percentage < 0) | (100 < percentage) )
+    if( (percentage < 0) | (10000 < percentage) )
     {
 #if defined (L6470_PRINT_MESSAGE)
         printf("%s %s percentage = 0 to 100 [%%]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION);
 #endif
         return pkt; /* 0x00 pkt */  
-    } /*0 to 100*/
+    } /*0 to 10000*/
 
-    int32_t val = ((255 * percentage) / 100);
+    int32_t val = ((255 * percentage) / 10000);
 #if defined (L6470_PRINT_MESSAGE)
-    if(((val * 100) / 255) != percentage)
-        printf("%s %s percentage is round to %d[%%]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION,(val * 100) / 255);
+    if(((val * 10000) / 255) != percentage)
+        printf("%s %s percentage is round to %d[0.01%%]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION,(val * 10000) / 255);
 #endif
     pkt = generate_pkt(enum_param,val);
     return pkt;
