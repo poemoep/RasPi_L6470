@@ -26,6 +26,7 @@
 #define FN_SLP_ACC_RESOLUTION (15) //[x0.000001]
 #define FN_SLP_DEC_RESOLUTION (15) //[x0.000001]
 #define K_THERM_RESOLUTION    (3125) //[x0.00001]
+#define K_THERM_MIN           (100000) // [x0.00001]
 #define OCD_TH_RESOLUTION     (375) // [mA]
 #define STALL_TH_RESOLUTION   (3125) // [x0.01 mA]
 #define FS_SPD_RESOLUTION     (1525) // [x0.01 step/s]
@@ -49,7 +50,7 @@
 #define STEP_ePOS_180deg    (0b10 << STEP_ePOS_ofset)
 #define STEP_ePOS_270deg    (0b11 << STEP_ePOS_ofset)
 
-#define STEP_EL_STEP_MASK   (127)
+#define STEP_u_STEP_MASK   (127)
 
 // define for STEP_MODE
 #define SYNC_EN_ofset (7)
