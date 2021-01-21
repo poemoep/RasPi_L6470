@@ -72,9 +72,9 @@ return 0;
 int output_footer()
 {
 printf("    //Dummy READONLY param &  RESERVED param\n");
-printf("    {L6470_param[enum_L6470_SPEED].addr,         0x00,   0x00,   0x00}, //dummy\n");
-printf("    {L6470_param[enum_L6470_ADC_OUT].addr,       0x00,   0x00,   0x00}, //dummy\n");
-printf("    {L6470_param[enum_L6470_STATUS].addr,        0x00,   0x00,   0x00}//, //dummy\n");
+printf("    {0x04,         0x00,   0x00,   0x00}, //dummy\n");
+printf("    {0x12,       0x00,   0x00,   0x00}, //dummy\n");
+printf("    {0x19,        0x00,   0x00,   0x00}//, //dummy\n");
 printf("//    {L6470_param[enum_L6470_RESERVED_h1A].addr,  0x00,   0x00,   0x00}, //dummy\n");
 printf("//    {L6470_param[enum_L6470_RESERVED_h1B].addr,  0x00,   0x00,   0x00}, //dummy\n");
 printf("\n");
