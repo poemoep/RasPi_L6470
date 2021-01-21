@@ -25,7 +25,7 @@
 #define ST_SLP_RESOLUTION     (15) // [x0.000001]
 #define FN_SLP_ACC_RESOLUTION (15) //[x0.000001]
 #define FN_SLP_DEC_RESOLUTION (15) //[x0.000001]
-#define K_THERM_RESOLUTION    (3125) //[x0.00001]
+#define K_THERM_RESOLUTION    (  3125) //[x0.00001]
 #define K_THERM_MIN           (100000) // [x0.00001]
 #define OCD_TH_RESOLUTION     (375) // [mA]
 #define STALL_TH_RESOLUTION   (3125) // [x0.01 mA]

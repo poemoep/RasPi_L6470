@@ -51,7 +51,7 @@
 #define USER_FN_SLP_DEC		(615)
 
 /* K_THERM = 100000 to 146875 [x0.00001]*/
-#define USER_K_THERM		(1.0 * 1000000)
+#define USER_K_THERM		(1.0 * 100000)
 
 /* OCD_TH = 375 to 6000 [mA]*/
 #define USER_OCD_TH		    (338)
