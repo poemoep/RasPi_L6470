@@ -477,7 +477,7 @@ union L6470_packet gen_MAX_SPEED(int32_t step_per_s)
         val = 1;
     } else if((int32_t)round((double)val * MAX_SPEED_RESOLUTION) != step_per_s){
         printf("%s %s MAX_SPEED is rounded to %d [x0.01 step/s]\n",
-                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * MAX_SPEED_RESOLUTION);
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * MAX_SPEED_RESOLUTION));
     } 
 #endif
 
