@@ -430,11 +430,14 @@ union L6470_packet gen_ACC(int32_t step_per_ss)
     int32_t val = (int32_t)round((double)step_per_ss / ACC_RESOLUTION) ;
 #if defined (L6470_PRINT_MESSAGE)
     if(val == 0){
-        printf("%s %s ACC step_per_ss is more than equal %d [x0.01 step/s^2]\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, ACC_RESOLUTION);
-        printf("%s %s set minumum value.\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION);
+        printf("%s %s ACC step_per_ss is more than equal %d [x0.01 step/s^2]\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, ACC_RESOLUTION);
+        printf("%s %s set minumum value.\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION);
         val = 1;
     } else if((int32_t)round((double)val * ACC_RESOLUTION) != step_per_ss){
-        printf("%s %s ACC is rounded to %d [x0.01 step/s^2]\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * ACC_RESOLUTION));
+        printf("%s %s ACC is rounded to %d [x0.01 step/s^2]\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * ACC_RESOLUTION));
     } 
 #endif
 
@@ -448,11 +451,13 @@ union L6470_packet gen_DEC(int32_t step_per_ss)
     int32_t val = (int32_t)round((double)step_per_ss / DEC_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if(val == 0){
-        printf("%s %s DEC step_per_ss is more than equal %d [x0.01 step/s^2]\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, DEC_RESOLUTION);
+        printf("%s %s DEC step_per_ss is more than equal %d [x0.01 step/s^2]\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, DEC_RESOLUTION);
         printf("%s %s set minumum value.\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION);
         val = 1;
     } else if((int32_t)round((double)val * DEC_RESOLUTION) != step_per_ss){
-        printf("%s %s DEC is rounded to %d [x0.01 step/s^2]\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * DEC_RESOLUTION));
+        printf("%s %s DEC is rounded to %d [x0.01 step/s^2]\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * DEC_RESOLUTION));
     } 
 #endif
 
@@ -466,11 +471,13 @@ union L6470_packet gen_MAX_SPEED(int32_t step_per_s)
     int32_t val = (int32_t)round((double)step_per_s / MAX_SPEED_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if(val == 0){
-        printf("%s %s MAX_SPEED is more than equal %d\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, MAX_SPEED_RESOLUTION);
+        printf("%s %s MAX_SPEED is more than equal %d\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, MAX_SPEED_RESOLUTION);
         printf("%s %s set minumum value.\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION);
         val = 1;
     } else if((int32_t)round((double)val * MAX_SPEED_RESOLUTION) != step_per_s){
-        printf("%s %s MAX_SPEED is rounded to %d [x0.01 step/s]\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * MAX_SPEED_RESOLUTION);
+        printf("%s %s MAX_SPEED is rounded to %d [x0.01 step/s]\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * MAX_SPEED_RESOLUTION);
     } 
 #endif
 
@@ -496,7 +503,8 @@ union L6470_packet gen_MIN_SPEED(int32_t enable_LSPD_step_per_s)
 
 #if defined (L6470_PRINT_MESSAGE)
     if((int32_t)round((double)val * MIN_SPEED_RESOLUTION) != step_per_s){
-        printf("%s %s MIN_SPEED is rounded to %d [x0.001 step/s]\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * MIN_SPEED_RESOLUTION));
+        printf("%s %s MIN_SPEED is rounded to %d [x0.001 step/s]\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * MIN_SPEED_RESOLUTION));
     } 
 #endif
     if(DISABLE != enable_LSPD) val |= ENABLE_LSPD_BIT;
@@ -539,7 +547,8 @@ union L6470_packet gen_INT_SPEED(int32_t step_per_s)
     uint32_t val = (int32_t)round((double)step_per_s / INT_SPEED_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if((int32_t)round((double)val * INT_SPEED_RESOLUTION) != step_per_s){
-        printf("%s %s INT_SPEED is rounded to %d [x0.0001 step/s] \n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * INT_SPEED_RESOLUTION));
+        printf("%s %s INT_SPEED is rounded to %d [x0.0001 step/s] \n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * INT_SPEED_RESOLUTION));
     } 
 #endif
 
@@ -553,7 +562,8 @@ union L6470_packet gen_ST_SLP(int32_t slp)
     uint32_t val = (int32_t)round((double)slp / ST_SLP_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if((int32_t)round((double)val * ST_SLP_RESOLUTION) != slp){
-        printf("%s %s ST_SLP is rounded to %d [x0.000001] \n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * ST_SLP_RESOLUTION));
+        printf("%s %s ST_SLP is rounded to %d [x0.000001] \n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * ST_SLP_RESOLUTION));
     } 
 #endif
     union L6470_packet pkt = generate_pkt(enum_L6470_ST_SLP, val);
@@ -566,7 +576,8 @@ union L6470_packet gen_FN_SLP_ACC(int32_t slp_acc)
     uint32_t val = (int32_t)round((double)slp_acc / FN_SLP_ACC_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if((int32_t)round((double)val * FN_SLP_ACC_RESOLUTION) != slp_acc){
-        printf("%s %s FN_SLP_ACC is rounded to %d [x0.000001]\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * FN_SLP_ACC_RESOLUTION));
+        printf("%s %s FN_SLP_ACC is rounded to %d [x0.000001]\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * FN_SLP_ACC_RESOLUTION));
     }
 #endif
     union L6470_packet pkt = generate_pkt(enum_L6470_FN_SLP_ACC, val);
@@ -579,7 +590,8 @@ union L6470_packet gen_FN_SLP_DEC(int32_t slp_dec)
     uint32_t val = (int32_t)round((double)slp_dec / FN_SLP_DEC_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if((int32_t)round((double)val * FN_SLP_DEC_RESOLUTION) != slp_dec){
-        printf("%s %s FN_SLP_DEC is rounded to %d [x0.000001]\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * FN_SLP_DEC_RESOLUTION));
+        printf("%s %s FN_SLP_DEC is rounded to %d [x0.000001]\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * FN_SLP_DEC_RESOLUTION));
     } 
 #endif
     union L6470_packet pkt = generate_pkt(enum_L6470_FN_SLP_DEC, val);
@@ -592,7 +604,8 @@ union L6470_packet gen_K_THERM(int32_t k_therm)
     int32_t val = (int32_t)round((double)(k_therm - K_THERM_MIN) / K_THERM_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if(((int32_t)round((double)val * K_THERM_RESOLUTION) + K_THERM_MIN) != k_therm){
-        printf("%s %s K_THERM is rounded to %d [x0.00001]\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * K_THERM_RESOLUTION) + K_THERM_MIN);
+        printf("%s %s K_THERM is rounded to %d [x0.00001]\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * K_THERM_RESOLUTION) + K_THERM_MIN);
     } 
 #endif
     union L6470_packet pkt = generate_pkt(enum_L6470_K_THERM, val);
@@ -605,7 +618,8 @@ union L6470_packet gen_OCD_TH(int32_t ocd_th)
     uint32_t val = (int32_t)round((double)(ocd_th - OCD_TH_RESOLUTION) / OCD_TH_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if(((int32_t)round((double)val * OCD_TH_RESOLUTION) + OCD_TH_RESOLUTION) != ocd_th){
-        printf("%s %s OCD_TH is rounded to %d [mA]\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, ((int32_t)round((double)val * OCD_TH_RESOLUTION) + OCD_TH_RESOLUTION));
+        printf("%s %s OCD_TH is rounded to %d [mA]\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, ((int32_t)round((double)val * OCD_TH_RESOLUTION) + OCD_TH_RESOLUTION));
     } 
 #endif
     union L6470_packet pkt = generate_pkt(enum_L6470_OCD_TH, val);
@@ -618,7 +632,8 @@ union L6470_packet gen_STALL_TH(int32_t stall_th)
     int32_t val = (int32_t)round((double)(stall_th - STALL_TH_RESOLUTION) / STALL_TH_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if(((int32_t)round((double)val * STALL_TH_RESOLUTION) + STALL_TH_RESOLUTION) != stall_th){
-        printf("%s %s STALL_TH is rounded to %d [x0.01 mA]\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, ((int32_t)round((double)val * STALL_TH_RESOLUTION) + STALL_TH_RESOLUTION));
+        printf("%s %s STALL_TH is rounded to %d [x0.01 mA]\n",
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, ((int32_t)round((double)val * STALL_TH_RESOLUTION) + STALL_TH_RESOLUTION));
     } 
 #endif    
     union L6470_packet pkt = generate_pkt(enum_L6470_STALL_TH, val);
@@ -630,7 +645,8 @@ union L6470_packet gen_FS_SPD(int32_t fs_spd)
     uint32_t val = (int32_t)round((double)(fs_spd - FS_SPD_MIN) / FS_SPD_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if(((int32_t)round((double)val * FS_SPD_RESOLUTION) + FS_SPD_MIN) != fs_spd){
-        printf("%s %s FS_SPD is rounded to %d [x0.01 step/s]\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * FS_SPD_RESOLUTION) + FS_SPD_MIN);
+        printf("%s %s FS_SPD is rounded to %d [x0.01 step/s]\n",
+        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * FS_SPD_RESOLUTION) + FS_SPD_MIN);
     } 
 #endif   
 
