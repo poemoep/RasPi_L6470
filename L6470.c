@@ -336,9 +336,16 @@ static void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,co
         return;
     }
 
-    pkt.data.value8b[0] = ((arg_param & 0xFF0000) >> 16);
-    pkt.data.value8b[1] = ((arg_param & 0x00FF00) >> 8);
-    pkt.data.value8b[2] = ((arg_param & 0x0000FF));
+    if(8 >= size){
+        pkt.data.value8b[0] = ((arg_param & 0x0000FF));
+    }else if (16 >= size){
+        pkt.data.value8b[0] = ((arg_param & 0x00FF00) >> 8);
+        pkt.data.value8b[1] = ((arg_param & 0x0000FF));
+    }else{
+        pkt.data.value8b[0] = ((arg_param & 0xFF0000) >> 16);
+        pkt.data.value8b[1] = ((arg_param & 0x00FF00) >> 8);
+        pkt.data.value8b[2] = ((arg_param & 0x0000FF));
+    }
 
     SPI_res = L6470_rw(&(pkt),bit2byte(size + ADDR_SIZE),msg);
 }
