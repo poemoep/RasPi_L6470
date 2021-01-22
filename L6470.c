@@ -104,7 +104,7 @@ void L6470_setting_init(void)
 
     for (int reg = 0; reg < (PARAM_NUM); reg++)
     {
-        printf("REG: %02x\n", L6470_param[reg].addr);
+        printf("param_num: %d,\tREG: %02x\n",reg, L6470_param[reg].addr);
         if(L6470_param[reg].rw == RESERVED){
             printf("RESERVED: %02x\n", L6470_param[reg].addr);
             continue;
