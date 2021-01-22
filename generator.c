@@ -3,9 +3,13 @@
 #include "L6470.h"
 #include "generator.h"
 
-int output_header(void);
-int output_footer(void);
-int print_pkt(union L6470_packet pkt);
+static int output_header(void);
+static int output_footer(void);
+static int print_pkt(union L6470_packet pkt);
+static union L6470_packet generate_pkt(int enum_param,int32_t val);
+static union L6470_packet generate_pkt_with_percentage(int enum_param, int32_t percentage);
+
+
 
 int main (int argc, char** argv)
 {
@@ -43,13 +47,13 @@ int main (int argc, char** argv)
 
 }
 
-int print_pkt(union L6470_packet pkt)
+static int print_pkt(union L6470_packet pkt)
 {
     printf("    {{\t0x%02x,\t{0x%02x,\t0x%02x,\t0x%02x}}},\n",pkt.value8b[0], pkt.value8b[1], pkt.value8b[2], pkt.value8b[3]);
     return 0;
 }
 
-int output_header()
+static int output_header()
 {
 printf("#include \"L6470.h\"\n");
 printf("#ifndef __L6470_USER_HEADER__\n");
@@ -72,7 +76,7 @@ printf("\n");
 return 0;
 }
 
-int output_footer()
+static int output_footer()
 {
 // printf("    //Dummy READONLY param &  RESERVED param\n");
 printf("    {{0x19,        {0x00,   0x00,   0x00}}}//, //dummy\n");
