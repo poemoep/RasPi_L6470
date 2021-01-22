@@ -17,6 +17,7 @@
 
 #define ADDR_SIZE             (8 )
 #define L6470_TICK            (250) // ns
+#define SPEED_RESOLUTION      (15) // [x0.001 step/s]
 #define ACC_RESOLUTION        (1455) //[x0.01 step/s^2]
 #define DEC_RESOLUTION        ACC_RESOLUTION
 #define MAX_SPEED_RESOLUTION  (1525) //[x0.01 step/s]

@@ -244,22 +244,27 @@ int32_t L6470_GetParam(int enum_param)
 
     return ret;
 }
-
+/*speed = 0 to 15625000 [x0.001 step/s] */
 void L6470_MoveCont(uint8_t dir, uint32_t speed)
 {
-    L6470_ExecCmd(L6470_cmd[enum_L6470_MOVECONT],dir,speed, "MoveCont");
+    int32_t speed_val = (int32_t)round((double)speed / SPEED_RESOLUTION);
+#if defined (L6470_PRINT_MESSAGE)
+    if((int32_t)round((double)speed_val * SPEED_RESOLUTION) != speed)
+        printf("%s %s speed is rounded to %d [x0.001 step/s]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION, (speed_val) * SPEED_RESOLUTION);
+#endif
+    L6470_ExecCmd(L6470_cmd[enum_L6470_MOVECONT],dir,speed_val, "MoveCont");
 }
-
+/* dir = DIR_FWD or DIR_RVS */
 void L6470_MoveStepClock(uint8_t dir)
 {
     L6470_ExecCmd(L6470_cmd[enum_L6470_MOVESTEPCLOCK],dir,0, "MoveStepClock");
 }
-
+/* step = 0 to 4194303(2^22) [step] */
 void L6470_MoveStep(uint8_t dir,uint32_t step)
 {
     L6470_ExecCmd(L6470_cmd[enum_L6470_MOVESTEP],dir,step, "MoveStep");
 }
-
+/* abs_pos = -2^21 to 2^21 -1 [step]*/
 void L6470_MoveGoTo(int32_t abs_pos)
 {
     L6470_ExecCmd(L6470_cmd[enum_L6470_MOVEGOTO],0,abs_pos, "MoveGoTo");
