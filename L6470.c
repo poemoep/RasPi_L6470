@@ -119,7 +119,7 @@ void L6470_setting_init(void)
             //make temp because wiringPiSPIDataRW rewrite send data
             union L6470_packet pkt_temp;
             pkt_temp = L6470_user_setting[reg];
-            printf("WRITABLE: %02x\n", pkt_temp.addr);
+            printf("WRITABLE: %02x\n", pkt_temp->addr);
 
             int len, SPI_res = 0;
             len = L6470_param[reg].param_size;
