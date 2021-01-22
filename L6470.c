@@ -102,29 +102,29 @@ void L6470_setting_init(void)
 
     L6470_setting = (union L6470_packet*)malloc((PARAM_NUM) * sizeof(union L6470_packet));
 
-    for (int reg = 0; reg < (PARAM_NUM); reg++)
+    for (int enum_param = 0; enum_param < (PARAM_NUM); enum_param++)
     {
-        printf("param_num: %d,\tREG: %02x\n",reg, L6470_param[reg].addr);
-        if(L6470_param[reg].rw == RESERVED){
-            printf("RESERVED: %02x\n", L6470_param[reg].addr);
+        printf("param_num: %d,\tenum_param: %02x\n",enum_param, L6470_param[enum_param].addr);
+        if(L6470_param[enum_param].rw == RESERVED){
+            printf("RESERVED: %02x\n", L6470_param[enum_param].addr);
             continue;
-        }else if(L6470_param[reg].rw == READONLY){
-            printf("READONLY: %02x\n", L6470_param[reg].addr);
-            L6470_GetParam(L6470_param[reg].addr);
+        }else if(L6470_param[enum_param].rw == READONLY){
+            printf("READONLY: %02x\n", L6470_param[enum_param].addr);
+            L6470_GetParam(enum_param);
         }else{
-            printf("WRITABLE: %02x\n", L6470_param[reg].addr);
+            printf("WRITABLE: %02x\n", L6470_param[enum_param].addr);
             /* copy to buf from const */
-            L6470_setting[reg] = L6470_user_setting[reg];
-            printf("WRITABLE: %02x\n", L6470_setting[reg].data.reg_addr);
+            L6470_setting[enum_param] = L6470_user_setting[enum_param];
+            printf("WRITABLE: %02x\n", L6470_setting[enum_param].data.reg_addr);
             //make temp because wiringPiSPIDataRW rewrite send data
             union L6470_packet pkt_temp;
-            pkt_temp = L6470_user_setting[reg];
+            pkt_temp = L6470_user_setting[enum_param];
             printf("WRITABLE: %02x\n", pkt_temp.data.reg_addr);
 
             int len, SPI_res = 0;
-            len = L6470_param[reg].param_size;
+            len = L6470_param[enum_param].param_size;
 #ifdef L6470_PRINT_MESSAGE
-            union L6470_packet send = L6470_user_setting[reg];
+            union L6470_packet send = L6470_user_setting[enum_param];
 #endif
             SPI_res = L6470_rw(&(pkt_temp), (int)(bit2byte(len + ADDR_SIZE)), NULL);
 #ifdef L6470_PRINT_MESSAGE
