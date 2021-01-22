@@ -240,8 +240,14 @@ void L6470_MoveCont(uint8_t dir, uint32_t speed)
 {
     int32_t speed_val = (int32_t)round((double)speed / SPEED_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
-    if((int32_t)round((double)speed_val * SPEED_RESOLUTION) != speed)
-        printf("%s %s speed is rounded to %d [x0.001 step/s]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION, (speed_val) * SPEED_RESOLUTION);
+    int32_t temp_speed = (int32_t)round((double)speed_val * SPEED_RESOLUTION);
+    if( temp_speed != speed)
+        printf("%s %s speed is rounded to %d [x0.001 step/s]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION, temp_speed);
+    union L6470_packet temp = L6470_setting[enum_L6470_MAX_SPEED];
+    int32_t max_speed = (temp.data.value8b[0] << 16) + (temp.data.value8b[1] << 8) + (temp.data.value8b[2])
+    if( temp_speed > max_speed )
+        printf("%s %s speed is over MAX_SPEED .rounded to %d [x0.001 step/s]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION, max_speed);
+
 #endif
     L6470_ExecCmd(L6470_cmd[enum_L6470_MOVECONT],dir,speed_val, "MoveCont");
 }
