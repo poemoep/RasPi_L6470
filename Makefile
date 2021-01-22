@@ -7,6 +7,7 @@ GENOBJS       = L6470.o generator.o
 USERH	      = L6470_user.h
 USERHEADER    = user
 GENPROGRAM    = gen
+GENHEADER     = generator.h
 PROGRAM       = main
 
 all:            $(PROGRAM)
@@ -15,6 +16,7 @@ $(PROGRAM):     $(MAINOBJS)
 	$(CC) $(MAINOBJS) $(LDFLAGS) $(LIBS) -o $(PROGRAM)
 
 $(GENPROGRAM):  $(GENOBJS)
+	cp $(GENHEADER) $(GENHEADER).bak
 	$(CC) $(GENOBJS) $(LDFLAGS) $(LIBS) -o $(GENPROGRAM)
 
 $(USERHEADER):  $(GENPROGRAM)
