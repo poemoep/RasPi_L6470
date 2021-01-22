@@ -106,13 +106,13 @@ void L6470_setting_init(void)
     {
         printf("REG: %02x\n", L6470_param[reg].addr);
         if(L6470_param[reg].rw == RESERVED){
-            printf("RESERVED\n");
+            printf("RESERVED: %02x\n", L6470_param[reg].addr);
             continue;
         }else if(L6470_param[reg].rw == READONLY){
-            printf("READONLY\n");
+            printf("READONLY: %02x\n", L6470_param[reg].addr);
             L6470_GetParam(L6470_param[reg].addr);
         }else{
-            printf("WRITABLE\n");
+            printf("WRITABLE: %02x\n", L6470_param[reg].addr);
             L6470_setting[reg] = L6470_user_setting[reg];
             //make temp because wiringPiSPIDataRW rewrite send data
             union L6470_packet pkt_temp;
