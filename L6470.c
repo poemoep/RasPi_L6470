@@ -113,6 +113,7 @@ void L6470_setting_init(void)
             L6470_GetParam(L6470_param[reg].addr);
         }else{
             printf("WRITABLE: %02x\n", L6470_param[reg].addr);
+            /* copy to buf from const */
             L6470_setting[reg] = L6470_user_setting[reg];
             //make temp because wiringPiSPIDataRW rewrite send data
             union L6470_packet pkt_temp;
@@ -121,11 +122,11 @@ void L6470_setting_init(void)
             int len, SPI_res = 0;
             len = L6470_param[reg].param_size;
 #ifdef L6470_PRINT_MESSAGE
-            union L6470_packet send = L6470_setting[reg];
+            union L6470_packet send = L6470_user_setting[reg];
 #endif
             SPI_res = L6470_rw(&(pkt_temp), (int)(bit2byte(len + ADDR_SIZE)), NULL);
 #ifdef L6470_PRINT_MESSAGE
-            L6470_debug_print("setting_init",&(send),&(L6470_setting[reg]));
+            L6470_debug_print("setting_init",&(send),&(pkt_temp));
 #endif
         }
     }
