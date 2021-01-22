@@ -155,6 +155,7 @@ void L6470_init(void)
 {
 
     L6470_SPI_init();
+    L6470_ResetDevice();
     L6470_setting_init();
 
 #ifdef L6470_PRINT_MESSAGE
