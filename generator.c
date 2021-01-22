@@ -14,6 +14,7 @@ int main (int argc, char** argv)
     print_pkt(gen_ABS_POS(USER_ABS_POS));
     print_pkt(gen_EL_POS(USER_EL_POS));
     print_pkt(gen_MARK(USER_MARK));
+    printf("    {{0x04,         {0x00,   0x00,   0x00}}}, //dummy\n");
     print_pkt(gen_ACC(USER_ACC));
     print_pkt(gen_DEC(USER_DEC));
     print_pkt(gen_MAX_SPEED(USER_MAX_SPEED));
@@ -27,6 +28,7 @@ int main (int argc, char** argv)
     print_pkt(gen_FN_SLP_ACC(USER_FN_SLP_ACC));
     print_pkt(gen_FN_SLP_DEC(USER_FN_SLP_DEC));
     print_pkt(gen_K_THERM(USER_K_THERM));
+    printf("    {{0x12,       {0x00,   0x00,   0x00}}}, //dummy\n");
     print_pkt(gen_OCD_TH(USER_OCD_TH));
     print_pkt(gen_STALL_TH(USER_STALL_TH));
     print_pkt(gen_FS_SPD(USER_FS_SPD));
@@ -71,12 +73,10 @@ return 0;
 
 int output_footer()
 {
-printf("    //Dummy READONLY param &  RESERVED param\n");
-printf("    {0x04,         0x00,   0x00,   0x00}, //dummy\n");
-printf("    {0x12,       0x00,   0x00,   0x00}, //dummy\n");
-printf("    {0x19,        0x00,   0x00,   0x00}//, //dummy\n");
-printf("//    {L6470_param[enum_L6470_RESERVED_h1A].addr,  0x00,   0x00,   0x00}, //dummy\n");
-printf("//    {L6470_param[enum_L6470_RESERVED_h1B].addr,  0x00,   0x00,   0x00}, //dummy\n");
+// printf("    //Dummy READONLY param &  RESERVED param\n");
+printf("    {{0x19,        {0x00,   0x00,   0x00}}}//, //dummy\n");
+printf("//    {{L6470_param[enum_L6470_RESERVED_h1A].addr,  {0x00,   0x00,   0x00}}}, //dummy\n");
+printf("//    {{L6470_param[enum_L6470_RESERVED_h1B].addr,  {0x00,   0x00,   0x00}}}, //dummy\n");
 printf("\n");
 printf("};\n");
 

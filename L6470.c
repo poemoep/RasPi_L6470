@@ -104,22 +104,16 @@ void L6470_setting_init(void)
 
     for (int enum_param = 0; enum_param < (PARAM_NUM); enum_param++)
     {
-        printf("param_num: %d,\tenum_param: %02x\n",enum_param, L6470_param[enum_param].addr);
         if(L6470_param[enum_param].rw == RESERVED){
-            printf("RESERVED: %02x\n", L6470_param[enum_param].addr);
             continue;
         }else if(L6470_param[enum_param].rw == READONLY){
-            printf("READONLY: %02x\n", L6470_param[enum_param].addr);
             L6470_GetParam(enum_param);
         }else{
-            printf("WRITABLE: %02x\n", L6470_param[enum_param].addr);
             /* copy to buf from const */
             L6470_setting[enum_param] = L6470_user_setting[enum_param];
-            printf("WRITABLE: %02x\n", L6470_setting[enum_param].data.reg_addr);
             //make temp because wiringPiSPIDataRW rewrite send data
             union L6470_packet pkt_temp;
             pkt_temp = L6470_user_setting[enum_param];
-            printf("WRITABLE: %02x\n", pkt_temp.data.reg_addr);
 
             int len, SPI_res = 0;
             len = L6470_param[enum_param].param_size;
@@ -270,17 +264,27 @@ void L6470_MoveGoTo(int32_t abs_pos)
 {
     L6470_ExecCmd(L6470_cmd[enum_L6470_MOVEGOTO],0,abs_pos, "MoveGoTo");
 }
-
+/* dir = DIR_FWD or DIR_RVS, abs_pos = -2^21 to 2^21-1 [step] */
 void L6470_MoveGoToDir(uint8_t dir,int32_t abs_pos)
 {
     L6470_ExecCmd(L6470_cmd[enum_L6470_MOVEGOTODIR],dir,abs_pos,"MoveGoToDir");
 }
-
+/* act = ACT_POS_CLEAR or ACT_POS_TO_MARK */
+/* dir = DIR_FWD or DIR_RVS */
+/*speed = 0 to 15625000 [x0.001 step/s] */
 void L6470_MoveGoToUntil(uint8_t act, uint8_t dir,uint32_t speed)
 {
-    L6470_ExecCmd(L6470_cmd[enum_L6470_MOVEGOTOUNTIL],act|dir,speed, "MoveGoToUntil");
+    int32_t speed_val = (int32_t)round((double)speed / SPEED_RESOLUTION);
+#if defined (L6470_PRINT_MESSAGE)
+    if((int32_t)round((double)speed_val * SPEED_RESOLUTION) != speed)
+        printf("%s %s speed is rounded to %d [x0.001 step/s]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION, (speed_val) * SPEED_RESOLUTION);
+#endif
+
+    L6470_ExecCmd(L6470_cmd[enum_L6470_MOVEGOTOUNTIL],act|dir,speed_val, "MoveGoToUntil");
 }
 
+/* act = ACT_POS_CLEAR or ACT_POS_TO_MARK */
+/* dir = DIR_FWD or DIR_RVS */
 void L6470_MoveRelease(uint8_t act, uint8_t dir)
 {
     L6470_ExecCmd(L6470_cmd[enum_L6470_MOVERELEASE],act|dir,0,"MoveRelease");
