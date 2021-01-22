@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include "L6470.h"
 #include "generator.h"
 

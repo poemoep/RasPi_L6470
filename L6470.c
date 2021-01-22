@@ -87,8 +87,6 @@ static union L6470_packet generate_pkt_with_percentage(int enum_param, int32_t p
 
 
 #if defined (L6470_PRINT_MESSAGE)
-#define L6470_PRINT_HEADER "[L6470 DEBUG]: "
-#define L6470_PRINT_CAUTION "Caution"
 static void L6470_debug_print(const char *msg,union L6470_packet* send, union L6470_packet* get);
 #endif
 
