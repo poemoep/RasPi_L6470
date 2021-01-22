@@ -249,7 +249,7 @@ void L6470_MoveCont(uint8_t dir, uint32_t speed)
     max_speed = max_speed * MAX_SPEED_RESOLUTION * 10; /* 10times MAX_SPEDD [x0.01 step/s] / SPEED [x0.001 step/s] */ 
         printf("MAX_SPEED_val: %d\n",max_speed);
     if( temp_speed > max_speed )
-        printf("%s %s speed is over MAX_SPEED .rounded to %d [x0.001 step/s]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION, max_speed);
+        printf("%s %s speed is over MAX_SPEED. rounded to %d [x0.001 step/s]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION, max_speed);
 
 #endif
     L6470_ExecCmd(L6470_cmd[enum_L6470_MOVECONT],dir,speed_val, "MoveCont");
