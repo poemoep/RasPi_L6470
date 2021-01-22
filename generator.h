@@ -83,4 +83,33 @@
 /*       |= [USE_CLKOUT_2M | USE_CLKOUT_4M | USE_CLKOUT_8M | USE_CLKOUT_16M] (if use CLKOUT to other L6470) */ 
 /*       |= [USE_EXTCLKSRC_8M | USE_EXTCLKSRC_16M | USE_EXTCLKSRC_24M | USE_EXTCLKSRC_32M] (if use EXTCLKSRC like another L6470) */
 #define USER_CONFIG		    (USE_INTCLK_16M | USE_CLKOUT_2M | ENABLE_OC_SD | POW_SR_FAST | F_PWM_INT(0b001) | F_PWM_DEC(0b011) )
+
+
+/* prototype */
+
+union L6470_packet gen_ABS_POS(int32_t abs_pos);
+union L6470_packet gen_EL_POS(int32_t step_el_step);
+union L6470_packet gen_MARK(int32_t mark);
+union L6470_packet gen_ACC(int32_t step_per_ss);
+union L6470_packet gen_DEC(int32_t step_per_ss);
+union L6470_packet gen_MAX_SPEED(int32_t step_per_s);
+union L6470_packet gen_MIN_SPEED(int32_t enable_LSPD_step_per_s);
+union L6470_packet gen_KVAL_HOLD(int32_t percentage);
+union L6470_packet gen_KVAL_RUN(int32_t percentage);
+union L6470_packet gen_KVAL_ACC(int32_t percentage);
+union L6470_packet gen_KVAL_DEC(int32_t percentage);
+union L6470_packet gen_INT_SPEED(int32_t step_per_s);
+union L6470_packet gen_ST_SLP(int32_t slp);
+union L6470_packet gen_FN_SLP_ACC(int32_t slp_acc);
+union L6470_packet gen_FN_SLP_DEC(int32_t slp_dec);
+union L6470_packet gen_K_THERM(int32_t k_therm);
+union L6470_packet gen_OCD_TH(int32_t ocd_th);
+union L6470_packet gen_STALL_TH(int32_t stall_th);
+union L6470_packet gen_FS_SPD(int32_t fs_spd);
+union L6470_packet gen_STEP_MODE(int32_t sync_en_sync_sel_step_sel);
+union L6470_packet gen_ALARM_EN(int32_t alm);
+union L6470_packet gen_CONFIG(int32_t param);
+
+
+
 #endif
