@@ -179,7 +179,7 @@ union L6470_packet gen_DEC(int32_t step_per_ss)
 /* step_per_s = N x MAX_SPEED_RESOLUTION [x0.01 step/s^2]*/
 union L6470_packet gen_MAX_SPEED(int32_t step_per_s)
 {
-    int32_t val = (int32_t)round((double)step_per_s - MAX_SPEED_MIN / MAX_SPEED_RESOLUTION);
+    int32_t val = (int32_t)round(((double)step_per_s - MAX_SPEED_MIN) / MAX_SPEED_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if(val == 0){
         printf("// %s %s MAX_SPEED is more than equal %d\n",
