@@ -1,59 +1,45 @@
-# Name（リポジトリ/プロジェクト/OSSなどの名前）
+# RasPi_L6470
 
-分かりやすくてカッコイイ名前をつける（今回は"hoge"という名前をつける）
-
-"hoge"が何かを簡潔に紹介する
-
-# DEMO
-
-"hoge"の魅力が直感的に伝えわるデモ動画や図解を載せる
+RasPi_L6470 is a library that makes L6470(STMicro) easy to use on Raspberry Pi.
 
 # Features
+you can do with this library
 
-"hoge"のセールスポイントや差別化などを説明する
+* Execute L6470 command(Run, Goto, GoHome ... and so on.)
+* Set initial parametor to L6470.
+* Get parametor from L6470.
+* generate initial parametor with HEX.
 
 # Requirement
 
-"hoge"を動かすのに必要なライブラリなどを列挙する
-
-* huga 3.5.2
-* hogehuga 1.0.2
-
-# Installation
-
-Requirementで列挙したライブラリなどのインストール方法を説明する
-
-```bash
-pip install huga_package
-```
+* GNU Make (debug with ver4.2.1)
+* GCC (debug with ver Raspbian 8.3.0-6+rpi1)
+* WiringPi (debug with ver2.60)
+    (For SPI control. Therefore, it may work with other SBCs, but I have not confirmed it. )
 
 # Usage
 
-DEMOの実行方法など、"hoge"の基本的な使い方を説明する
-
+First Test
 ```bash
 git clone https://github.com/hoge/~
-cd examples
-python demo.py
+cd raspi_l6470
+make 
+./main
 ```
 
-# Note
-
-注意点などがあれば書く
+generate "L6470_user.h" from generator
+```bash
+"edit generator.h"
+make user 
+```
+"make user" is build generator && execute "./gen"  && add stdout to "L6470_user.h"
+The backup of L6470_user.h is left at the bottom of the same file using "#if 0".
 
 # Author
 
-作成情報を列挙する
 
-* 作成者
-* 所属
-* E-mail
+* Made by poemoep.
+  (I made it within my hobby, so there may be bugs.)
 
 # License
-ライセンスを明示する
-
-"hoge" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
-
-社内向けなら社外秘であることを明示してる
-
-"hoge" is Confidential.
+The source code is licensed MIT.
