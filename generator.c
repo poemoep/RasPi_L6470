@@ -99,7 +99,7 @@ union L6470_packet gen_ABS_POS(int32_t abs_pos)
     if( (abs_pos > (int32_t)(pow(2,21)-1)) | (abs_pos < (int32_t)((-1)*pow(2,21))) )
         printf("// %s %s abs_pos is over/under flow\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION);
 #endif
-    int32_t val = abs_pos & (int32_t)(pow(2,22)-1);
+    int32_t val = abs_pos & (int32_t)(pow(2,21)-1);
     union L6470_packet pkt = generate_pkt(enum_L6470_ABS_POS, val);
     return pkt;
 }
@@ -130,7 +130,7 @@ union L6470_packet gen_MARK(int32_t mark)
     if( (mark > (int32_t)(pow(2,21)-1)) | (mark < (int32_t)((-1)*pow(2,21))) )
         printf("// %s %s MARK is over/under flow\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION);
 #endif
-    int32_t val = ( mark & (int32_t)(pow(2,22) - 1) );
+    int32_t val = ( mark & (int32_t)(pow(2,21) - 1) );
     union L6470_packet pkt = generate_pkt(enum_L6470_MARK, mark);
     return pkt;
 }
@@ -179,13 +179,13 @@ union L6470_packet gen_DEC(int32_t step_per_ss)
 /* step_per_s = N x MAX_SPEED_RESOLUTION [x0.01 step/s^2]*/
 union L6470_packet gen_MAX_SPEED(int32_t step_per_s)
 {
-    int32_t val = (int32_t)round((double)step_per_s / MAX_SPEED_RESOLUTION);
+    int32_t val = (int32_t)round((double)step_per_s - MAX_SPEED_MIN / MAX_SPEED_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
     if(val == 0){
         printf("// %s %s MAX_SPEED is more than equal %d\n",
-                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, MAX_SPEED_RESOLUTION);
+                        L6470_PRINT_HEADER, L6470_PRINT_CAUTION, MAX_SPEED_MIN);
         printf("// %s %s set minumum value.\n",L6470_PRINT_HEADER, L6470_PRINT_CAUTION);
-        val = 1;
+        val = 0;
     } else if((int32_t)round((double)val * MAX_SPEED_RESOLUTION) != step_per_s){
         printf("// %s %s MAX_SPEED is rounded to %d [x0.01 step/s]\n",
                         L6470_PRINT_HEADER, L6470_PRINT_CAUTION, (int32_t)round((double)val * MAX_SPEED_RESOLUTION));

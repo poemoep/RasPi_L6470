@@ -21,6 +21,7 @@
 #define ACC_RESOLUTION        (1455) //[x0.01 step/s^2]
 #define DEC_RESOLUTION        ACC_RESOLUTION
 #define MAX_SPEED_RESOLUTION  (1525) //[x0.01 step/s]
+#define MAX_SPEED_MIN         (1525) //[x0.01 step/s]
 #define MIN_SPEED_RESOLUTION  (238) //[x0.001 step/s]
 #define INT_SPEED_RESOLUTION  (596) //[x0.0001 step/s]
 #define ST_SLP_RESOLUTION     (15) // [x0.000001]
@@ -31,7 +32,7 @@
 #define OCD_TH_RESOLUTION     (375) // [mA]
 #define STALL_TH_RESOLUTION   (3125) // [x0.01 mA]
 #define FS_SPD_RESOLUTION     (1525) // [x0.01 step/s]
-#define FS_SPD_MIN            (FS_SPD_RESOLUTION/2) // [step/s]
+#define FS_SPD_MIN            (763) // [step/s]
 
 #define ENABLE  (1)
 #define DISABLE (0)

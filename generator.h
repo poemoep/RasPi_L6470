@@ -24,7 +24,7 @@
 
 /* MIX_SPEED = 0 to 976300 [x0.001 step/s]*/
 /*          |= ENABLE_LSPD (if use LSPD)*/
-#define USER_MIN_SPEED		(0)
+#define USER_MIN_SPEED		(ENABLE_LSPD |200000)
 
 /*KVA_HOLD = 0 to 10000 [0.01%] */
 #define USER_KVAL_HOLD		(1602)
@@ -38,20 +38,20 @@
 /*KVA_HOLD = 0 to 10000 [0.01%] */
 #define USER_KVAL_DEC		(4000)
 
-/* INT_SPEED = 0 to 9765000 [x0.0001 step/s] */
+/* INT_SPEED = 0 to 9764000 [x0.0001 step/s] */
 #define USER_INT_SPEED		(9765000)
 
-/* ST_SLP = 0 to 4000 [x0.000001% s/step] */
-#define USER_ST_SLP		    (4000)
+/* ST_SLP = 0 to 3825 [x0.000001% s/step] */
+#define USER_ST_SLP		    (3825)
 
-/* FN_SLP_ACC = 0 to 4000 [x0.000001 ] */
-#define USER_FN_SLP_ACC		(4000)
+/* FN_SLP_ACC = 0 to 3825 [x0.000001 ] */
+#define USER_FN_SLP_ACC		(3825)
 
-/* FN_SLP_DEC = 0 to 4000 [x0.000001 ] */
-#define USER_FN_SLP_DEC		(4000)
+/* FN_SLP_DEC = 0 to 3825 [x0.000001 ] */
+#define USER_FN_SLP_DEC		(3825)
 
 /* K_THERM = 100000 to 146875 [x0.00001]*/
-#define USER_K_THERM		(1.0 * 100000)
+#define USER_K_THERM		(1.46875 * 100000)
 
 /* OCD_TH = 375 to 6000 [mA]*/
 #define USER_OCD_TH		    (3.38 * 1000)
