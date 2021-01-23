@@ -227,7 +227,7 @@ typedef enum{
   enum_L6470_NOP,
   enum_L6470_SETPARAM, 
   enum_L6470_GETPARAM,
-  enum_L6470_MOVECONT,
+  enum_L6470_MoveRun,
   enum_L6470_MOVESTEPCLOCK,
   enum_L6470_MOVESTEP,
   enum_L6470_MOVEGOTO,
@@ -387,7 +387,7 @@ int  L6470_rw(union L6470_packet *pkt,int len,const char* msg);
 void L6470_nop(int times);
 void L6470_SetParam(int enum_param,uint32_t value);
 int32_t L6470_GetParam(int param);
-void L6470_MoveCont(uint8_t dir,uint32_t value);
+void L6470_MoveRun(uint8_t dir,uint32_t value);
 void L6470_MoveStepClock(uint8_t dir);
 void L6470_MoveStep(uint8_t dir, uint32_t step);
 void L6470_MoveGoTo(int32_t abs_pos);

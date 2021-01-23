@@ -62,7 +62,7 @@ const struct L6470_CMD L6470_cmd[CMD_NUM] =
 {  enum_L6470_NOP,            CMD_NOP,            CMD_SIZE_NOP},
 {  enum_L6470_SETPARAM,       CMD_SETPARAM,       CMD_SIZE_SETPARAM},
 {  enum_L6470_GETPARAM,       CMD_GETPARAM,       CMD_SIZE_GETPARAM},
-{  enum_L6470_MOVECONT,       CMD_MOVECONT,       CMD_SIZE_MOVECONT},
+{  enum_L6470_MoveRun,       CMD_MOVECONT,       CMD_SIZE_MOVECONT},
 {  enum_L6470_MOVESTEPCLOCK,  CMD_MOVESTEPCLOCK,  CMD_SIZE_MOVESTEPCLOCK},
 {  enum_L6470_MOVESTEP,       CMD_MOVESTEP,       CMD_SIZE_MOVESTEP},
 {  enum_L6470_MOVEGOTO,       CMD_MOVEGOTO,       CMD_SIZE_MOVEGOTO},
@@ -236,7 +236,7 @@ int32_t L6470_GetParam(int enum_param)
     return ret;
 }
 /*speed = 0 to 15625000 [x0.001 step/s] */
-void L6470_MoveCont(uint8_t dir, uint32_t speed)
+void L6470_MoveRun(uint8_t dir, uint32_t speed)
 {
     int32_t speed_val = (int32_t)round((double)speed / SPEED_RESOLUTION);
 #if defined (L6470_PRINT_MESSAGE)
@@ -250,7 +250,7 @@ void L6470_MoveCont(uint8_t dir, uint32_t speed)
         printf("%s %s speed is over MAX_SPEED. rounded to %d [x0.001 step/s]\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION, max_speed);
 
 #endif
-    L6470_ExecCmd(L6470_cmd[enum_L6470_MOVECONT],dir,speed_val, "MoveCont");
+    L6470_ExecCmd(L6470_cmd[enum_L6470_MoveRun],dir,speed_val, "MoveCont");
 }
 /* dir = DIR_FWD or DIR_RVS */
 void L6470_MoveStepClock(uint8_t dir)
