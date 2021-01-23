@@ -12,10 +12,10 @@ PROGRAM       = main
 
 all:            $(PROGRAM)
 
-$(PROGRAM):     $(MAINOBJS)
+$(PROGRAM):     $(MAINOBJS) $(USERH)
 	$(CC) $(MAINOBJS) $(LDFLAGS) $(LIBS) -o $(PROGRAM)
 
-$(GENPROGRAM):  $(GENOBJS)
+$(GENPROGRAM):  $(GENOBJS) $(GENHEADER)
 	cp $(GENHEADER) $(GENHEADER).bak
 	$(CC) $(GENOBJS) $(LDFLAGS) $(LIBS) -o $(GENPROGRAM)
 

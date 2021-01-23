@@ -10,7 +10,7 @@ int main(int argc, char** argv)
     int pos_aim,pos;
 
     pos = L6470_GetAbsPos();
-    L6470_MoveRun(DIR_FWD, 500000);
+    L6470_MoveRun(DIR_FWD, 2560000);
     sleep(5);
     pos = L6470_GetAbsPos();
     L6470_MoveRun(DIR_FWD, 5120000);
