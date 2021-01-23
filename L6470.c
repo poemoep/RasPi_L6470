@@ -347,13 +347,13 @@ static void L6470_ExecCmd(struct L6470_CMD cmd, int orprm, uint32_t arg_param,co
 
     int size = cmd.send_bit_size;
     pkt.data.reg_addr = (cmd.addr | orprm);
-
     if(pow(2,cmd.send_bit_size) < abs(arg_param))
     {
+#if defined (L6470_PRINT_MESSAGE)
         printf("%s AbortCmd size_over cmdsize:2^%d, but arg is %d\n ",L6470_PRINT_HEADER, cmd.send_bit_size,arg_param);
+#endif
         return;
     }
-
     if(8 >= size){
         pkt.data.value8b[0] = ((arg_param & 0x0000FF));
     }else if (16 >= size){
