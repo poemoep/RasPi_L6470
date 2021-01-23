@@ -33,15 +33,18 @@ generate "L6470_user.h" from generator
 make user 
 ```
 "make user" is build generator && execute "./gen"  && add stdout to "L6470_user.h"
+
 The backup of L6470_user.h is left at the bottom of the same file using "#if 0".
 
 # Note
 if you don't want to get debug message like "[L6470 DEBUG]: ~",
+
 Comment out "#define L6470_PRINT_MESSAGE" from "L6470.h".
 
 # Author
 
 * Made by poemoep.
+
   (I made it within my hobby, so there may be bugs.)
 
 # License
