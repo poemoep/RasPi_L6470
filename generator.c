@@ -200,12 +200,12 @@ union L6470_packet gen_MAX_SPEED(int32_t step_per_s)
 union L6470_packet gen_MIN_SPEED(int32_t enable_LSPD_step_per_s)
 {
     union L6470_packet pkt = {0};
-    if( 0 != (enable_LSPD_step_per_s & 0x7E000000) ) {
+    if( 0 != (enable_LSPD_step_per_s & (0xFF << (ENABLE_LSPD_MAGIC+1)) ) {
 #if defined (L6470_PRINT_MESSAGE)
         printf("// %s %s MIN_SPEED is over\n",L6470_PRINT_HEADER,L6470_PRINT_CAUTION);
 #endif
     return pkt;
-    } /*check 0b0111 1110 000~ */
+    } /*check 0b1111 1110 000~ */
 
     int32_t step_per_s = (enable_LSPD_step_per_s & MIN_SPEED_MASK); /* 20 bits */
     int32_t enable_LSPD = (enable_LSPD_step_per_s & ENABLE_LSPD); /* 25 bit */
