@@ -4,3 +4,4 @@ wiringPiSPI.h
 *.o
 gen
 main
+.vscode/
