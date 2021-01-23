@@ -1,3 +1,8 @@
+/* =============================================                    */
+/* Copyright (c) 2021 poemoep                                       */
+/* This software is released under the MIT License, see LICENSE.    */
+/* =============================================                    */
+
 #include "L6470.h"
 
 #ifndef __GENERATOR_H__
