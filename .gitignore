@@ -1,3 +1,4 @@
+.gitignore
 wiringPi/
 wiringPi.h
 wiringPiSPI.h
