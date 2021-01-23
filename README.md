@@ -22,7 +22,7 @@ you can do with this library
 First Test
 ```bash
 git clone https://github.com/hoge/~
-cd raspi_l6470
+cd RasPi_L6470
 make 
 ./main
 ```
