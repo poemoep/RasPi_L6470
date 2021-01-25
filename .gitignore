@@ -1,8 +1,0 @@
-.gitignore
-wiringPi/
-wiringPi.h
-wiringPiSPI.h
-*.o
-gen
-main
-.vscode/
