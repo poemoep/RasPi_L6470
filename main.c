@@ -76,21 +76,25 @@ int main(int argc, char** argv)
 	pos = L6470_GetAbsPos();
         sleep(1);
     }
-    
+
+    int mark[2] = {1,2};   
     L6470_MoveGoToUntil(ACT_POS_TO_MARK,DIR_FWD,10000);
-    for(int i= 0; i<12; i++){
+    while(mark[0] != mark[1]){
 	pos = L6470_GetAbsPos();
+	mark[0] = mark[1];
+	mark[1] = pos;
         sleep(1);
     }
-
+    pos = 100;
     L6470_GoHome();
-    for(int i= 0; i<12; i++){
+    while(pos != 0){
 	pos = L6470_GetAbsPos();
         sleep(1);
     }
 
-    L6470_GoMark();
-    for(int i= 0; i<12; i++){
+
+   L6470_GoMark();
+   while(pos != mark[0]){
 	pos = L6470_GetAbsPos();
         sleep(1);
     }
