@@ -21,7 +21,7 @@ you can do with this library
 
 First Test
 ```bash
-git clone https://github.com/hoge/~
+git clone https://github.com/poemoep/RasPi_L6470.git
 cd RasPi_L6470
 make 
 ./main
